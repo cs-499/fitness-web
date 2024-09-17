@@ -2,5 +2,6 @@
 
 ## Feature Flow Diagram
 
-<img width="940" alt="image" src="https://github.com/user-attachments/assets/ace4fec6-84e1-4f01-a001-af005e6d5743">
+<img width="920" alt="image" src="https://github.com/user-attachments/assets/6a576656-931a-446d-b68b-a1a4604781b4">
+
 
