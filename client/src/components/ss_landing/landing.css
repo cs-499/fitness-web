@@ -1,0 +1,65 @@
+/*Log in Box*/
+.authcontainer {
+  width: 400px;
+  height: 500px;
+  background: #ffffff;
+  color: #000000;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  padding: 40px 30px;
+  box-shadow: 0px 0px 0px #ffffff;
+  z-index: 1; /* <-------------- This is what puts the element above the particles btw*/
+  border-radius: 3%;
+}
+
+/*Log In / Sign Up text that tells you what this page is for*/
+.authText {
+  margin: 0;
+  padding: 0 0 20px;
+  text-align: center;
+  color: #000000;
+}
+
+/*Email and password input box*/
+.authbox {
+  width: 100%;
+  margin-bottom: 15px;
+  border: none;
+  border-bottom: 1px solid #000000;
+  outline: none;
+  height: 40px;
+  background-color: #ffffff;
+  color: #616161;
+}
+
+/*text above input boxes that says what they're for*/
+.authhelp {
+  color: #000000;
+}
+
+/*log in/sign up buttons*/
+.authbutton {
+  border: none;
+  outline: none;
+  height: 40px;
+  width: 100%;
+  background-color: #375dda;
+  border-radius: 20px;
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.authbutton:hover {
+  background-color: #2445b3;
+}
+
+a {
+  padding-left: 15px;
+}
+
+.button {
+  padding-top: 25px;
+}

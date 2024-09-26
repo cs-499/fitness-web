@@ -1,0 +1,7 @@
+/*This is for the gradient - Will be included wherever there are particles*/
+body {
+    background: linear-gradient(rgb(21, 76, 121), rgb(118, 181, 197));
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+  }
