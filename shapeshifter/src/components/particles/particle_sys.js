@@ -1,3 +1,6 @@
+//This is just the particle system, can be imported to any page by including <ParticleSys /> in the rendering
+//don't forget to import ParticleSys from '../particles/particle_sys' at the top before you include it
+
 import { useCallback, useEffect, useState } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadFull } from "tsparticles";

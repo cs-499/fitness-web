@@ -1,13 +1,28 @@
 //ShapeShifter_Landing
 //This is the initial landing page - where you log in
 //if no account then you create one and it will lead to the survey
-
+import React from 'react';
 import '../../App.css'
 import './landing.css'
 import ParticleSys from '../particles/particle_sys'; 
-export default function Landing() {
-document.title = 'ShapeShifter'
-  
+import Homepage from '../ss_homepage/homepage';
+//import { NavLink, Link } from 'react-router-dom';
+
+//function call from log in
+//did it this way in case we need to add more logic to the click later
+function logIn(){
+  window.location = "../ss_homepage/homepage.js";
+}
+
+//function call from create_account
+function createAcc(){
+  window.location = "../ss_register/register.js";
+}
+
+
+const Landing = () => {
+  document.title = 'ShapeShifter'
+
   //rendering
   return (
       <div>
@@ -37,15 +52,17 @@ document.title = 'ShapeShifter'
 
             {/*Log in & Create Account buttons*/}
             <div className='button'>
-                <button className='authbutton'>Log In</button>
+                <button className='authbutton' onClick={logIn}>Log In</button>
             </div>
             <div className='button'>
-                <button className='authbutton'>Create Account</button>
+                <button className='authbutton' onClick={createAcc}>Create Account</button>
             </div>
         </div>
 
         {/*Particle System*/}
         <ParticleSys />
+
+        <Homepage />
 
       </div>
     
@@ -56,3 +73,5 @@ document.title = 'ShapeShifter'
   );
 
 }
+
+export default Landing;
