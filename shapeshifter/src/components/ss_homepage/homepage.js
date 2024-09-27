@@ -5,9 +5,8 @@ import '../../App.css';
 import './homepage.css';
 import ParticleSys from '../particles/particle_sys';
 
-console.log("hello");
-
 const Homepage = () => {
+    document.title = 'ShapeShifter'
     return(
         <div>
             <div>

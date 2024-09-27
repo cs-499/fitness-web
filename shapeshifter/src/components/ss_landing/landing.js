@@ -5,18 +5,18 @@ import React from 'react';
 import '../../App.css'
 import './landing.css'
 import ParticleSys from '../particles/particle_sys'; 
-import Homepage from '../ss_homepage/homepage';
+//import Homepage from '../ss_homepage/homepage';
 //import { NavLink, Link } from 'react-router-dom';
 
 //function call from log in
 //did it this way in case we need to add more logic to the click later
 function logIn(){
-  window.location = "../ss_homepage/homepage.js";
+  window.location = "/homepage";
 }
 
 //function call from create_account
 function createAcc(){
-  window.location = "../ss_register/register.js";
+  window.location = "/register";
 }
 
 
@@ -61,9 +61,7 @@ const Landing = () => {
 
         {/*Particle System*/}
         <ParticleSys />
-
-        <Homepage />
-
+        
       </div>
     
 
