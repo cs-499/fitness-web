@@ -1,7 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
 import Landing from './components/ss_landing/landing';
-import logo from './logo.svg';
+import Homepage from './components/ss_homepage/homepage';
+import Register from './components/ss_register/register';
+import Survey from './components/ss_survey/survey';
+//import logo from './logo.svg';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 
@@ -11,7 +14,10 @@ function App() {
     
     <BrowserRouter>
       <Routes>
-        <Route path = "/" element = {<Landing></Landing>}></Route>
+        <Route path = "/" element = {<Landing></Landing>} />
+        <Route path = "/homepage" element = {<Homepage></Homepage>} />
+        <Route path = "/register" element = {<Register></Register>} />
+        <Route path = "/survey" element = {<Survey></Survey>} />
       </Routes>
     </BrowserRouter>
 
