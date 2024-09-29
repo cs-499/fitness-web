@@ -4,39 +4,18 @@ import Landing from './components/ss_landing/landing';
 import Homepage from './components/ss_homepage/homepage';
 import Register from './components/ss_register/register';
 import Survey from './components/ss_survey/survey';
-//import logo from './logo.svg';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-
 
 function App() {
   return (
-    
     <BrowserRouter>
       <Routes>
-        <Route path = "/" element = {<Landing></Landing>} />
-        <Route path = "/homepage" element = {<Homepage></Homepage>} />
-        <Route path = "/register" element = {<Register></Register>} />
-        <Route path = "/survey" element = {<Survey></Survey>} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/homepage" element={<Homepage />} />
+        <Route path="/register" element={<Register />} /> {/* Register route */}
+        <Route path="/survey" element={<Survey />} />
       </Routes>
     </BrowserRouter>
-
-    /*<div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>*/
   );
 }
 
