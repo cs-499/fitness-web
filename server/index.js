@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
-const PORT = 5000;
+const PORT = 4080;
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -83,3 +83,4 @@ app.post('/register', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
