@@ -8,16 +8,16 @@ const Survey = () => {
 
     //list of questions or div IDs
     const questions = [
-        'Question 1 content goes here',
-        'Question 2 content goes here',
-        'Question 3 content goes here',
-        'Question 4 content goes here',
-        'Question 5 content goes here',
-        'Question 6 content goes here',
-        'Question 7 content goes here',
-        'Question 8 content goes here',
-        'Question 9 content goes here',
-        'Question 10 content goes here',
+        'Question 1',
+        'Question 2',
+        'Question 3',
+        'Question 4',
+        'Question 5',
+        'Question 6',
+        'Question 7',
+        'Question 8',
+        'Question 9',
+        'Question 10',
     ];
 
     //state to track the current question index
@@ -47,7 +47,7 @@ const Survey = () => {
                     {/* buttons to navigate */}
                     <button type="button" onClick={handlePrevious} disabled={currentQuestionIndex === 0}>Previous</button>
                         {/* Current Question */}
-                        <h3>{currentQuestionIndex}/{questions.length}</h3>
+                        <h3>{currentQuestionIndex + 1}/{questions.length}</h3>
                     <button type="button" onClick={handleNext} disabled={currentQuestionIndex === questions.length - 1}>Next</button>
                 </div>
             </div>
