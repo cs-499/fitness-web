@@ -18,5 +18,5 @@ app.use(sessionMiddleware);
 app.use(routes);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server started successfully! Running on port ${PORT}`);
 });
