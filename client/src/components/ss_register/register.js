@@ -65,11 +65,17 @@ const Register = () => {
                     </div>
                 </form>
             </div>
-
-            <ParticleSys />
         </div>
         
     );
 };
 
-export default Register;
+//This is to wrap the particles seperatly so they don't refresh when you type something
+//hasn't broken anything in my testing
+const Wrapper = () => {
+    return (
+        <><ParticleSys /><Register /></>
+    )
+}
+
+export default Wrapper;
