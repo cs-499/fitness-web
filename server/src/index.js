@@ -13,8 +13,10 @@ connectDB();
 app.use(corsMiddleware);
 app.use(bodyParse);
 app.use(sessionCookie);
+app.use(express.json());
 
 app.use(routes);
+app.use('/api', routes);
 
 app.listen(PORT, () => {
     console.log(`Server started successfully! Running on port ${PORT}`);
