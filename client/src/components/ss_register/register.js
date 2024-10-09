@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../App.css';
+import ParticleSys from '../particles/particle_sys'; 
 import './register.css'; // Ensure you have this CSS file for styling
 
 const Register = () => {
@@ -37,33 +38,44 @@ const Register = () => {
     };
 
     return (
-        <div className='authcontainer'>
-            <h1 className='authText'>Register</h1>
-            <form onSubmit={handleRegister}>
-                <p className='authhelp'>Username:</p>
-                <input
-                    type='text'
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder='Enter Username'
-                    className='authbox'
-                    required
-                />
-                <p className='authhelp'>Password:</p>
-                <input
-                    type='password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder='Enter Password'
-                    className='authbox'
-                    required
-                />
-                <div className='button'>
-                    <button type='submit' className='authbutton'>Register</button>
-                </div>
-            </form>
+        <div>
+            <div className='authcontainer'>
+                <h1 className='authText'>Register</h1>
+                <form onSubmit={handleRegister}>
+                    <p className='authhelp'>Username:</p>
+                    <input
+                        type='text'
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder='Enter Username'
+                        className='authbox'
+                        required
+                    />
+                    <p className='authhelp'>Password:</p>
+                    <input
+                        type='password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder='Enter Password'
+                        className='authbox'
+                        required
+                    />
+                    <div className='button'>
+                        <button type='submit' className='authbutton'>Register</button>
+                    </div>
+                </form>
+            </div>
         </div>
+        
     );
 };
 
-export default Register;
+//This is to wrap the particles seperatly so they don't refresh when you type something
+//hasn't broken anything in my testing
+const Wrapper = () => {
+    return (
+        <><ParticleSys /><Register /></>
+    )
+}
+
+export default Wrapper;
