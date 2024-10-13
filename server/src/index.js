@@ -16,7 +16,7 @@ app.use(sessionCookie);
 app.use(express.json());
 
 app.use(routes);
-app.use('/surveymeal', routes);
+app.use('/survey', routes);
 
 app.listen(PORT, () => {
     console.log(`rest api running on port ${PORT}`);

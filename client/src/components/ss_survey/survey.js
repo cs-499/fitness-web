@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../App.css';
-import './surveymeal.css';
+import './survey.css';
 
-const SurveyMeal = () => {
+const Survey = () => {
     document.title = 'ShapeShifter';
     const navigate = useNavigate();
 
@@ -68,6 +68,54 @@ const SurveyMeal = () => {
             subtitle: '',
             inputType: 'radio',
             choices: ["10-20", "20-50", "50-100", "100-200", "200+"]
+        },
+        {
+            question: 'What are your goals?',
+            subtitle: 'Select all that apply',
+            inputType: 'checkbox',
+            choices: ["Gain muscle", "Lose fat", "Maintain health"]
+        },
+        {
+            question: 'What is your experience level?',
+            subtitle: '',
+            inputType: 'radio',
+            choices: ["Beginner", "Intermediate", "advanced"]
+        },
+        {
+            question: 'How often do you want to work out?',
+            subtitle: '',
+            inputType: 'radio',
+            choices: ["1-2 Times a week", "3-4 Times a week", "4-5 Times a week", "6+ a week"]
+        },
+        {
+            question: 'How long do you want your workouts to be?',
+            subtitle: '',
+            inputType: 'radio',
+            choices: ["15 minutes", "30 minutes", "45 minutes", "1 hour", "1+ hours"]
+        },
+        {
+            question: 'What equipment do you have available?',
+            subtitle: 'Select all that apply',
+            inputType: 'checkbox',
+            choices: ["Bench", "Weights", "Squat Rack", "Cable Machine", "Nothing"]
+        },
+        {
+            question: 'What is your Sex?',
+            subtitle: '',
+            inputType: 'radio',
+            choices: ["Male", "Female", "Not Specified"]
+        },
+        {
+            question: 'Input weight (lbs)',
+            subtitle: '',
+            inputType: 'text',
+            choices: []
+        },
+        {
+            question: 'Input height (cm)',
+            subtitle: '',
+            inputType: 'text',
+            choices: []
         }
     ];
 
@@ -111,7 +159,7 @@ const SurveyMeal = () => {
             return;
         }
         try {
-            await axios.post('http://localhost:5000/surveymeal/submit', {
+            await axios.post('http://localhost:5000/survey/submit', {
                 userId,
                 answers,
             });
@@ -209,4 +257,4 @@ const SurveyMeal = () => {
     );
 };
 
-export default SurveyMeal;
+export default Survey;
