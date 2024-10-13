@@ -1,4 +1,4 @@
-import 'dotenv/config.js';
+import 'dotenv/config';
 import express from 'express';
 import { connectDB } from './connectDB.js';
 import { corsMiddleware } from './middleware/cors.js';
@@ -13,9 +13,11 @@ connectDB();
 app.use(corsMiddleware);
 app.use(bodyParse);
 app.use(sessionCookie);
+app.use(express.json());
 
 app.use(routes);
+app.use('/survey', routes);
 
 app.listen(PORT, () => {
-    console.log(`Server started successfully! Running on port ${PORT}`);
+    console.log(`rest api running on port ${PORT}`);
 });
