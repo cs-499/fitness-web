@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
 import Survey from '../models/createSurvey.js';
 
-//const Survey = mongoose.model('Survey', surveySchema);
-
 export const submitSurvey = async (req, res) => {
     const { userId, answers } = req.body;
     // throw 400's if user does not exist
