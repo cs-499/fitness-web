@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import { surveySchema } from '../models/createSurvey.js';
+import Survey from '../models/createSurvey.js';
 
-const Survey = mongoose.model('Survey', surveySchema);
+//const Survey = mongoose.model('Survey', surveySchema);
 
 export const submitSurvey = async (req, res) => {
     const { userId, answers } = req.body;

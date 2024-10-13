@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export const surveySchema = new mongoose.Schema(
+const surveySchema = new mongoose.Schema(
   {
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -18,3 +18,6 @@ export const surveySchema = new mongoose.Schema(
     },
   }
 );
+
+const Survey = mongoose.model('Survey', surveySchema);
+export default Survey;

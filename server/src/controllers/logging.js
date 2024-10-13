@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose'; 
 import { userSchema } from '../models/createUser.js';
+import Survey from '../models/createSurvey.js';
 
 const User = mongoose.model('User', userSchema);
 
@@ -11,9 +12,14 @@ export const login = async (req, res) => {
         if (!user || !bcrypt.compareSync(password, user.password)){
             return res.status(401).send('Invalid credentials. Please try again.');
         }
-        
+
+        const surveyResponse = await Survey.findOne({ userId: user._id });
+        // make it bool, so if false user always goes to survey
+        const surveyCompleted = !!surveyResponse;
+
         const response = {
             firstTimeLogin: user.firstLogin,
+            surveyCompleted,
             userId: user._id
         };
 

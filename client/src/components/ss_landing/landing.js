@@ -32,7 +32,7 @@ const Landing = () => {
 
           if (response.ok) {
               localStorage.setItem('userId', data.userId);
-              navigate(data.firstTimeLogin ? '/survey' : '/homepage');
+              navigate(data.firstTimeLogin || !data.surveyCompleted ? '/survey' : '/homepage');
           } else {
               alert(data.message);
           }        
