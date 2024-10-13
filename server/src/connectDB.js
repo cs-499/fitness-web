@@ -1,4 +1,4 @@
-import "dotenv/config.js";
+import "dotenv/config";
 import mongoose from 'mongoose';
 
 export const connectDB = async () => {

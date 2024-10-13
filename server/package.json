@@ -1,13 +1,13 @@
 {
-  "name": "server",
+  "name": "rest-api",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "devStart": "nodemon src/index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "nikola ivkovic",
   "license": "ISC",
   "description": "",
   "dependencies": {
@@ -18,6 +18,7 @@
     "express": "^4.21.0",
     "express-session": "^1.18.0",
     "mongodb": "^6.9.0",
-    "mongoose": "^8.6.3"
+    "mongoose": "^8.6.3",
+    "nodemon": "^3.1.7"
   }
 }
