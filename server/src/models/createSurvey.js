@@ -10,8 +10,6 @@ export const surveySchema = new mongoose.Schema(
     answers: {
         type: Map,
         of: [String]
-        // of: mongoose.Schema.Types.Mixed,
-        // required: true,
     },
     createdAt: {
         type: Date,

@@ -7,7 +7,7 @@
     "devStart": "DOTENV_CONFIG_PATH=src/.env nodemon src/index.js"
   },
   "keywords": [],
-  "author": "nikola ivkovic",
+  "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
