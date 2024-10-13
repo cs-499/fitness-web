@@ -13,7 +13,7 @@ const Survey = () => {
             question: 'What dietary preferences do you have?',
             subtitle: 'Select all that apply',
             inputType: 'checkbox',
-            choices: ["Vegan", "Vegetarian", "Pescatarian", "Kosher", "Halal"]
+            choices: ["Vegan", "Vegetarian", "Pescatarian", "Kosher", "Halal", "None"]
         },
         {
             question: 'What allergies or restrictions do you have?',
@@ -233,17 +233,14 @@ const Survey = () => {
                     {/* display the current question based on index */}
                     <h3>{questions[currentQuestionIndex].question}</h3>
                     <p>{questions[currentQuestionIndex].subtitle}</p>
-
                     {/* render the input fields for the current question */}
                     {renderChoices(questions[currentQuestionIndex], currentQuestionIndex)}
                 </div>
-
                 <div className="question-buttons">
                     {/* buttons to navigate through questions */}
                     <button type="button" onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
                         Previous
                     </button>
-
                     <h3>{currentQuestionIndex + 1}/{questions.length}</h3>
 
                     <button type="button" onClick={currentQuestionIndex === questions.length - 1 ? submitSurvey : handleNext}>
