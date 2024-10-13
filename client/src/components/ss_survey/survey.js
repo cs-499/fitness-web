@@ -118,10 +118,11 @@ const Survey = () => {
             choices: []
         }
     ];
-
+    // state to track the current question index
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState({});
 
+    // handlers for moving between questions
     const handleNext = () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -134,11 +135,13 @@ const Survey = () => {
         }
     };
 
+    // handler for updating answers
     const handleInputChange = (e, question) => {
         const { name, value, type, checked } = e.target;
         setAnswers((prev) => {
             const updatedAnswers = { ...prev };
             if (type === 'checkbox') {
+                // handle checkbox: add/remove choices from an array
                 if (checked) {
                     if (!updatedAnswers[question]) updatedAnswers[question] = [];
                     updatedAnswers[question].push(value);
@@ -227,31 +230,26 @@ const Survey = () => {
         <div className="page">
             <div className="intake-survey">
                 <div className="intake-question">
-                    {/* Display the current question based on index */}
+                    {/* display the current question based on index */}
                     <h3>{questions[currentQuestionIndex].question}</h3>
                     <p>{questions[currentQuestionIndex].subtitle}</p>
 
-                    {/* Render the input fields for the current question */}
+                    {/* render the input fields for the current question */}
                     {renderChoices(questions[currentQuestionIndex], currentQuestionIndex)}
                 </div>
 
                 <div className="question-buttons">
-                    {/* Buttons to navigate through questions */}
+                    {/* buttons to navigate through questions */}
                     <button type="button" onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
                         Previous
                     </button>
 
                     <h3>{currentQuestionIndex + 1}/{questions.length}</h3>
 
-                    <button type="button" onClick={handleNext} disabled={currentQuestionIndex === questions.length - 1}>
-                        Next
+                    <button type="button" onClick={currentQuestionIndex === questions.length - 1 ? submitSurvey : handleNext}>
+                        {currentQuestionIndex === questions.length - 1 ? 'Submit' : 'Next'}
                     </button>
                 </div>
-                {currentQuestionIndex === questions.length - 1 && (
-                    <button type="button" onClick={submitSurvey}>
-                        Submit Survey
-                    </button>
-                )}
             </div>
         </div>
     );
