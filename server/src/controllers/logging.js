@@ -12,7 +12,10 @@ export const login = async (req, res) => {
             return res.status(401).send('Invalid credentials. Please try again.');
         }
         
-        const response = {firstTimeLogin: user.firstLogin};
+        const response = {
+            firstTimeLogin: user.firstLogin,
+            userId: user._id
+        };
 
         req.session.userId = user._id;
 
@@ -24,7 +27,7 @@ export const login = async (req, res) => {
 
     } catch (error) {
         console.error('Login error:', error);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(500).json({ message: 'Internal Server Error' })
     }
 };
 

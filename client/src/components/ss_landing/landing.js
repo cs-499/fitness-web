@@ -31,9 +31,10 @@ const Landing = () => {
           const data = await response.json();
 
           if (response.ok) {
-            navigate(data.firstTimeLogin ? '/surveymeal' : '/homepage');
+              localStorage.setItem('userId', data.userId);
+              navigate(data.firstTimeLogin ? '/surveymeal' : '/homepage');
           } else {
-            alert(data.message);
+              alert(data.message);
           }        
       } catch (error) {
           console.error(error);
