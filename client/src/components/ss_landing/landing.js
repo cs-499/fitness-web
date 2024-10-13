@@ -28,45 +28,34 @@ const Landing = () => {
               }),
           });
 
-          const data = await response.text();
+          const data = await response.json();
 
           if (response.ok) {
-              alert(`Welcome back, ${username}!`);
-              navigate('/homepage');
+            navigate(data.firstTimeLogin ? '/surveymeal' : '/homepage');
           } else {
-              alert(data);
-          }
+            alert(data.message);
+          }        
       } catch (error) {
-          console.error('Error:', error);
-          alert('Error during login.');
+          console.error(error);
       }
   };
 
-  // Rendering
   return (
       <div>
-        {/* Log in Box */}
         <div className='authcontainer'>
-            <h1 className='authText'>Log In</h1>
-  
-            {/* Username Input */}
+            <h1 className='authText'>Sign In</h1>
             <p className='authhelp'>Username:</p>
             <input id='username' type='text' placeholder='Username' className='authbox' required />
-
-            {/* Password Input */}
             <p className='authhelp'>Password:</p>
             <input id='password' type='password' placeholder='Password' className='authbox' required />
-
-            {/* Log in & Create Account buttons */}
             <div className='button'>
-                <button className='authbutton' onClick={logIn}>Log In</button>
+                <button className='authbutton' onClick={logIn}>Login</button>
             </div>
             <div className='button'>
                 <button className='authbutton' onClick={createAcc}>Create Account</button>
             </div>
         </div>
 
-        {/* Particle System */}
         <ParticleSys />
       </div>
   );

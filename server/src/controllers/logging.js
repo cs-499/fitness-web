@@ -8,14 +8,23 @@ export const login = async (req, res) => {
     const { username, password } = req.body;
     try {
         const user = await User.findOne({ username });
-        if (user && bcrypt.compareSync(password, user.password)) {
-            req.session.userId = user.username;
-            res.send(`Welcome back, ${username}!`);
-        } else {
-            res.status(401).send('Invalid username and/or password');
+        if (!user || !bcrypt.compareSync(password, user.password)){
+            return res.status(401).send('Invalid credentials. Please try again.');
         }
-    } catch (err) {
-        res.status(500).send('Internal server error');
+        
+        const response = {firstTimeLogin: user.firstLogin};
+
+        req.session.userId = user._id;
+
+        if (user.firstLogin) {
+            user.firstLogin = false;
+            await user.save();
+        }
+        return res.json(response);
+
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 
