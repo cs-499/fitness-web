@@ -12,8 +12,17 @@ export const submitSurvey = async (req, res) => {
     try {
         const newSurveyResponse = new Survey({
             userId,
-            answers,
+            answers: new Map()
         });
+        for (const question in answers) {
+            const answer = answers[question];
+            // If answer is an array, use Set to prevent duplicates
+            if (Array.isArray(answer)) {
+                newSurveyResponse.answers.set(question, [...new Set(answer)]);
+            } else {
+                newSurveyResponse.answers.set(question, [answer]);
+            }
+        }
         await newSurveyResponse.save();
         res.status(201).json({ message: 'Survey saved successfully!' });
     } catch (error) {
