@@ -15,6 +15,7 @@ export const sessionCookie = session({
     },
 });
 
+// this middleware function was inspired by https://medium.com/@vikramgyawali57/7-best-approach-of-protecting-routes-in-node-js-every-senior-engineer-suggests-fc32b7777827
 const verifyToken = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1]; // Extract the token from the "Authorization" header
     if (!token) {
