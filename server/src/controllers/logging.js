@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose'; 
 import { userSchema } from '../models/createUser.js';
 import Survey from '../models/createSurvey.js';
+import jwt from 'jsonwebtoken';
 
 const User = mongoose.model('User', userSchema);
 
@@ -16,10 +17,13 @@ export const login = async (req, res) => {
         const surveyResponse = await Survey.findOne({ userId: user._id });
         // make it bool, so if false user always goes to survey
         const surveyCompleted = !!surveyResponse;
+        // generate JWT token in response
+        const token = jwt.sign({ userId: user._id }, process.env.JVT_SECRET, { expiresIn: '2d' });
 
         const response = {
             firstTimeLogin: user.firstLogin,
             surveyCompleted,
+            token,
             userId: user._id
         };
 
