@@ -158,13 +158,20 @@ const Survey = () => {
     const submitSurvey = async () => {
         // get userId from local storage (stored from login)
         const userId = localStorage.getItem('userId');
-        if (!userId) {
+        const token = localStorage.getItem('token');
+
+        if (!userId || !token) {
             return;
         }
         try {
             await axios.post('http://localhost:5000/survey/submit', {
                 userId,
                 answers,
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
             });
             console.log('Thank you for completing the survey.');
             navigate('/homepage');
