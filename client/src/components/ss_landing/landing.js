@@ -32,6 +32,7 @@ const Landing = () => {
 
           if (response.ok) {
               localStorage.setItem('userId', data.userId);
+              localStorage.setItem('token', data.token);
               navigate(data.firstTimeLogin || !data.surveyCompleted ? '/survey' : '/homepage');
           } else {
               alert(data.message);
