@@ -1,10 +1,10 @@
 {
-  "name": "server",
+  "name": "rest-api",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "devStart": "DOTENV_CONFIG_PATH=src/.env nodemon src/index.js"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +17,12 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "express-session": "^1.18.0",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.9.0",
-    "mongoose": "^8.6.3"
+    "mongoose": "^8.6.3",
+    "nodemon": "^3.1.7"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

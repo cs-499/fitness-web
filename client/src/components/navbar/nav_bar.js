@@ -15,9 +15,9 @@ const NavBar = () => {
 
     return(
         <>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
             <ul className="navbar_ul">
-                <li className="homeNav"><a href="/homepage">Home</a></li>
-                <li className="journalNav"><a href="/">Journal</a></li>
+                <li className="homeNav"><a href="/homepage"><i class="fa fa-fw fa-home"></i></a></li>
                 <li className="wplanNav"><a href="/">Workout Plan</a></li>
                 <li className="mplanNav"><a href="/">Meal Plan</a></li>
                 <li className="recipiesNav"><a href="/">Recipies</a></li>

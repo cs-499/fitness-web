@@ -1,13 +1,74 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../../App.css';
-import './surveyworkout.css';
-import ParticleSys from '../particles/particle_sys';
+import './survey.css';
 
-const SurveyWorkout = () => {
+const Survey = () => {
     document.title = 'ShapeShifter';
+    const navigate = useNavigate();
 
-    //list of questions or div IDs
     const questions = [
+        {
+            question: 'What dietary preferences do you have?',
+            subtitle: 'Select all that apply',
+            inputType: 'checkbox',
+            choices: ["Vegan", "Vegetarian", "Pescatarian", "Kosher", "Halal", "None"]
+        },
+        {
+            question: 'What allergies or restrictions do you have?',
+            subtitle: 'Select all that apply',
+            inputType: 'checkbox',
+            choices: ["Nuts", "Gluten", "Shellfish", "Lactose and Dairy", "Eggs", "Soy"]
+        },
+        {
+            question: 'How often do you grocery shop?',
+            subtitle: '',
+            inputType: 'radio',
+            choices: ["1-2 Times a week", "3-4 Times a week", "5-6 Times a week", "A little bit every day"]
+        },
+        {
+            question: 'How often do you cook?',
+            subtitle: '',
+            inputType: 'radio',
+            choices: ["Once a day", "Twice a day", "Multiple times a day"]
+        },
+        {
+            question: 'How often do you meal prep?',
+            subtitle: '',
+            inputType: 'radio',
+            choices: ["Meal prep for 1-2 days", "Meal prep for 3-4 days", "Meal prep for 5+ days"]
+        },
+        {
+            question: 'How often do you eat?',
+            subtitle: '',
+            inputType: 'radio',
+            choices: ["Once a day", "Twice a day", "Three times a day", "Multiple times a day"]
+        },
+        {
+            question: 'What cooking experience do you have?',
+            subtitle: '',
+            inputType: 'radio',
+            choices: ["None", "Amateur", "Homecook", "Professional"]
+        },
+        {
+            question: 'Do you have the following appliances?',
+            subtitle: 'Select all that apply',
+            inputType: 'checkbox',
+            choices: ["Oven", "Stovetop", "Microwave", "Refrigerator"]
+        },
+        {
+            question: 'Do you have preferences in ingredients?',
+            subtitle: 'Select all that apply',
+            inputType: 'checkbox',
+            choices: ["Organic", "NON-GMO", "Free Range", "Farmed", "Wild Caught"]
+        },
+        {
+            question: 'What is your budget?',
+            subtitle: '',
+            inputType: 'radio',
+            choices: ["10-20", "20-50", "50-100", "100-200", "200+"]
+        },
         {
             question: 'What are your goals?',
             subtitle: 'Select all that apply',
@@ -56,11 +117,9 @@ const SurveyWorkout = () => {
             inputType: 'text',
             choices: []
         }
-    ];    
-
+    ];
     // state to track the current question index
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    // state to store the answers
     const [answers, setAnswers] = useState({});
 
     // handlers for moving between questions
@@ -90,14 +149,37 @@ const SurveyWorkout = () => {
                     updatedAnswers[question] = updatedAnswers[question].filter(item => item !== value);
                 }
             } else {
-                // handle text and radio inputs
                 updatedAnswers[question] = value;
             }
             return updatedAnswers;
         });
     };
 
-    // render choices dynamically based on input type
+    const submitSurvey = async () => {
+        // get userId from local storage (stored from login)
+        const userId = localStorage.getItem('userId');
+        const token = localStorage.getItem('token');
+
+        if (!userId || !token) {
+            return;
+        }
+        try {
+            await axios.post('http://localhost:5000/survey/submit', {
+                userId,
+                answers,
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+            console.log('Thank you for completing the survey.');
+            navigate('/homepage');
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const renderChoices = (question, index) => {
         const { inputType, choices } = question;
 
@@ -142,7 +224,8 @@ const SurveyWorkout = () => {
                         type="number"
                         name={`${question.question}-${index}`}
                         value={answers[question.question] || ''}
-                        placeholder="Input"
+                        placeholder="Enter your budget"
+                        min="10"
                         onChange={(e) => handleInputChange(e, question.question)}
                     />
                 </div>
@@ -157,21 +240,18 @@ const SurveyWorkout = () => {
                     {/* display the current question based on index */}
                     <h3>{questions[currentQuestionIndex].question}</h3>
                     <p>{questions[currentQuestionIndex].subtitle}</p>
-                    
                     {/* render the input fields for the current question */}
                     {renderChoices(questions[currentQuestionIndex], currentQuestionIndex)}
                 </div>
-                
                 <div className="question-buttons">
                     {/* buttons to navigate through questions */}
                     <button type="button" onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
                         Previous
                     </button>
-                    
                     <h3>{currentQuestionIndex + 1}/{questions.length}</h3>
 
-                    <button type="button" onClick={handleNext} disabled={currentQuestionIndex === questions.length - 1}>
-                        Next
+                    <button type="button" onClick={currentQuestionIndex === questions.length - 1 ? submitSurvey : handleNext}>
+                        {currentQuestionIndex === questions.length - 1 ? 'Submit' : 'Next'}
                     </button>
                 </div>
             </div>
@@ -179,4 +259,4 @@ const SurveyWorkout = () => {
     );
 };
 
-export default SurveyWorkout;
+export default Survey;

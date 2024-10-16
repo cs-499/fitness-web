@@ -2,17 +2,19 @@
 .navbar_ul {
     list-style-type: none;
     margin: 0;
-    padding: 0;
+    padding: 10px;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: white;
+    z-index: 1;
 }
 
 /* the text, will likely change to icons*/
 .navbar_ul li a {
     display: block;
-    color: white;
+    color: black;
     text-align: center;
     padding: 10px 125px;
     text-decoration: none;
@@ -68,4 +70,8 @@
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
+}
+
+i {
+    size:10cap
 }

@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose'; 
 import { userSchema } from '../models/createUser.js';
+import Survey from '../models/createSurvey.js';
+import jwt from 'jsonwebtoken';
 
 const User = mongoose.model('User', userSchema);
 
@@ -8,14 +10,34 @@ export const login = async (req, res) => {
     const { username, password } = req.body;
     try {
         const user = await User.findOne({ username });
-        if (user && bcrypt.compareSync(password, user.password)) {
-            req.session.userId = user.username;
-            res.send(`Welcome back, ${username}!`);
-        } else {
-            res.status(401).send('Invalid username and/or password');
+        if (!user || !bcrypt.compareSync(password, user.password)){
+            return res.status(401).send('Invalid credentials. Please try again.');
         }
-    } catch (err) {
-        res.status(500).send('Internal server error');
+
+        const surveyResponse = await Survey.findOne({ userId: user._id });
+        // make it bool, so if false user always goes to survey
+        const surveyCompleted = !!surveyResponse;
+        // generate JWT token in response
+        const token = jwt.sign({ userId: user._id }, process.env.JVT_SECRET, { expiresIn: '2d' });
+
+        const response = {
+            firstTimeLogin: user.firstLogin,
+            surveyCompleted,
+            token,
+            userId: user._id
+        };
+
+        req.session.userId = user._id;
+
+        if (user.firstLogin) {
+            user.firstLogin = false;
+            await user.save();
+        }
+        return res.json(response);
+
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ message: 'Internal Server Error' })
     }
 };
 
