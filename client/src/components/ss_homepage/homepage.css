@@ -1,21 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+body{
+    background-color: white;
+}
 
-.today_workout {
-    width: 500px;
-    height: 700px;
-    background: #ffffff;
-    color: #000000;
+/*Text above the Blue Box + blue box*/
+.todayW{
     position: absolute;
     top: 50%;
     left: 33%;
     transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+/* Blue Box*/
+.today_workout {
+    width: 500px;
+    height: 700px;
+    background: #164C7A;
+    color: #000000;
+
     box-sizing: border-box;
     padding: 10px 30px;
     box-shadow: 0px 0px 0px #ffffff;
     z-index: 1; /* <-------------- This is what puts the element above the particles btw*/
     border-radius: 25px;
-    box-shadow: 0px 0px 5px #00000073
+    box-shadow: 0px 0px 5px #00000073;
 }
 
 .today_mealplan {
