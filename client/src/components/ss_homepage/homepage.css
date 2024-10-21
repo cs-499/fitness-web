@@ -28,23 +28,6 @@ body{
     box-shadow: 0px 0px 5px #00000073;
 }
 
-.today_mealplan {
-    width: 500px;
-    height: 700px;
-    background: #ffffff;
-    color: #000000;
-    position: absolute;
-    top: 50%;
-    left: 67%;
-    transform: translate(-50%, -50%);
-    box-sizing: border-box;
-    padding: 10px 30px;
-    box-shadow: 0px 0px 0px #ffffff;
-    z-index: 1; /* <-------------- This is what puts the element above the particles btw*/
-    border-radius: 25px;
-    box-shadow: 0px 0px 5px #00000073;
-}
-
 .today_exercises, .today_meals{
     list-style-type: none;
     margin: 0;
@@ -69,34 +52,105 @@ body{
     color: white;
 }
 
-.exercisebp{
-    background-image: url('../../../public/The-Bench-Press.png');
-    border-radius: 25px;
-    max-height: 100px;
-}
-
-.exerciseip{
-    background-image: url('../../../public/inclinePress.png');
-    border-radius: 25px;
-    max-height: 100px;
-}
-
-.exercisecc{
-    background-image: url('../../../public/crossover.png');
-    border-radius: 25px;
-    max-height: 100px;
-}
-
 .today_workout p, .today_mealplan p{
     font-family: "Roboto", sans-serif;
     text-align: center;
     font-size: 24pt;
 }
 
-.mealcereal{
-    background-image: url('../../../public/cereal.png');
-    border-radius: 25px;
-    max-height: 100px;
+.today_workout{
+    overflow: hidden;
 }
 
+.actual_workout{
+    position: absolute;
+    bottom: 0;
+    color: white;
+}
 
+.category_text{
+    color: white;
+}
+
+.meal_category{
+    color: white;
+    padding-top: 20px;
+}
+
+.body_highlight{
+    width: 250%;
+    height: 150%;
+    position: relative;
+    top: 50px;
+    right: 210px;
+    object-fit: contain;
+}
+
+.done-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1;
+    position: absolute;
+    bottom: 1;
+    right: 0px;
+    width: 50%;
+}
+
+.meals-section {
+    flex: 1.5;
+    padding-left: 20px;
+    z-index: 1;
+}
+
+.meals-section h1 {
+    position: relative;
+    left: 55%;
+    margin-bottom: 20px;
+    z-index: 1;
+}
+
+.meal-item {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: white;
+    left: 55%;
+    width: 40%;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.meal-image .image-placeholder {
+    width: 60px;
+    height: 60px;
+    background-color: black;
+    border-radius: 5px;
+}
+
+.meal-info {
+    flex-grow: 1;
+    margin-left: 20px;
+}
+
+.meal-info h3 {
+    margin-bottom: 5px;
+    color: #000000;
+}
+
+.log-button {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

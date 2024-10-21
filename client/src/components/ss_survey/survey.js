@@ -224,7 +224,7 @@ const Survey = () => {
                         type="number"
                         name={`${question.question}-${index}`}
                         value={answers[question.question] || ''}
-                        placeholder="Enter your budget"
+                        placeholder="Enter Measurements"
                         min="10"
                         onChange={(e) => handleInputChange(e, question.question)}
                     />
