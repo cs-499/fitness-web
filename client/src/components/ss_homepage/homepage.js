@@ -3,7 +3,8 @@
 import React from 'react';
 import '../../App.css';
 import './homepage.css';
-import NavBar from "../navbar/nav_bar"
+import WorkoutImage from '../images/chest.png';
+import NavBar from "../navbar/nav_bar";
 import ParticleSys from '../particles/particle_sys';
 
 const Homepage = () => {
@@ -11,31 +12,56 @@ const Homepage = () => {
     return(
         <div className='all'>
             <NavBar />
-            <div className='today_workout'>
-                <p>Today's Workout</p>
-                <ul className='today_exercises'>
-                    <div className='exercisebp' id='bench_press'>
-                        <li><a href='/'>Bench press</a></li>
+            <div className='Workoutout_Meals'>
+                <div className='todayW'>
+                <h1 className='category_text'>Today's Workout</h1>
+                    <div className='today_workout'>
+                    
+                        <img className='body_highlight' src={WorkoutImage} />
+                        <h1 className='actual_workout'>Chest</h1>
+                        
                     </div>
-                    <div className='exerciseip' id='incline_press'>
-                        <li><a href='/'>incline press</a></li>
+                    <button class="done-button">Workout Complete</button>
+                </div>
+
+                <div class="meals-section">
+                    <h1 className='meal_category'>Planned Meals</h1>
+
+                    <div class="meal-item">
+                        <div class="meal-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="meal-info">
+                            <h3>Meal name</h3>
+                            <p>Other info</p>
+                        </div>
+                        <button class="log-button">Log</button>
                     </div>
-                    <div className='exercisecc' id='cable_crossover'>
-                        <li><a href='/'>cable crossover</a></li>
+
+                    <div class="meal-item">
+                        <div class="meal-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="meal-info">
+                            <h3>Meal name</h3>
+                            <p>Other info</p>
+                        </div>
+                        <button class="log-button">Log</button>
                     </div>
-                </ul>
+
+                    <div class="meal-item">
+                        <div class="meal-image">
+                            <div class="image-placeholder"></div>
+                        </div>
+                        <div class="meal-info">
+                            <h3>Meal name</h3>
+                            <p>Other info</p>
+                        </div>
+                        <button class="log-button">Log</button>
+                    </div>
+                </div>
             </div>
-
-
-
-            <div className='today_mealplan'>
-                <p>Today's meals</p>
-                <ul className='today_meals'>
-                    <div className='mealcereal' id='cereal'>
-                        <li><a href='/'>Cereal</a></li>
-                    </div>
-                </ul>
-            </div>
+            
 
             <ParticleSys />
         </div>

@@ -19,7 +19,7 @@ const Survey = () => {
             question: 'What allergies or restrictions do you have?',
             subtitle: 'Select all that apply',
             inputType: 'checkbox',
-            choices: ["Nuts", "Gluten", "Shellfish", "Lactose and Dairy", "Eggs", "Soy"]
+            choices: ["Nuts", "Gluten", "Shellfish", "Lactose and Dairy", "Eggs", "Soy", "None"]
         },
         {
             question: 'How often do you grocery shop?',
@@ -31,13 +31,13 @@ const Survey = () => {
             question: 'How often do you cook?',
             subtitle: '',
             inputType: 'radio',
-            choices: ["Once a day", "Twice a day", "Multiple times a day"]
+            choices: ["Once a day", "Twice a day", "Multiple times a day", "Never"]
         },
         {
             question: 'How often do you meal prep?',
             subtitle: '',
             inputType: 'radio',
-            choices: ["Meal prep for 1-2 days", "Meal prep for 3-4 days", "Meal prep for 5+ days"]
+            choices: ["Meal prep for 1-2 days", "Meal prep for 3-4 days", "Meal prep for 5+ days", "Never"]
         },
         {
             question: 'How often do you eat?',
@@ -61,10 +61,10 @@ const Survey = () => {
             question: 'Do you have preferences in ingredients?',
             subtitle: 'Select all that apply',
             inputType: 'checkbox',
-            choices: ["Organic", "NON-GMO", "Free Range", "Farmed", "Wild Caught"]
+            choices: ["Organic", "NON-GMO", "Free Range", "Farmed", "Wild Caught", "No"]
         },
         {
-            question: 'What is your budget?',
+            question: 'What is your weekly budget?',
             subtitle: '',
             inputType: 'radio',
             choices: ["10-20", "20-50", "50-100", "100-200", "200+"]
@@ -72,8 +72,8 @@ const Survey = () => {
         {
             question: 'What are your goals?',
             subtitle: 'Select all that apply',
-            inputType: 'checkbox',
-            choices: ["Gain muscle", "Lose fat", "Maintain health"]
+            inputType: 'radio',
+            choices: ["Gain muscle", "Lose fat", "Both"]
         },
         {
             question: 'What is your experience level?',
@@ -83,15 +83,15 @@ const Survey = () => {
         },
         {
             question: 'How often do you want to work out?',
-            subtitle: '',
-            inputType: 'radio',
-            choices: ["1-2 Times a week", "3-4 Times a week", "4-5 Times a week", "6+ a week"]
+            subtitle: 'Select all the days you want',
+            inputType: 'checkbox',
+            choices: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         },
         {
             question: 'How long do you want your workouts to be?',
             subtitle: '',
             inputType: 'radio',
-            choices: ["15 minutes", "30 minutes", "45 minutes", "1 hour", "1+ hours"]
+            choices: ["30-45 Minutes", "45-60 Minutes", "60-90 Minutes", "90+ Minutes"]
         },
         {
             question: 'What equipment do you have available?',
@@ -103,7 +103,7 @@ const Survey = () => {
             question: 'What is your Sex?',
             subtitle: '',
             inputType: 'radio',
-            choices: ["Male", "Female", "Not Specified"]
+            choices: ["Male", "Female"]
         },
         {
             question: 'Input weight (lbs)',
@@ -224,7 +224,7 @@ const Survey = () => {
                         type="number"
                         name={`${question.question}-${index}`}
                         value={answers[question.question] || ''}
-                        placeholder="Enter your budget"
+                        placeholder="Enter Measurements"
                         min="10"
                         onChange={(e) => handleInputChange(e, question.question)}
                     />
