@@ -14,7 +14,7 @@
 
 /* The icons*/
 .nav_icons{
-    font-size: 27pt;
+    font-size: 25pt;
 }
 
 /* the text*/
@@ -24,12 +24,12 @@
     text-align: center;
     padding: 0px 150px;
     text-decoration: none;
-    font-size: 8pt;
+    font-size: 10pt;
 }
 
 /* Change the link color to #111 (black) on hover */
 .navbar_ul li a:hover, span:hover {
-    background-color: #0f395c;
+    background-color: #DfDfDf;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 }
@@ -42,7 +42,7 @@
     height: 100%;
     width: 0; 
     position: fixed;
-    z-index: 1;
+    z-index: 100;
     top: 0;
     right: 0;
     background-color: #ffffff;
@@ -82,4 +82,32 @@
     .sidenav a {font-size: 18px;}
 }
 
+@media screen and (max-width: 1500px){
+    .navbar_ul li a {
+        padding: 0px 100px;
+    }
+}
 
+@media screen and (max-width: 1250px){
+    .navbar_ul li a {
+        padding: 0px 75px;
+    }
+}
+
+@media screen and (max-width: 1000px){
+    .navbar_ul li a {
+        padding: 0px 50px;
+    }
+}
+
+@media screen and (max-width: 750px){
+    .navbar_ul li a {
+        padding: 0px 25px;
+    }
+}
+
+@media screen and (max-width: 500px){
+    .navbar_ul li a {
+        padding: 0px 0px;
+    }
+}

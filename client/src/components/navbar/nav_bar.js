@@ -42,11 +42,11 @@ const NavBar = () => {
                     </a>
                 </li>
                 <li className="recipesNav">
-                    <a href="/recipes">
+                    <a href="/journal">
                         <div className="nav_icons">
-                            <i class="fa-solid fa-burger"></i>
+                            <i class="fa-solid fa-book"></i>
                         </div>
-                        Recipes
+                        Journal
                     </a>
                 </li>
                 <li className="accountNav">

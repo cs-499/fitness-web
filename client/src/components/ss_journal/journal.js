@@ -10,7 +10,7 @@ const Recipes = () => {
     return(
         <>
             <NavBar />
-            recipes
+            Journal
         </>
     )
 }
