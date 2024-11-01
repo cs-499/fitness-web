@@ -1,0 +1,184 @@
+/* liveworkout.css */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+body{
+    background-color: white;
+    overflow: visible;
+    overflow-x: hidden;
+}
+
+
+/* General styling */
+/* .all {
+    font-family: Arial, sans-serif;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f5f5f5;
+} */
+
+/* .Workoutout_Meals {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 900px;
+    padding: 20px;
+    margin: 20px;
+} */
+
+/* Section Titles */
+.category_text {
+    font-size: 24px;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Workout Selection */
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Guided Workout */
+.guided-workout {
+    margin-top: 20px;
+    background: #f0f8ff;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.guided-workout h2 {
+    color: #007bff;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.guided-workout ul {
+    list-style: none;
+    padding: 0;
+}
+
+.guided-workout li {
+    font-size: 16px;
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.guided-workout li:last-child {
+    border-bottom: none;
+}
+
+/* Diet Tracker */
+.diet-tracker {
+    margin-top: 20px;
+    background: #fff5e1;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.diet-tracker h2 {
+    color: #e67e22;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.diet-tracker p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Circular Timer */
+.circular-timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.circular-timer svg {
+    margin: 20px 0;
+}
+
+.timer-text {
+    font-size: 24px;
+    color: #333;
+}
+
+.timer-controls {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.timer-controls button {
+    background-color: #28a745;
+}
+
+.timer-controls button:hover {
+    background-color: #218838;
+}
+
+/* Workout Summary */
+.done-button {
+    background-color: #ff6347;
+    color: #fff;
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 20px 0;
+    display: block;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.done-button:hover {
+    background-color: #e5533d;
+}
+
+/* Metrics Display */
+.metrics-display {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e9f7ef;
+    border-radius: 8px;
+}
+
+.metrics-display h2, .metrics-display h3 {
+    margin: 5px 0;
+    color: #333;
+}
+
+.metrics-display h2 {
+    font-size: 22px;
+    color: #007bff;
+}
+
+.metrics-display h3 {
+    font-size: 18px;
+    color: #555;
+}
