@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import '../../App.css';
-import './homepage.css';
+import './contact.css';
 import WorkoutImage from '../images/chest.png';
 import WorkoutImage2 from '../images/legs.avif';
 import WorkoutImage3 from '../images/biceps.webp';
@@ -10,7 +10,7 @@ import WorkoutImage4 from '../images/abs.jpg';
 import NavBar from "../navbar/nav_bar";
 import ParticleSys from '../particles/particle_sys';
 
-const Homepage = () => {
+const Contact = () => {
     useEffect(() => {
         document.title = 'ShapeShifter';
     }, []);
@@ -102,4 +102,5 @@ const Homepage = () => {
     );
 }
 
-export default Homepage;
+
+export default Contact;
