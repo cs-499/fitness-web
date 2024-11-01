@@ -54,7 +54,7 @@ const Contact = () => {
                         onClick={() => window.location.href = 'http://localhost:3000/liveworkout'}>
                         Start Workout
                     </button>
-                    <button className="done-button">Workout Complete</button>
+                    <button className="end-button">Workout Complete</button>
                     </div>
                 </div>
 
