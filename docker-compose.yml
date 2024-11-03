@@ -7,11 +7,6 @@ services:
       - mongo-data:/data/db
     ports:
       - '27017:27017'
-    # healthcheck:
-    #   test: ["CMD", "mongo", "--eval", "db.runCommand({ ping: 1 })"]
-    #   interval: 5s
-    #   timeout: 5s
-    #   retries: 3
   server:
     build:
       context: ./server
