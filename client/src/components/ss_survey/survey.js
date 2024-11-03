@@ -164,7 +164,7 @@ const Survey = () => {
             return;
         }
         try {
-            await axios.post('http://localhost:5000/survey/submit', {
+            await axios.post(`${process.env.REACT_APP_API_HOST}/survey/submit`, {
                 userId,
                 answers,
             }, {

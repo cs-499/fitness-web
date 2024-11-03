@@ -11,7 +11,7 @@ const Register = () => {
         event.preventDefault(); // Prevent page refresh
 
         try {
-            const response = await fetch('http://localhost:5000/register', {
+            const response = await fetch(`${process.env.REACT_APP_API_HOST}/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
