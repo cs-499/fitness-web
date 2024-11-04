@@ -30,9 +30,9 @@ export const submitSurvey = async (req, res) => {
 
 export const getSurveyFromUser = async (req, res) => {
     const { userId } = req.params;
-    // check for userId in database
+    // Check for userId in the database
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-        return res.status(400);
+        return res.status(400).json({ message: 'Invalid user ID' });
     }
     try {
         const surveyResponses = await Survey.find({ userId });
@@ -40,7 +40,8 @@ export const getSurveyFromUser = async (req, res) => {
             return res.status(404).json({ message: 'No survey for this user' });
         }
         res.status(200).json(surveyResponses);
+        return surveyResponses;
     } catch (error) {
-        res.status(500).json({error: error.message });
+        res.status(500).json({ error: error.message });
     }
 };

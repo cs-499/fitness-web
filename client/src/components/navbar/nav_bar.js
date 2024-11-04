@@ -11,6 +11,13 @@ function closeNav() {
     document.getElementById("account_nav").style.width = "0";
     
 } 
+
+function handleLogout(event) {
+    event.preventDefault(); // Prevents the default link behavior
+    closeNav(); // Only closes the app on "Logout"
+    // Add any additional logout logic here
+}
+
 const NavBar = () => {
 
     return(
@@ -59,13 +66,20 @@ const NavBar = () => {
                 </li>
             </ul>
 
+
+
+
+
+
             <div id="account_nav" className="sidenav">
                 <a href="javascript:void(0)" className="closebtn" onClick={closeNav}>&times;</a>
-                <a href="/">About</a>
-                <a href="/">Services</a>
-                <a href="/">Clients</a>
-                <a href="/">Contact</a>
+                <a href="/about">About</a>
+                <a href="/services">Services</a>
+                <a href="/clients">Clients</a>
+                <a href="/contact">Contact</a>
+                <a href="/" onClick={handleLogout}>Logout</a>
             </div>
+
         </>
     );
 }

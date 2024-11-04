@@ -28,123 +28,6 @@ body{
     box-shadow: 0px 0px 5px #00000073;
 }
 
-.workout-container {
-    width: 90%;
-    max-width: 600px; /* Limits the maximum width for larger screens */
-    margin: 0 auto; /* Centers the container */
-    text-align: center;
-}
-
-/* Responsive Image Slider */
-.today_workout {
-    width: 100%;
-    aspect-ratio: 5 / 7;
-    background: #164C7A;
-    color: #000000;
-    overflow: hidden;
-    padding: 10px 20px;
-    box-shadow: 0px 0px 5px #00000073;
-    border-radius: 25px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    margin: 20px auto;
-}
-
-.body_highlight {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 25px;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.left-arrow, .right-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.left-arrow {
-    left: 10px;
-}
-
-.right-arrow {
-    right: 10px;
-}
-
-.button-container {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    width: 100%;
-    position: relative;
-    margin-top: 20px; /* Adjust margin as needed */
-}
-
-
-.start-button {
-    /* position: absolute; */
-    bottom: -230px;
-    left: 20px;
-    padding: 1px 2px; /* Adjust padding */
-    width: 150px; /* Adjust width for a better fit */
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    white-space: nowrap; /* Prevent text from wrapping */
-    text-align: center;
-}
-
-.end-button {
-    /* position: absolute; */
-    bottom: -170px;
-    left: 200px; /* Set distance from the start button */
-    padding: 17px 20px; /* Adjust padding */
-    width: 150px; /* Adjust width to match start button */
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    white-space: nowrap;
-    text-align: center;
-}
-
-.start-button:hover, .end-button:hover {
-    background-color: #0056b3;
-    border: 1px solid white;
-}
-
-
-
-
-
-
 .today_exercises, .today_meals{
     list-style-type: none;
     margin: 0;
@@ -199,24 +82,58 @@ body{
     object-fit: contain;
 }
 
-/* .done-button {
-    margin-top: 20px;
-    padding: 10px 20px;
+
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    width: 100%;
+    position: relative;
+    margin-top: 20px; /* Adjust margin as needed */
+}
+
+
+.start-button {
+    /* position: absolute; */
+    bottom: -130px;
+    left: 20px;
+    padding: 1px 2px; /* Adjust padding */
+    width: 150px; /* Adjust width for a better fit */
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    z-index: 1;
-    position: absolute;
-    bottom: 1;
-    right: 0px;
-    width: 50%;
-    height: auto;
-} */
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    white-space: nowrap; /* Prevent text from wrapping */
+    text-align: center;
+}
 
+.end-button {
+    /* position: absolute; */
+    bottom: -170px;
+    left: 200px; /* Set distance from the start button */
+    padding: 17px 20px; /* Adjust padding */
+    width: 150px; /* Adjust width to match start button */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    white-space: nowrap;
+    text-align: center;
+}
 
-
+.start-button:hover, .end-button:hover {
+    background-color: #0056b3;
+    border: 1px solid white;
+}
 
 
 
@@ -278,24 +195,19 @@ body{
     height: 100%;
 }
 
-@media screen and (max-width: 768px) {
-    .today_workout {
-        padding: 10px;
+@media screen and (max-width: 1250px) {
+    .today_workout{
+        background-color: #000000;
     }
-    .actual_workout {
-        font-size: 1.5rem;
+    .meals-section{
+        position: absolute;
+        top: 1000px;
     }
-    .left-arrow, .right-arrow {
-        width: 35px;
-        height: 35px;
-        font-size: 1.2rem;
+    .meal-item{
+        width: 200%;
+
     }
-    /* .button-container {
-        flex-direction: column;
-        gap: 10px;
-    } */
-    /* .start-button, .done-button {
-        width: 100%;
-        font-size: 0.9rem;
-    } */
+    body{
+        overflow-y: visible;
+    }
 }

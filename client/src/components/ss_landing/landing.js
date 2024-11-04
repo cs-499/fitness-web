@@ -17,7 +17,7 @@ const Landing = () => {
       const password = document.getElementById('password').value;
 
       try {
-          const response = await fetch('http://localhost:5000/login', {
+          const response = await fetch(`${process.env.REACT_APP_API_HOST}/login`, {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/x-www-form-urlencoded',

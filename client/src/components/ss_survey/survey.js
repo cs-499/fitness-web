@@ -79,7 +79,7 @@ const Survey = () => {
             question: 'What is your experience level?',
             subtitle: '',
             inputType: 'radio',
-            choices: ["Beginner", "Intermediate", "advanced"]
+            choices: ["Beginner", "Intermediate", "Advanced"]
         },
         {
             question: 'How often do you want to work out?',
@@ -164,7 +164,7 @@ const Survey = () => {
             return;
         }
         try {
-            await axios.post('http://localhost:5000/survey/submit', {
+            await axios.post(`${process.env.REACT_APP_API_HOST}/survey/submit`, {
                 userId,
                 answers,
             }, {
