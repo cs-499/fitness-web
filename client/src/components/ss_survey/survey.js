@@ -79,7 +79,7 @@ const Survey = () => {
             question: 'What is your experience level?',
             subtitle: '',
             inputType: 'radio',
-            choices: ["Beginner", "Intermediate", "advanced"]
+            choices: ["Beginner", "Intermediate", "Advanced"]
         },
         {
             question: 'How often do you want to work out?',

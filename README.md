@@ -20,6 +20,11 @@ npm start
 npm install
 node index.js OR npm run devStart
 ```
+### Run tests
+```
+npm test
+```
+
 ### Docker
 #### Initiate entire stack (client, server API, mongodb) and spin them as containers
 #### Uses nginx as a proxy
