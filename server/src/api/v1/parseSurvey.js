@@ -1,4 +1,4 @@
-import { getSurveyFromUser } from '../../survey.js';
+import { getSurveyFromUser } from '../../controllers/survey.js';
 
 export const getSpecificAnswer = async (userId, questionText) => {
     // Mock response object to capture the output
