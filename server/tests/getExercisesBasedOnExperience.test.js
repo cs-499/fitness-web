@@ -1,4 +1,3 @@
-// tests/getExercisesBasedOnExperience.test.js
 import getExercisesByExperienceLevel from '../src/api/v1/ninjaApi.js';
 import request from 'request';
 import { getSpecificAnswer } from '../src/api/v1/parseSurvey.js';
