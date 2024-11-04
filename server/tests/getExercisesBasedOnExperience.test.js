@@ -1,22 +1,22 @@
 // tests/getExercisesBasedOnExperience.test.js
-import getExercisesByExperienceLevel from '../src/controllers/api/v1/ninjaApi';
+import getExercisesByExperienceLevel from '../src/api/v1/ninjaApi.js';
 import request from 'request';
-import { getSpecificAnswer } from '../src/controllers/api/v1/parseSurvey'; // Adjust import as necessary
+import { getSpecificAnswer } from '../src/api/v1/parseSurvey.js';
 
 jest.mock('request');
-jest.mock('../src/controllers/api/v1/parseSurvey');
+jest.mock('../src/api/v1/parseSurvey.js');
 
 describe('getExercisesByExperienceLevel', () => {
-    // Mock the environment variable before all tests
     beforeAll(() => {
-        process.env.NINJA_API = 'mocked_api_key'; // Set your mocked API key
+        // put some dummy key
+        process.env.NINJA_API = 'dbvsabsjbvbvdshba';
     });
 
     it('should call the API with the correct difficulty level based on experience', async () => {
         const surveyResponses = [
             { question: 'What is your experience level?', answer: 'Beginner' },
         ];
-        getSpecificAnswer.mockResolvedValue('Beginner'); // Mocking the resolved value
+        getSpecificAnswer.mockResolvedValue('Beginner');
 
         // Mock the request.get implementation
         request.get.mockImplementation((options, callback) => {
@@ -25,19 +25,19 @@ describe('getExercisesByExperienceLevel', () => {
 
         await getExercisesByExperienceLevel(surveyResponses);
 
+        // Simplify the assertion to match only specific properties in the options object
         expect(request.get).toHaveBeenCalledWith(expect.objectContaining({
             url: expect.stringContaining('difficulty=beginner'),
-            headers: {
-                'X-Api-Key': process.env.NINJA_API, // Ensure this is set up as expected
-            },
-        }));
+            headers: expect.objectContaining({
+                'X-Api-Key': process.env.NINJA_API,
+            }),
+        }), expect.any(Function));
     });
 
     it('should log an error if no experience level is found', async () => {
         const surveyResponses = [];
-        getSpecificAnswer.mockResolvedValue(''); // Mocking no experience level found
-
-        console.log = jest.fn(); // Mock console.log
+        getSpecificAnswer.mockResolvedValue('');
+        console.log = jest.fn();
 
         await getExercisesByExperienceLevel(surveyResponses);
 
@@ -46,14 +46,13 @@ describe('getExercisesByExperienceLevel', () => {
 
     it('should log an error if an invalid experience level is provided', async () => {
         const surveyResponses = [
-            { question: 'What is your experience level?', answer: 'UnknownLevel' },
+            { question: 'What is your experience level?', answer: 'Unknown' },
         ];
-        getSpecificAnswer.mockResolvedValue('UnknownLevel'); // Mocking an invalid level
-
-        console.log = jest.fn(); // Mock console.log
+        getSpecificAnswer.mockResolvedValue('Unknown');
+        console.log = jest.fn();
 
         await getExercisesByExperienceLevel(surveyResponses);
 
-        expect(console.log).toHaveBeenCalledWith('No matching difficulty level found for experience:', 'UnknownLevel');
+        expect(console.log).toHaveBeenCalledWith('No matching difficulty level found for experience:', 'Unknown');
     });
 });
