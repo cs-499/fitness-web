@@ -4,9 +4,15 @@ import { connectDB } from './connectDB.js';
 import { corsMiddleware } from './middleware/cors.js';
 import { sessionCookie, bodyParse } from './middleware/auth.js';
 import routes from './routes.js';
+import { spawn } from 'child_process';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 connectDB();
 
@@ -18,6 +24,20 @@ app.use(express.json());
 app.use(routes);
 app.use('/survey', routes);
 
+// script for starting Flask server for meal-gen API
+const flaskAppPath = path.join(__dirname, 'controllers', 'meal-gen.py');
+
+// start the Flask server using `spawn`, which handles spaces in paths better
+const flaskProcess = spawn('python3', [flaskAppPath]);
+
+flaskProcess.on('error', (error) => {
+    console.error(`Error starting Flask server: ${error.message}`);
+});
+
+flaskProcess.stderr.on('data', (data) => {
+    console.error(`Flask error: ${data}`);
+});
+
 app.listen(PORT, () => {
-    console.log(`rest api running on port ${PORT}`);
+    console.log(`REST API running on port ${PORT}`);
 });
