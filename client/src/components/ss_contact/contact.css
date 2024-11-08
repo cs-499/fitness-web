@@ -196,9 +196,6 @@ body{
 }
 
 @media screen and (max-width: 1250px) {
-    .today_workout{
-        background-color: #000000;
-    }
     .meals-section{
         position: absolute;
         top: 1000px;

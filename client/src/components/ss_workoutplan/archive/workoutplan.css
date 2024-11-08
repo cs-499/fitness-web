@@ -10,12 +10,10 @@ body {
 
 .enhanced-workout-page {
     background: linear-gradient(rgb(21, 76, 121), rgb(118, 181, 197));
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 40px;
-
 }
 
 .dashboard {

@@ -1,5 +1,7 @@
 // This page will be the Homepage where you see your workouts
 
+// ???????????????? not sure what this page is to be honest, or the css file could be deleted probably - ilian
+
 import React, { useEffect, useState } from 'react';
 import '../../App.css';
 import './contact.css';
