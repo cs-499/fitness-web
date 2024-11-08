@@ -2,163 +2,120 @@ import React, { useEffect, useState } from 'react';
 import '../../App.css';
 import './workoutplan.css';
 import NavBar from "../navbar/nav_bar";
-import ParticleSys from '../particles/particle_sys';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
-import { Line, Doughnut } from 'react-chartjs-2';
+const WorkoutPlan = () => {
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
-
-const EnhancedWorkoutPlan = () => {
-    useEffect(() => {
-        document.title = 'ShapeShifter Enhanced';
-    }, []);
-
-    const [workoutCompletion, setWorkoutCompletion] = useState([true, false, true, false, true, true, false]);
-    const [stats, setStats] = useState({
-        workoutsCompleted: 5,
-        caloriesBurned: 4200,
-        avgWorkoutDuration: "1 hr 15 min",
-    });
-    const [editableStats, setEditableStats] = useState({ ...stats });
-
-    const calorieData = {
-        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        datasets: [
-            {
-                label: "Calories Burned",
-                data: [500, 600, 550, 700, 800, 750, 850],
-                fill: true,
-                backgroundColor: 'rgba(23, 162, 184, 0.3)',
-                borderColor: "#17a2b8",
-                tension: 0.3,
-                pointStyle: 'circle',
-                pointBorderColor: "#164C7A",
-                pointBackgroundColor: "#1A6DB3",
-                pointRadius: 5,
-                hoverRadius: 7
-            },
-        ],
+    const schedule = {
+        sunday: { name: "Rest", exercises: [] },
+        monday: { name: "Chest & Back", exercises: ["Bench Press", "Pull-Ups", "Cable Flys"] },
+        tuesday: { name: "Arms", exercises: ["Bicep Curls", "Tricep Extensions", "Cable Pushdowns"] },
+        wednesday: { name: "Legs", exercises: ["Squats", "Lunges", "Leg Press"] },
+        thursday: { name: "Triceps", exercises: ["Skull Crushers", "Diamond Pushups"] },
+        friday: { name: "Biceps", exercises: ["Curl", "Incline Curl"] },
+        saturday: { name: "Rest", exercises: [] }
     };
 
-    const weeklyCompletionData = {
-        labels: ['Completed', 'Pending'],
-        datasets: [{
-            data: [stats.workoutsCompleted, 7 - stats.workoutsCompleted],
-            backgroundColor: ['#164C7A', '#e0e0e0'],
-            hoverBackgroundColor: ['#1A6DB3', '#d6d6d6']
-        }]
-    };
+    // Get today's day name
+    const dayNames = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+    const todayIndex = new Date().getDay();
+    const todayName = dayNames[todayIndex];
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setEditableStats({ ...editableStats, [name]: value });
-    };
+    const updateCalendar = () => {
+        dayNames.forEach((day, index) => {
+            const dayElement = document.getElementById(day);
+            if (index <= todayIndex) {
+                dayElement.classList.add("disabled");
+            }
+            if (day === todayName) {
+                dayElement.classList.remove("disabled");
+                dayElement.classList.add("active");
+                displayWorkout(day);
+            }
+        });
+    }
 
-    const handleUpdateStats = () => {
-        setStats(editableStats);
-    };
+    const displayWorkout = (day) => {
+        const dayData = schedule[day];
+        document.getElementById("dayDisplay").textContent = `Today: ${dayData.name}`;
+        
+        // Populate dropdown with exercises
+        const dropdown = document.getElementById("exerciseDropdown");
+        dropdown.innerHTML = "";
+        if (dayData.exercises.length === 0) {
+            dropdown.innerHTML = "<option>No exercises scheduled</option>";
+        } else {
+            dayData.exercises.forEach(exercise => {
+                const option = document.createElement("option");
+                option.textContent = exercise;
+                dropdown.appendChild(option);
+            });
+        }
+    }
+
+    // Add event listeners for clickable days
+    const addEventListener = () => {
+        dayNames.forEach(day => {
+            const dayElement = document.getElementById(day);
+            dayElement.addEventListener("click", () => {
+                if (!dayElement.classList.contains("disabled")) {
+                    displayWorkout(day);
+                }
+            });
+        });
+    }
+    
+    updateCalendar();
+    addEventListener();
 
     return (
-        <div className='enhanced-workout-page'>
+        <>
             <NavBar />
-            <div className='dashboard'>
+            
+            <div className='plan'>
+                <div class="calendar-container">
+                    <div class="day-container">
+                        <div class="day-name">Sunday</div>
+                        <div class="day disabled" id="sunday">Rest</div>
+                    </div>
+                    <div class="day-container">
+                        <div class="day-name">Monday</div>
+                        <div class="day disabled" id="monday">Chest & Back</div>
+                    </div>
+                    <div class="day-container">
+                        <div class="day-name">Tuesday</div>
+                        <div class="day disabled" id="tuesday">Arms</div>
+                    </div>
+                    <div class="day-container">
+                        <div class="day-name">Wednesday</div>
+                        <div class="day" id="wednesday">Legs</div>
+                    </div>
+                    <div class="day-container">
+                        <div class="day-name">Thursday</div>
+                        <div class="day" id="thursday">Rest</div>
+                    </div>
+                    <div class="day-container">
+                        <div class="day-name">Friday</div>
+                        <div class="day" id="friday">Biceps</div>
+                    </div>
+                    <div class="day-container">
+                        <div class="day-name">Saturday</div>
+                        <div class="day" id="saturday">Rest</div>
+                    </div>
+                </div>
                 
-                <div className='forecast-chart'>
-                    <h2>Calorie Burn Forecast</h2>
-                    <Line data={calorieData} />
-                </div>
+                
+                <div id="dayDisplay">Today: Legs</div>
 
-                <div className='workout-tracker widget'>
-                    <h3>Daily Workout Tracker</h3>
-                    <ul>
-                        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, index) => (
-                            <li key={index}>
-                                {day}: {workoutCompletion[index] ? "✅" : "❌"}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                
+                <select id="exerciseDropdown">
+                    <option>Select an Exercise</option>
+                </select>
 
-                <div className='weekly-goals'>
-                    <h3>Weekly Goals</h3>
-                    <p>Calories Burned: Target 4500 kcal</p>
-                    <p>Workout Sessions: Target 5/7</p>
-                    <p>Muscle Groups: Chest, Legs, Biceps, Abs</p>
-                    <Doughnut data={weeklyCompletionData} />
-                </div>
-
-                <div className='stats-section'>
-                    <h2 className='section-title'>Progress Stats</h2>
-                    <div className='stat-box'>
-                        <h3>Workouts Completed</h3>
-                        <p>{stats.workoutsCompleted}/7</p>
-                    </div>
-                    <div className='stat-box'>
-                        <h3>Calories Burned</h3>
-                        <p>{stats.caloriesBurned} kcal</p>
-                    </div>
-                    <div className='stat-box'>
-                        <h3>Average Workout Duration</h3>
-                        <p>{stats.avgWorkoutDuration}</p>
-                    </div>
-                </div>
-
-                {/* Editable Stats Section */}
-                <div className='edit-section widget'>
-                    <h3>Update Your Stats</h3>
-                    <div>
-                        <label className='edit-label'>Workouts Completed</label>
-                        <input
-                            className='editable-input'
-                            type="number"
-                            name="workoutsCompleted"
-                            value={editableStats.workoutsCompleted}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div>
-                        <label className='edit-label'>Calories Burned</label>
-                        <input
-                            className='editable-input'
-                            type="number"
-                            name="caloriesBurned"
-                            value={editableStats.caloriesBurned}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div>
-                        <label className='edit-label'>Avg Workout Duration</label>
-                        <input
-                            className='editable-input'
-                            type="text"
-                            name="avgWorkoutDuration"
-                            value={editableStats.avgWorkoutDuration}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <button className='update-button' onClick={handleUpdateStats}>
-                        Update Stats
-                    </button>
-                </div>
-
-                <div className='exercise-library widget'>
-                    <h3>Exercise Library</h3>
-                    <ul>
-                        <li>Push-ups - Chest</li>
-                        <li>Squats - Legs</li>
-                        <li>Deadlifts - Back</li>
-                        <li>Curls - Biceps</li>
-                        <li>Planks - Abs</li>
-                    </ul>
-                </div>
-
-                <div className='nutrition-advice widget'>
-                    <h3>Nutrition Advice</h3>
-                    <p>Include protein-rich foods post-workout for muscle recovery. Stay hydrated!</p>
-                </div>
+                
+                <a href="#" id="videoButton">Video Placeholder</a>
             </div>
-        </div>
+        </>
+        
     );
 }
 
-export default EnhancedWorkoutPlan;
+export default WorkoutPlan;

@@ -1,127 +1,77 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;700&display=swap');
 
-body {
-    background: linear-gradient(to bottom right, #fff, #f8f9fa);
-    font-family: 'Roboto', sans-serif;
-    color: #333;
+
+/*Everything*/
+.plan{
+    overflow: visible;
+    overflow-x: hidden;
+    background: linear-gradient(rgb(21, 76, 121), rgb(118, 181, 197));
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: contain;
+    height: 100vh;
     margin: 0;
     padding: 0;
-}
-
-.enhanced-workout-page {
-    background: linear-gradient(rgb(21, 76, 121), rgb(118, 181, 197));
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px;
-
 }
 
-.dashboard {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
-    max-width: 1400px;
-    width: 100%;
+/* Calendar styling */
+.calendar-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: 80%;
 }
-
-.section-title, .stats-section h2 {
-    font-family: 'Anton', sans-serif;
-    color: #2C3E50;
-    font-size: 2.2em;
-    text-transform: uppercase;
-}
-
-.widget, .stat-box {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.widget:hover, .stat-box:hover {
-    transform: translateY(-10px);
-    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
-}
-
-.widget h3, .stat-box h3 {
-    margin: 0;
-    font-size: 1.4em;
-    color: #164C7A;
-}
-
-.forecast-chart, .weekly-goals {
-    background: linear-gradient(135deg, #164C7A, #1A6DB3);
-    color: #fff;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.stat-box p {
-    font-size: 1.5em;
-    margin: 10px 0 0;
-    color: #555;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-}
-
-ul li {
-    margin: 8px 0;
-    font-size: 1.1em;
-    color: #333;
-}
-
-/* Add subtle animations */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.widget, .stat-box {
-    animation: fadeIn 1s ease-out;
-}
-
-/* Input styling for stats update */
-.editable-input {
-    width: 100%;
-    padding: 10px;
-    font-size: 1.1em;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-top: 5px;
-    background: #fafafa;
-}
-
-.update-button {
-    background: #164C7A;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 20px;
-    margin-top: 10px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.update-button:hover {
-    background: #1A6DB3;
-}
-
-.edit-section {
+.day-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
+    align-items: center;
+    flex: 1;
 }
-
-.edit-label {
+.day-name {
+    font-size: 20px;
     font-weight: bold;
-    color: #333;
+    margin-bottom: 5px;
+}
+.day {
+    width: 100%;
+    padding: 20px;
+    font-size: 20px;
+    text-align: center;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+.day.active {
+    background-color: #6a6a6a;
+    color: #fff;
+}
+.day.disabled {
+    background-color: #d3d3d3;
+    color: #fff;
+    cursor: not-allowed;
+}
+#dayDisplay {
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+#exerciseDropdown {
+    margin: 20px;
+    padding: 10px;
+    font-size: 18px;
+    width: 30%;
+}
+#videoButton {
+    width: 300px;
+    height: 200px;
+    background-color: black;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    margin-top: 20px;
 }
