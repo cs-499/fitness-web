@@ -18,7 +18,7 @@ export const login = async (req, res) => {
         // make it bool, so if false user always goes to survey
         const surveyCompleted = !!surveyResponse;
         // generate JWT token in response
-        const token = jwt.sign({ userId: user._id }, process.env.JVT_SECRET, { expiresIn: '2d' });
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '2d' });
 
         const response = {
             firstTimeLogin: user.firstLogin,
