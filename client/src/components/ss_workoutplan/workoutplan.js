@@ -6,40 +6,30 @@ import './workoutplan.css';
 
 const localizer = momentLocalizer(moment);
 
-class MyCalendar extends React.Component {
-  state = {
-    holidaysList: [], // Replace with fetched holiday data
-    absentiesList: [
+class workoutCalendar extends React.Component {
+  // keep this as example, will be replaced by actuall API responses soon...
+  ninjaAPI = {
+    availabilityDays: [
       {
         id: 1,
-        username: "Meeting with stakeholders to discuss the quarterly performance review and future project goals. This meeting will cover financial reports, team achievements, potential roadblocks, and strategies to improve overall productivity and efficiency across all departments. Attendance is mandatory, and preparation with the outlined agenda items is required. Please bring all relevant documentation and be ready for an interactive Q&A session.",
+        username: "Excercise for today",
         start_at: new Date(),
         end_at: new Date(new Date().setHours(new Date().getHours() + 2)),
         color: '#6A1B9A'
       }
-    ], // Replace with actual leave data
+    ], 
   };
 
   render() {
-    const holidays = this.state.holidaysList.map((holiday) => ({
-      id: holiday.id,
-      title: holiday.occasion,
-      start: moment(holiday.for_date).toDate(),
-      end: moment(holiday.for_date).toDate(),
-      color: holiday.color,
+    const excercises = this.ninjaAPI.availabilityDays.map((excercise) => ({
+      id: excercise.id,
+      title: excercise.username,
+      start: new Date(excercise.start_at),
+      end: new Date(excercise.end_at),
+      color: excercise.color,
       allDay: true,
     }));
-
-    const leaves = this.state.absentiesList.map((leave) => ({
-      id: leave.id,
-      title: leave.username,
-      start: new Date(leave.start_at),
-      end: new Date(leave.end_at),
-      color: leave.color,
-      allDay: true,
-    }));
-
-    const events = [...holidays, ...leaves];
+    const events = [...excercises];
 
     return (
       <Calendar
@@ -48,8 +38,9 @@ class MyCalendar extends React.Component {
         startAccessor="start"
         endAccessor="end"
         defaultDate={moment().toDate()}
-        views={{ week: true }}  // Only show the week view
-        defaultView={Views.WEEK} // Set default to week view
+        // Only show the week view 
+        views={{ week: true }}
+        defaultView={Views.WEEK}
         min={new Date(2025, 1, 1, 0, 0, 0)}
         max={new Date(2025, 1, 1, 0, 0, 0)}
         showMultiDayTimes={false}
@@ -67,4 +58,4 @@ class MyCalendar extends React.Component {
   }
 }
 
-export default MyCalendar;
+export default workoutCalendar;

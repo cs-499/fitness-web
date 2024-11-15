@@ -1,26 +1,25 @@
 /* Ensure the text in event boxes wraps and doesn't overflow */
 .rbc-event {
-  white-space: normal; /* Allow text to wrap */
-  word-wrap: break-word; /* Break long words if needed */
-  word-break: break-word; /* Ensure long words are broken if needed */
-  font-size: 14px; /* Adjust text size */
-  padding: 8px; /* Add some padding for readability */
-  min-height: 50px; /* Minimum height */
-  max-width: 100%; /* Ensure the box doesn't overflow horizontally */
-  overflow: visible; /* Make sure content is fully visible */
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-word;
+  font-size: 14px;
+  padding: 8px;
+  min-height: 50px;
+  max-width: 100%;
+  overflow: visible;
   box-sizing: border-box;
-  display: block; /* Make the event box a block-level element for proper sizing */
+  display: block;
 }
 
 /* Ensure the event text is wrapped */
 .rbc-event .rbc-event-content {
-  white-space: normal; /* Ensure the text wraps */
-  word-wrap: break-word; /* Break long words if necessary */
-  overflow: hidden; /* Prevent text from overflowing the box */
-  max-height: none; /* Remove any max-height restrictions */
+  white-space: normal;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: none;
 }
 
-/* Calendar day cells for week view */
 .rbc-day-bg {
   display: table-cell;
   border-right: 1px solid #fff;
@@ -28,36 +27,34 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  min-height: 150px; /* Increased height of day cells to make space for events */
-  vertical-align: top; /* Align event boxes at the top of the cell */
+  min-height: 150px;
+  vertical-align: top;
   position: relative;
 }
 
-/* Week View adjustments */
 .rbc-week-view .rbc-week-content {
-  display: block; /* Ensure week view content expands properly */
+  display: block;
 }
 
 .rbc-week-view .rbc-day {
-  height: 150px !important; /* Ensure day cells are large enough for events */
-  padding: 10px 0; /* Add some padding around events */
-  overflow: visible; /* Allow events to be fully visible */
+  height: 150px !important;
+  padding: 10px 0; 
+  overflow: visible;
 }
 
 .rbc-week-view .rbc-day .rbc-event {
-  min-height: 50px; /* Minimum height for events */
-  max-height: none; /* Allow event boxes to grow based on content */
-  overflow: visible; /* Ensure content inside event boxes is visible */
-  display: block; /* Make event boxes block elements so they grow properly */
-  width: 100% !important; /* Ensure the event box spans the entire width of the day cell */
+  min-height: 50px;
+  max-height: none;
+  overflow: visible;
+  display: block;
+  width: 100% !important;
 }
 
 /* Add space around day cells to ensure events don't overlap */
 .rbc-week-view .rbc-day-slot {
-  min-height: 50px; /* Ensure there is enough space to display events */
+  min-height: 50px;
 }
 
-/* Remove extra borders */
 .rbc-day-bg:last-child,
 .rbc-header:last-child {
   border-right: none;
