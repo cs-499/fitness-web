@@ -1,165 +1,70 @@
-import React, { useEffect, useState } from 'react';
-import '../../App.css';
+import React from 'react';
+import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
+import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './workoutplan.css';
-import NavBar from "../navbar/nav_bar";
-import ParticleSys from '../particles/particle_sys';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
-import { Line, Doughnut } from 'react-chartjs-2';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
+const localizer = momentLocalizer(moment);
 
-const EnhancedWorkoutPlan = () => {
-    useEffect(() => {
-        document.title = 'ShapeShifter Enhanced';
-    }, []);
+class MyCalendar extends React.Component {
+  state = {
+    holidaysList: [], // Replace with fetched holiday data
+    absentiesList: [
+      {
+        id: 1,
+        username: "Meeting with stakeholders to discuss the quarterly performance review and future project goals. This meeting will cover financial reports, team achievements, potential roadblocks, and strategies to improve overall productivity and efficiency across all departments. Attendance is mandatory, and preparation with the outlined agenda items is required. Please bring all relevant documentation and be ready for an interactive Q&A session.",
+        start_at: new Date(),
+        end_at: new Date(new Date().setHours(new Date().getHours() + 2)),
+        color: '#6A1B9A'
+      }
+    ], // Replace with actual leave data
+  };
 
-    const [workoutCompletion, setWorkoutCompletion] = useState([true, false, true, false, true, true, false]);
-    const [stats, setStats] = useState({
-        workoutsCompleted: 5,
-        caloriesBurned: 4200,
-        avgWorkoutDuration: "1 hr 15 min",
-    });
-    const [editableStats, setEditableStats] = useState({ ...stats });
+  render() {
+    const holidays = this.state.holidaysList.map((holiday) => ({
+      id: holiday.id,
+      title: holiday.occasion,
+      start: moment(holiday.for_date).toDate(),
+      end: moment(holiday.for_date).toDate(),
+      color: holiday.color,
+      allDay: true,
+    }));
 
-    const calorieData = {
-        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        datasets: [
-            {
-                label: "Calories Burned",
-                data: [500, 600, 550, 700, 800, 750, 850],
-                fill: true,
-                backgroundColor: 'rgba(23, 162, 184, 0.3)',
-                borderColor: "#17a2b8",
-                tension: 0.3,
-                pointStyle: 'circle',
-                pointBorderColor: "#164C7A",
-                pointBackgroundColor: "#1A6DB3",
-                pointRadius: 5,
-                hoverRadius: 7
-            },
-        ],
-    };
+    const leaves = this.state.absentiesList.map((leave) => ({
+      id: leave.id,
+      title: leave.username,
+      start: new Date(leave.start_at),
+      end: new Date(leave.end_at),
+      color: leave.color,
+      allDay: true,
+    }));
 
-    const weeklyCompletionData = {
-        labels: ['Completed', 'Pending'],
-        datasets: [{
-            data: [stats.workoutsCompleted, 7 - stats.workoutsCompleted],
-            backgroundColor: ['#164C7A', '#e0e0e0'],
-            hoverBackgroundColor: ['#1A6DB3', '#d6d6d6']
-        }]
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setEditableStats({ ...editableStats, [name]: value });
-    };
-
-    const handleUpdateStats = () => {
-        setStats(editableStats);
-    };
+    const events = [...holidays, ...leaves];
 
     return (
-        <div className='enhanced-workout-page'>
-            <NavBar />
-            <div className='dashboard'>
-                
-                <div className='forecast-chart'>
-                    <h2>Calorie Burn Forecast</h2>
-                    <Line data={calorieData} />
-                </div>
-
-                <div className='workout-tracker widget'>
-                    <h3>Daily Workout Tracker</h3>
-                    <ul>
-                        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, index) => (
-                            <li key={index}>
-                                {day}: {workoutCompletion[index] ? "✅" : "❌"}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                <div className='weekly-goals'>
-                    <h3>Weekly Goals</h3>
-                    <p>Calories Burned: Target 4500 kcal</p>
-                    <p>Workout Sessions: Target 5/7</p>
-                    <p>Muscle Groups: Chest, Legs, Biceps, Abs</p>
-                    <Doughnut data={weeklyCompletionData} />
-                </div>
-
-                <div className='stats-section'>
-                    <h2 className='section-title'>Progress Stats</h2>
-                    <div className='stat-box'>
-                        <h3>Workouts Completed</h3>
-                        <p>{stats.workoutsCompleted}/7</p>
-                    </div>
-                    <div className='stat-box'>
-                        <h3>Calories Burned</h3>
-                        <p>{stats.caloriesBurned} kcal</p>
-                    </div>
-                    <div className='stat-box'>
-                        <h3>Average Workout Duration</h3>
-                        <p>{stats.avgWorkoutDuration}</p>
-                    </div>
-                </div>
-
-                {/* Editable Stats Section */}
-                <div className='edit-section widget'>
-                    <h3>Update Your Stats</h3>
-                    <div>
-                        <label className='edit-label'>Workouts Completed</label>
-                        <input
-                            className='editable-input'
-                            type="number"
-                            name="workoutsCompleted"
-                            value={editableStats.workoutsCompleted}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div>
-                        <label className='edit-label'>Calories Burned</label>
-                        <input
-                            className='editable-input'
-                            type="number"
-                            name="caloriesBurned"
-                            value={editableStats.caloriesBurned}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div>
-                        <label className='edit-label'>Avg Workout Duration</label>
-                        <input
-                            className='editable-input'
-                            type="text"
-                            name="avgWorkoutDuration"
-                            value={editableStats.avgWorkoutDuration}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <button className='update-button' onClick={handleUpdateStats}>
-                        Update Stats
-                    </button>
-                </div>
-
-                <div className='exercise-library widget'>
-                    <h3>Exercise Library</h3>
-                    <ul>
-                        <li>Push-ups - Chest</li>
-                        <li>Squats - Legs</li>
-                        <li>Deadlifts - Back</li>
-                        <li>Curls - Biceps</li>
-                        <li>Planks - Abs</li>
-                    </ul>
-                </div>
-
-                <div className='nutrition-advice widget'>
-                    <h3>Nutrition Advice</h3>
-                    <p>Include protein-rich foods post-workout for muscle recovery. Stay hydrated!</p>
-                </div>
-            </div>
-            <ParticleSys />
-        </div>
+      <Calendar
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        defaultDate={moment().toDate()}
+        views={{ week: true }}  // Only show the week view
+        defaultView={Views.WEEK} // Set default to week view
+        min={new Date(2025, 1, 1, 0, 0, 0)}
+        max={new Date(2025, 1, 1, 0, 0, 0)}
+        showMultiDayTimes={false}
+        formats={{
+          monthHeaderFormat: 'MMMM yyyy',
+          dayRangeHeaderFormat: 'dddd, MMMM Do YYYY',
+        }}
+        eventPropGetter={event => {
+          const eventData = events.find(ot => ot.id === event.id);
+          const backgroundColor = eventData && eventData.color;
+          return { style: { backgroundColor } };
+        }}
+      />
     );
+  }
 }
 
-export default EnhancedWorkoutPlan;
+export default MyCalendar;

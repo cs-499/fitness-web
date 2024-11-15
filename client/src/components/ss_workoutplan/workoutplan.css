@@ -1,125 +1,64 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;700&display=swap');
-
-body {
-    background: linear-gradient(to bottom right, #fff, #f8f9fa);
-    font-family: 'Roboto', sans-serif;
-    color: #333;
-    margin: 0;
-    padding: 0;
+/* Ensure the text in event boxes wraps and doesn't overflow */
+.rbc-event {
+  white-space: normal; /* Allow text to wrap */
+  word-wrap: break-word; /* Break long words if needed */
+  word-break: break-word; /* Ensure long words are broken if needed */
+  font-size: 14px; /* Adjust text size */
+  padding: 8px; /* Add some padding for readability */
+  min-height: 50px; /* Minimum height */
+  max-width: 100%; /* Ensure the box doesn't overflow horizontally */
+  overflow: visible; /* Make sure content is fully visible */
+  box-sizing: border-box;
+  display: block; /* Make the event box a block-level element for proper sizing */
 }
 
-.enhanced-workout-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px;
-    background-color: #f4f6f8;
+/* Ensure the event text is wrapped */
+.rbc-event .rbc-event-content {
+  white-space: normal; /* Ensure the text wraps */
+  word-wrap: break-word; /* Break long words if necessary */
+  overflow: hidden; /* Prevent text from overflowing the box */
+  max-height: none; /* Remove any max-height restrictions */
 }
 
-.dashboard {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
-    max-width: 1400px;
-    width: 100%;
+/* Calendar day cells for week view */
+.rbc-day-bg {
+  display: table-cell;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  min-height: 150px; /* Increased height of day cells to make space for events */
+  vertical-align: top; /* Align event boxes at the top of the cell */
+  position: relative;
 }
 
-.section-title, .stats-section h2 {
-    font-family: 'Anton', sans-serif;
-    color: #2C3E50;
-    font-size: 2.2em;
-    text-transform: uppercase;
+/* Week View adjustments */
+.rbc-week-view .rbc-week-content {
+  display: block; /* Ensure week view content expands properly */
 }
 
-.widget, .stat-box {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.rbc-week-view .rbc-day {
+  height: 150px !important; /* Ensure day cells are large enough for events */
+  padding: 10px 0; /* Add some padding around events */
+  overflow: visible; /* Allow events to be fully visible */
 }
 
-.widget:hover, .stat-box:hover {
-    transform: translateY(-10px);
-    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
+.rbc-week-view .rbc-day .rbc-event {
+  min-height: 50px; /* Minimum height for events */
+  max-height: none; /* Allow event boxes to grow based on content */
+  overflow: visible; /* Ensure content inside event boxes is visible */
+  display: block; /* Make event boxes block elements so they grow properly */
+  width: 100% !important; /* Ensure the event box spans the entire width of the day cell */
 }
 
-.widget h3, .stat-box h3 {
-    margin: 0;
-    font-size: 1.4em;
-    color: #164C7A;
+/* Add space around day cells to ensure events don't overlap */
+.rbc-week-view .rbc-day-slot {
+  min-height: 50px; /* Ensure there is enough space to display events */
 }
 
-.forecast-chart, .weekly-goals {
-    background: linear-gradient(135deg, #164C7A, #1A6DB3);
-    color: #fff;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.stat-box p {
-    font-size: 1.5em;
-    margin: 10px 0 0;
-    color: #555;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-}
-
-ul li {
-    margin: 8px 0;
-    font-size: 1.1em;
-    color: #333;
-}
-
-/* Add subtle animations */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.widget, .stat-box {
-    animation: fadeIn 1s ease-out;
-}
-
-/* Input styling for stats update */
-.editable-input {
-    width: 100%;
-    padding: 10px;
-    font-size: 1.1em;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-top: 5px;
-    background: #fafafa;
-}
-
-.update-button {
-    background: #164C7A;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 20px;
-    margin-top: 10px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.update-button:hover {
-    background: #1A6DB3;
-}
-
-.edit-section {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
-}
-
-.edit-label {
-    font-weight: bold;
-    color: #333;
+/* Remove extra borders */
+.rbc-day-bg:last-child,
+.rbc-header:last-child {
+  border-right: none;
 }
