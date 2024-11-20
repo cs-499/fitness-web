@@ -27,7 +27,7 @@ const NavBar = () => {
                 <li className="homeNav">
                     <a href="/homepage">
                         <div className="nav_icons">
-                            <i class="fa-solid fa-house"></i>
+                            <i className="fa-solid fa-house"></i>
                         </div>
                         Home
                     </a>
@@ -35,7 +35,7 @@ const NavBar = () => {
                 <li className="wplanNav">
                     <a href="/workoutplan">
                         <div className="nav_icons">
-                            <i class="fa-solid fa-dumbbell"></i>
+                            <i className="fa-solid fa-dumbbell"></i>
                         </div>
                         Workout Plan
                     </a>
@@ -43,7 +43,7 @@ const NavBar = () => {
                 <li className="mplanNav">
                     <a href="/mealplan">
                         <div className="nav_icons">
-                            <i class="fa-solid fa-utensils"></i>
+                            <i className="fa-solid fa-utensils"></i>
                         </div>
                         Meal Plan
                     </a>
@@ -51,7 +51,7 @@ const NavBar = () => {
                 <li className="recipesNav">
                     <a href="/journal">
                         <div className="nav_icons">
-                            <i class="fa-solid fa-book"></i>
+                            <i className="fa-solid fa-book"></i>
                         </div>
                         Journal
                     </a>
@@ -59,7 +59,7 @@ const NavBar = () => {
                 <li className="accountNav">
                     <a href="javascript:void(0)" onClick={openNav}>
                         <div className="nav_icons">
-                            <i class="fa-solid fa-user"></i>
+                            <i className="fa-solid fa-user"></i>
                         </div>
                         Account
                     </a>

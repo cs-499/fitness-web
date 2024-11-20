@@ -23,7 +23,7 @@ def get_recipes():
     params = {
         "apiKey": API_KEY,
         "query": query,
-        "number": 10  # Limit the number of results
+        "number": 5  # Limit the number of results
     }
 
     try:
@@ -37,4 +37,4 @@ def get_recipes():
 
 # Run the Flask server on port 5001
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    app.run(debug=False, port=5001)

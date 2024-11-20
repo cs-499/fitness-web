@@ -27,8 +27,8 @@ app.use('/survey', routes);
 // script for starting Flask server for meal-gen API
 const flaskAppPath = path.join(__dirname, 'controllers', 'meal-gen.py');
 
-// start the Flask server using `spawn`, which handles spaces in paths better
-const flaskProcess = spawn('python3', [flaskAppPath]);
+// start the Flask server using `spawn`
+const flaskProcess = spawn('python', [flaskAppPath]);
 
 flaskProcess.on('error', (error) => {
     console.error(`Error starting Flask server: ${error.message}`);
