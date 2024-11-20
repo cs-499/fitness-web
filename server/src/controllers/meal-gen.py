@@ -3,38 +3,55 @@ from flask_cors import CORS
 import requests
 import os
 from dotenv import load_dotenv
+from flask_pymongo import PyMongo
 
-# load API from env
+# Load environment variables
 load_dotenv()
 API_KEY = os.getenv("SPOONACULAR_API")
+if not API_KEY:
+    raise EnvironmentError("Failed to load SPOONACULAR_API key from environment.")
 
 app = Flask(__name__)
-CORS(app)  #enable cross resoruce sharing
+CORS(app)  # Enable CORS for all domains
+
+# Setup MongoDB connection
+app.config["MONGO_URI"] = "mongodb://localhost:27017/api"
 
 @app.route("/api/recipes", methods=["GET"])
 def get_recipes():
-    # Get the 'query' parameter from the request, return an error if not provided
     query = request.args.get("query")
     if not query:
         return jsonify({"error": "Query parameter is required"}), 400
 
     url = "https://api.spoonacular.com/recipes/complexSearch"
-    headers = {"Content-Type": "application/json"}
     params = {
         "apiKey": API_KEY,
         "query": query,
-        "number": 5  # Limit the number of results
+        "number": 9  # Adjust the number of results as needed
     }
 
     try:
-        # Make a GET request to the Spoonacular API
-        response = requests.get(url, headers=headers, params=params)
-        response.raise_for_status()  # Raise an error for HTTP errors
-        return jsonify(response.json())  # Return the JSON data from the API
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        return jsonify(response.json())
+    except requests.exceptions.HTTPError as e:
+        return jsonify({"error": "HTTP error: " + str(e)}), response.status_code
     except requests.exceptions.RequestException as e:
-        # Return an error message and 500 status code if the request fails
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": "Request failed: " + str(e)}), 500
 
-# Run the Flask server on port 5001
+@app.route("/api/recipe/<int:recipe_id>", methods=["GET"])
+def get_recipe(recipe_id):
+    url = f"https://api.spoonacular.com/recipes/{recipe_id}/information"
+    params = {'apiKey': API_KEY}
+
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        return jsonify(response.json()), 200
+    except requests.exceptions.HTTPError as e:
+        return jsonify({'error': 'Failed to fetch recipe', 'message': str(e)}), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({'error': 'Network error occurred', 'message': str(e)}), 500
+
 if __name__ == "__main__":
     app.run(debug=False, port=5001)

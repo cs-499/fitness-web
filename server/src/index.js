@@ -7,6 +7,7 @@ import routes from './routes.js';
 import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { getSurveyFromUser } from './controllers/survey.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,14 +29,14 @@ app.use('/survey', routes);
 const flaskAppPath = path.join(__dirname, 'controllers', 'meal-gen.py');
 
 // start the Flask server using `spawn`
-const flaskProcess = spawn('python', [flaskAppPath]);
+const flaskProcess = spawn('python3', [flaskAppPath]);
 
 flaskProcess.on('error', (error) => {
     console.error(`Error starting Flask server: ${error.message}`);
 });
 
 flaskProcess.stderr.on('data', (data) => {
-    console.error(`Flask error: ${data}`);
+    console.error(`Flask message: ${data}`);
 });
 
 app.listen(PORT, () => {
