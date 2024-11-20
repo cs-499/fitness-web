@@ -9,7 +9,6 @@ function openNav() {
 /* Set the width of the side navigation to 0 */
 function closeNav() {
     document.getElementById("account_nav").style.width = "0";
-    
 } 
 
 function handleLogout(event) {
@@ -19,10 +18,9 @@ function handleLogout(event) {
 }
 
 const NavBar = () => {
-
     return(
         <>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
             <ul className="navbar_ul">
                 <li className="homeNav">
                     <a href="/homepage">
@@ -57,7 +55,7 @@ const NavBar = () => {
                     </a>
                 </li>
                 <li className="accountNav">
-                    <a href="javascript:void(0)" onClick={openNav}>
+                    <a href="#" onClick={(e) => { e.preventDefault(); openNav(); }}>
                         <div className="nav_icons">
                             <i className="fa-solid fa-user"></i>
                         </div>
@@ -66,22 +64,16 @@ const NavBar = () => {
                 </li>
             </ul>
 
-
-
-
-
-
             <div id="account_nav" className="sidenav">
-                <a href="javascript:void(0)" className="closebtn" onClick={closeNav}>&times;</a>
+                <a href="#" className="closebtn" onClick={(e) => { e.preventDefault(); closeNav(); }}>&times;</a>
                 <a href="/about">About</a>
                 <a href="/services">Services</a>
                 <a href="/clients">Clients</a>
                 <a href="/contact">Contact</a>
-                <a href="/" onClick={handleLogout}>Logout</a>
+                <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(e); }}>Logout</a>
             </div>
-
         </>
     );
 }
 
-export default NavBar
+export default NavBar;
