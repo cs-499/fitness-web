@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "devStart": "DOTENV_CONFIG_PATH=src/.env nodemon src/index.js",
-    "test": "node ./node_modules/.bin/jest --config=./jest.config.cjs"
+    "test": "node --experimental-require-module ./node_modules/.bin/jest --config=./jest.config.cjs",
+    "postinstall": "pip3 install -r requirements.txt"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +32,7 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.9",
     "babel-jest": "^29.7.0",
+    "concurrently": "^9.1.0",
     "cross-env": "^7.0.3",
     "jest": "^29.7.0"
   }
