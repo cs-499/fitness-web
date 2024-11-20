@@ -1,45 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../App.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import NavBar from "../navbar/nav_bar";
-// import ParticleSys from '../particles/particle_sys'; // Include if used for visual effects on this page
 import './mealgenerator.css';
 
 function MealGenerator() {
     const [recipes, setRecipes] = useState([]);
-    // const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [query, setQuery] = useState("");
-    const navigate = useNavigate();  // Initialize navigate function for routing
+    const [calorieGoal, setCalorieGoal] = useState("");
+    const [workoutGoal, setWorkoutGoal] = useState("");
+    const [dietGoal, setDietGoal] = useState("");
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    const handleSearch = () => {
-        if (!query.trim()) {
-            setError('Please enter a search term before generating recipes');
+    // Extract query parameters for goals from URL
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        setWorkoutGoal(params.get('workoutGoal') || "");
+        setDietGoal(params.get('dietGoal') || "");
+    }, [location.search]);
+
+    const handleSearch = async () => {
+        if (!query.trim() && !calorieGoal.trim()) {
+            setError('Please enter a food keyword or calorie goal');
             setRecipes([]);
-            // setLoading(false); // Ensure loading is not shown
             return;
         }
 
-        // setLoading(true);
         setError(null);
         setRecipes([]);
+        const apiKey = "YOUR_SPOONACULAR_API_KEY"; // Replace with your actual Spoonacular API key
+        const endpoint = query.trim()
+            ? `https://api.spoonacular.com/recipes/complexSearch?query=${query}&maxCalories=${calorieGoal}&diet=${dietGoal}&number=10&apiKey=${apiKey}`
+            : `https://api.spoonacular.com/recipes/complexSearch?maxCalories=${calorieGoal}&diet=${dietGoal}&number=10&apiKey=${apiKey}`;
 
-        // fetch recipes from the Flask server with the user's query
-        fetch(`http://localhost:5001/api/recipes?query=${query}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setRecipes(data.results || []);
-                // setLoading(false);
-            })
-            .catch(error => {
-                setError(error.message);
-                // setLoading(false);
-            });
+        try {
+            const response = await fetch(endpoint);
+            if (!response.ok) throw new Error('Failed to fetch recipes');
+            const data = await response.json();
+
+            // Fetch detailed nutrition info for each recipe
+            const detailedRecipes = await Promise.all(
+                data.results.map(recipe =>
+                    fetch(`https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${apiKey}`)
+                        .then(res => res.json())
+                )
+            );
+
+            // Rank recipes based on user goals
+            const rankedRecipes = rankRecipes(detailedRecipes, { calorieGoal, dietGoal, workoutGoal });
+            setRecipes(rankedRecipes);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
+    const rankRecipes = (recipes, userGoals) => {
+        return recipes.sort((a, b) => {
+            const aScore = calculateRecipeScore(a, userGoals);
+            const bScore = calculateRecipeScore(b, userGoals);
+            return bScore - aScore; // Higher scores rank higher
+        });
+    };
+
+    const calculateRecipeScore = (recipe, userGoals) => {
+        let score = 0;
+        if (userGoals.calorieGoal && recipe.nutrition.nutrients.find(n => n.name === "Calories")?.amount <= userGoals.calorieGoal) {
+            score += 10;
+        }
+        if (userGoals.workoutGoal === "muscle gain" && recipe.nutrition.nutrients.find(n => n.name === "Protein")?.amount >= 20) {
+            score += 15;
+        }
+        if (userGoals.dietGoal && recipe.diets.includes(userGoals.dietGoal)) {
+            score += 5;
+        }
+        return score;
     };
 
     const handleKeyDown = (e) => {
@@ -53,32 +89,57 @@ function MealGenerator() {
             <NavBar />
             <div className="searchHeader">
                 <h1 className="pageTitle">Meal Plan Recipes</h1>
-                {/* Input and Search Button */}
+                <p className="instruction">Search for recipes by food keyword or set a calorie goal for recommendations.</p>
                 <div className="search">
-                    <input className="searchBox"
+                    <input
+                        className="searchBox"
                         type="text"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder="Enter a recipe keyword"
                     />
+                    <input
+                        className="searchBox"
+                        type="number"
+                        value={calorieGoal}
+                        onChange={(e) => setCalorieGoal(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder="Enter a calorie goal"
+                    />
                     <button className="searchButton" onClick={handleSearch}>Generate</button>
                 </div>
             </div>
 
-            {/* Display Recipes or Loading/Error */}
-            {error && <p className="search-handling">{error}</p>}
+            {error && <p className="search-handling error">{error}</p>}
             <div className="recipe-container">
-                {recipes.map(recipe => (
-                    <div key={recipe.id} className="recipe-item" onClick={() => navigate(`/recipe/${recipe.id}`)}>
-                        <img className="recipe-image" src={recipe.image} alt={recipe.title} style={{ width: '150px' }} />
-                        <div className="recipe-title">{recipe.title}</div>
-                    </div>
-                ))}
+                {recipes.length > 0 ? (
+                    recipes.map(recipe => (
+                        <div
+                            key={recipe.id}
+                            className="recipe-item"
+                            onClick={() => navigate(`/recipe/${recipe.id}`)}
+                        >
+                            <img
+                                className="recipe-image"
+                                src={recipe.image}
+                                alt={recipe.title}
+                            />
+                            <div className="recipe-title">{recipe.title}</div>
+                            <p>Calories: {recipe.nutrition.nutrients.find(n => n.name === "Calories")?.amount || "N/A"}</p>
+                        </div>
+                    ))
+                ) : (
+                    !error && <p className="search-handling">No recipes found. Try another search.</p>
+                )}
             </div>
         </div>
     );
 }
+
+export default MealGenerator;
+
+
 
 /*
     useEffect(() => {
@@ -109,5 +170,3 @@ function MealGenerator() {
     )) : <p>No surveys found</p>}
 </div>
 */
-
-export default MealGenerator;
