@@ -86,3 +86,26 @@
 .search-handling {
     justify-self: center;
 }
+
+
+
+
+.goal-inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.goal-inputs label {
+    margin: 10px 0 5px;
+}
+
+.goal-inputs input {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
