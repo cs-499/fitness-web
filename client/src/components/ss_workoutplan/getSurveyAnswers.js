@@ -1,4 +1,4 @@
-export const getSpecificAnswer = async (userId, questionText) => {
+export const getSpecificAnswer = async (userId, surveyQuestion) => {
     try {
         const response = await fetch(`${process.env.REACT_APP_API_HOST}/survey/${userId}`, {
             method: 'GET',
@@ -19,14 +19,14 @@ export const getSpecificAnswer = async (userId, questionText) => {
             if (response.answers) {
                 // Convert the Map to an object if it's a Map
                 const answersObject = response.answers instanceof Map ? Object.fromEntries(response.answers) : response.answers;
-                if (answersObject[questionText]) {
-                    return answersObject[questionText];
+                if (answersObject[surveyQuestion]) {
+                    return answersObject[surveyQuestion];
                 }
             }
         }
         return null;
     } catch (error) {
-        console.error(`No answer found for question: "${questionText}"`, error);
+        console.error(`No answer found for question: "${surveyQuestion}"`, error);
         return null;
     }
 };

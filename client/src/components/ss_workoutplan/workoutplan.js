@@ -25,14 +25,9 @@ class workoutCalendar extends React.Component {
 
   async componentDidMount() {
     const userId = localStorage.getItem('userId');
-    const questionText = "What is your experience level?";
+    const surveyQuestion = "What is your experience level?";
 
-    if (!userId) {
-      console.error('User ID is missing in local storage');
-      return;
-    }
-
-      const surveyAnswer = await getSpecificAnswer(userId, questionText);
+      const surveyAnswer = await getSpecificAnswer(userId, surveyQuestion);
 
       // Update the availabilityDays with the fetched survey answer
       this.setState((prevState) => ({
