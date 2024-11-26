@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './workoutplan.css';
-import { getSpecificAnswer } from './getSurveyAnswers.js';
+import getExercisesByExperienceLevel from './ninjaAPI.js';
 
 const localizer = momentLocalizer(moment);
 
@@ -24,19 +24,27 @@ class workoutCalendar extends React.Component {
   }
 
   async componentDidMount() {
-    const userId = localStorage.getItem('userId');
-    const surveyQuestion = "What is your experience level?";
+    try {
+        // Fetch exercises
+        const exercises = await getExercisesByExperienceLevel();
 
-      const surveyAnswer = await getSpecificAnswer(userId, surveyQuestion);
-
-      // Update the availabilityDays with the fetched survey answer
-      this.setState((prevState) => ({
-        availabilityDays: prevState.availabilityDays.map((day) => ({
-          ...day,
-          username: surveyAnswer || `No exercise found for selected day`,
-        })),
-      }));
-  }
+        // Update the availabilityDays with the fetched exercise
+        this.setState((prevState) => ({
+            availabilityDays: prevState.availabilityDays.map((day) => ({
+                ...day,
+                username: exercises.length > 0 ? exercises[0]?.name : 'No exercise found for selected day',
+            })),
+        }));
+    } catch (error) {
+        console.error('Error fetching exercises:', error);
+        this.setState((prevState) => ({
+            availabilityDays: prevState.availabilityDays.map((day) => ({
+                ...day,
+                username: 'Error fetching exercises',
+            })),
+        }));
+    }
+}
 
   render() {
     const excercises = this.state.availabilityDays.map((excercise) => ({
