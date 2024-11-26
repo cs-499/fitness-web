@@ -3,27 +3,45 @@ import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './workoutplan.css';
+import { getSpecificAnswer } from './getSurveyAnswers.js';
 
 const localizer = momentLocalizer(moment);
 
 class workoutCalendar extends React.Component {
-  // keep this as example, will be replaced by actuall API responses soon...
-  ninjaAPI = {
-    availabilityDays: [
-      {
-        id: 1,
-        username: "Excercise for today",
-        start_at: new Date(),
-        end_at: new Date(new Date().setHours(new Date().getHours() + 2)),
-        color: '#6A1B9A'
-      }
-    ], 
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      availabilityDays: [
+        {
+          id: 1,
+          username: "Exercise for today", // Placeholder, to be replaced by fetched data
+          start_at: new Date(),
+          end_at: new Date(new Date().setHours(new Date().getHours() + 2)),
+          color: '#6A1B9A',
+        },
+      ],
+    };
+  }
+
+  async componentDidMount() {
+    const userId = localStorage.getItem('userId');
+    const surveyQuestion = "What is your experience level?";
+
+      const surveyAnswer = await getSpecificAnswer(userId, surveyQuestion);
+
+      // Update the availabilityDays with the fetched survey answer
+      this.setState((prevState) => ({
+        availabilityDays: prevState.availabilityDays.map((day) => ({
+          ...day,
+          username: surveyAnswer || `No exercise found for selected day`,
+        })),
+      }));
+  }
 
   render() {
-    const excercises = this.ninjaAPI.availabilityDays.map((excercise) => ({
+    const excercises = this.state.availabilityDays.map((excercise) => ({
       id: excercise.id,
-      title: excercise.username,
+      title: excercise.username, // Use updated username
       start: new Date(excercise.start_at),
       end: new Date(excercise.end_at),
       color: excercise.color,
@@ -38,7 +56,6 @@ class workoutCalendar extends React.Component {
         startAccessor="start"
         endAccessor="end"
         defaultDate={moment().toDate()}
-        // Only show the week view 
         views={{ week: true }}
         defaultView={Views.WEEK}
         min={new Date(2025, 1, 1, 0, 0, 0)}
@@ -48,8 +65,8 @@ class workoutCalendar extends React.Component {
           monthHeaderFormat: 'MMMM yyyy',
           dayRangeHeaderFormat: 'dddd, MMMM Do YYYY',
         }}
-        eventPropGetter={event => {
-          const eventData = events.find(ot => ot.id === event.id);
+        eventPropGetter={(event) => {
+          const eventData = events.find((ot) => ot.id === event.id);
           const backgroundColor = eventData && eventData.color;
           return { style: { backgroundColor } };
         }}
