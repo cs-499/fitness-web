@@ -6,7 +6,7 @@ const apiKey = process.env.REACT_APP_NINJA_API;
 const experienceToDifficulty = {
     'Beginner': 'beginner',
     'Intermediate': 'intermediate',
-    'Advanced': 'expert',
+    'advanced': 'expert',
 };
 
 // Get exercises based on the user’s experience level

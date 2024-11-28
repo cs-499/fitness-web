@@ -2,60 +2,63 @@ import React from 'react';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import './workoutplan.css';
-import getExercisesByExperienceLevel from './ninjaAPI.js';
+import './workoutplan.css'; // Your CSS file
+import { getSpecificAnswer } from './getSurveyAnswers.js';
 
 const localizer = momentLocalizer(moment);
 
-class workoutCalendar extends React.Component {
+class WorkoutCalendar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      availabilityDays: [
-        {
-          id: 1,
-          username: "Exercise for today", // Placeholder, to be replaced by fetched data
-          start_at: new Date(),
-          end_at: new Date(new Date().setHours(new Date().getHours() + 2)),
-          color: '#6A1B9A',
-        },
-      ],
+      // Array to store available days
+      availabilityDays: [], 
     };
   }
 
   async componentDidMount() {
-    try {
-        // Fetch exercises
-        const exercises = await getExercisesByExperienceLevel();
+    await this.fetchAvailableDays();
+  }
 
-        // Update the availabilityDays with the fetched exercise
-        this.setState((prevState) => ({
-            availabilityDays: prevState.availabilityDays.map((day) => ({
-                ...day,
-                username: exercises.length > 0 ? exercises[0]?.name : 'No exercise found for selected day',
-            })),
-        }));
-    } catch (error) {
-        console.error('Error fetching exercises:', error);
-        this.setState((prevState) => ({
-            availabilityDays: prevState.availabilityDays.map((day) => ({
-                ...day,
-                username: 'Error fetching exercises',
-            })),
-        }));
+  async fetchAvailableDays() {
+    const availableWeekdays = await getSpecificAnswer(localStorage.getItem('userId'), "How often do you want to work out?");
+    
+    const currentDate = moment();
+    const availabilityDays = [];
+
+    for (let weekOffset = 0; weekOffset < 4; weekOffset++) {
+      const weekStart = currentDate.clone().add(weekOffset, 'weeks').startOf('week');
+      const weekEnd = weekStart.clone().endOf('week');
+
+      let currentDay = weekStart.clone();
+      while (currentDay.isBefore(weekEnd) || currentDay.isSame(weekEnd, 'day')) {
+        if (availableWeekdays.includes(currentDay.format('dddd'))) {
+          availabilityDays.push({
+            id: currentDay.format('YYYY-MM-DD'),
+            title: `Available on ${currentDay.format('dddd')}`,
+            start: currentDay.toDate(),
+            end: currentDay.clone().endOf('day').toDate(),
+            color: '#FFD700',
+            // highlight available day
+            highlighted: true 
+          });
+        }
+        currentDay.add(1, 'day');
+      }
     }
-}
+
+    // Update state with availability for a month
+    this.setState({ availabilityDays });
+  }
 
   render() {
-    const excercises = this.state.availabilityDays.map((excercise) => ({
-      id: excercise.id,
-      title: excercise.username, // Use updated username
-      start: new Date(excercise.start_at),
-      end: new Date(excercise.end_at),
-      color: excercise.color,
-      allDay: true,
+    const events = this.state.availabilityDays.map((day) => ({
+      id: day.id,
+      title: day.title,
+      start: day.start,
+      end: day.end,
+      color: day.color,
     }));
-    const events = [...excercises];
 
     return (
       <Calendar
@@ -69,18 +72,18 @@ class workoutCalendar extends React.Component {
         min={new Date(2025, 1, 1, 0, 0, 0)}
         max={new Date(2025, 1, 1, 0, 0, 0)}
         showMultiDayTimes={false}
-        formats={{
-          monthHeaderFormat: 'MMMM yyyy',
-          dayRangeHeaderFormat: 'dddd, MMMM Do YYYY',
-        }}
         eventPropGetter={(event) => {
-          const eventData = events.find((ot) => ot.id === event.id);
-          const backgroundColor = eventData && eventData.color;
+          const backgroundColor = event.color;
           return { style: { backgroundColor } };
+        }}
+        dayPropGetter={(date) => {
+          const dayString = moment(date).format('YYYY-MM-DD');
+          const isAvailable = this.state.availabilityDays.some(day => day.id === dayString);
+          return isAvailable ? { className: 'highlighted' } : {};
         }}
       />
     );
   }
 }
 
-export default workoutCalendar;
+export default WorkoutCalendar;

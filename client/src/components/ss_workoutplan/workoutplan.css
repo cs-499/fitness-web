@@ -1,61 +1,76 @@
-/* Ensure the text in event boxes wraps and doesn't overflow */
-.rbc-event {
-  white-space: normal;
-  word-wrap: break-word;
-  word-break: break-word;
-  font-size: 14px;
-  padding: 8px;
-  min-height: 50px;
-  max-width: 100%;
-  overflow: visible;
-  box-sizing: border-box;
-  display: block;
+.question {
+  display: none;
 }
 
-/* Ensure the event text is wrapped */
-.rbc-event .rbc-event-content {
-  white-space: normal;
-  word-wrap: break-word;
-  overflow: hidden;
-  max-height: none;
+.page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
 }
 
+.intake-survey {
+  display: flex;
+  height: 256px;
+  width: 512px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  margin: 10px;
+  border: 5px solid rgba(255, 255, 255, 0.65);
+  border-radius: 20px;
+  background-image: linear-gradient(to bottom, rgb(116, 179, 195), rgb(22, 76, 120));
+}
+
+.question-buttons {
+  display: flex;
+  width: 250px;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+}
+
+button {
+  height: 25px;
+  width: 75px;
+  background-color: rgba(255, 255, 255, 0.65);
+  border: 2px solid grey;
+  border-radius: 20px;
+  color: black;
+}
+
+h3 {
+  color: white;
+}
+
+/* Calendar Styling */
+
+/* Ensure the day cells are positioned correctly */
 .rbc-day-bg {
-  display: table-cell;
-  border-right: 1px solid #fff;
-  border-bottom: 1px solid #fff;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  min-height: 150px;
-  vertical-align: top;
   position: relative;
 }
 
-.rbc-week-view .rbc-week-content {
-  display: block;
+/* Add styles to highlight available days */
+.rbc-day-bg.highlighted {
+  background-color: #FFD700 !important;
+  border-radius: 5px !important;
 }
 
-.rbc-week-view .rbc-day {
-  height: 150px !important;
-  padding: 10px 0; 
-  overflow: visible;
+.rbc-day-bg.highlighted:hover {
+  background-color: #ffcc00 !important;
 }
 
-.rbc-week-view .rbc-day .rbc-event {
-  min-height: 50px;
-  max-height: none;
-  overflow: visible;
-  display: block;
-  width: 100% !important;
+.rbc-event {
+  background-color: #FFD700 !important;
+  border-radius: 5px !important;
+  color: white !important;
+  font-weight: bold;
+  text-align: center;
 }
 
-/* Add space around day cells to ensure events don't overlap */
-.rbc-week-view .rbc-day-slot {
-  min-height: 50px;
-}
-
-.rbc-day-bg:last-child,
-.rbc-header:last-child {
-  border-right: none;
+.rbc-event:hover {
+  background-color: #ffcc00 !important;
+  cursor: pointer;
 }
