@@ -54,13 +54,22 @@ const Homepage = () => {
                         onClick={() => window.location.href = 'http://localhost:3000/liveworkout'}>
                         Start Workout
                     </button>
-                    <button className="end-button">Workout Complete</button>
                     </div>
                 </div>
 
+                <h1 
+  className="meal_category" 
+  style={{
+    textAlign: 'right',
+    marginRight: '2rem',
+    color: 'white',
+  }}
+>
+  Planned Meals
+</h1>
 
                 <div className="meals-section">
-                    <h1 className='meal_category'>Planned Meals</h1>
+                    
 
                     <div className="meal-item">
                         <div className="meal-image">
