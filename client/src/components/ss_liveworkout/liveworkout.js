@@ -102,77 +102,88 @@ const LiveWorkout = () => {
     };
 
     return (
-        <div className='all'>
-            <NavBar />
-            <div className='Workoutout_Meals'>
-                <div className='todayW'>
-                    <h1 className='category_text'>Today's Workout</h1>
+<div className="all">
+    <NavBar />
+    <div className="Workoutout_Meals">
+        {/* Today's Workout Section */}
+        <div className="todayW">
+            <h1 className="category_text">Today's Workout</h1>
+            <select
+                onChange={(e) => setCurrentWorkoutIndex(Number(e.target.value))}
+                value={currentWorkoutIndex}
+            >
+                {workoutNames.map((workout, index) => (
+                    <option key={index} value={index}>
+                        {workout}
+                    </option>
+                ))}
+            </select>
 
-                    <select onChange={(e) => setCurrentWorkoutIndex(Number(e.target.value))} value={currentWorkoutIndex}>
-                        {workoutNames.map((workout, index) => (
-                            <option key={index} value={index}>
-                                {workout}
-                            </option>
-                        ))}
-                    </select>
-
-                    <div className="guided-workout">
-                        <h2>Guided Workout for {workoutNames[currentWorkoutIndex]}</h2>
-                        <ul>
-                            {exercises[workoutNames[currentWorkoutIndex]].map((exercise, index) => (
-                                <li key={index}>
-                                    {exercise.name} - {exercise.sets} Sets of {exercise.reps || `${exercise.duration}s`} Reps
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <div className="diet-tracker">
-                        <h2>Diet Tracker</h2>
-                        <p>Caloric Goal: {caloricIntake} kcal</p>
-                        <p>Calories Consumed: {caloriesConsumed} kcal</p>
-                        <p>Protein: {protein}g / {proteinGoal}g</p>
-                        <p>Carbs: {carbs}g / {carbGoal}g</p>
-                        <p>Fat: {fat}g / {fatGoal}g</p>
-                        <button onClick={() => logMeal(500, 25, 60, 15)}>Log Meal</button>
-                    </div>
-
-                    <div className="circular-timer">
-                        <svg width="200" height="200">
-                            <circle cx="100" cy="100" r={radius} fill="none" stroke="#e0e0e0" strokeWidth="10" />
-                            <circle
-                                cx="100"
-                                cy="100"
-                                r={radius}
-                                fill="none"
-                                stroke="#007bff"
-                                strokeWidth="10"
-                                strokeDasharray={circumference}
-                                strokeDashoffset={circumference - progress}
-                            />
-                        </svg>
-                        <div className="timer-text">
-                            {Math.floor(timeElapsed / 60)}:{String(timeElapsed % 60).padStart(2, '0')}
-                        </div>
-                        
-                        <div className="timer-controls">
-                            <button onClick={togglePause}>
-                                {isPaused ? "Resume" : "Pause"}
-                            </button>
-                            <button onClick={endWorkout}>End Workout</button>
-                        </div>
-                    </div>
-
-                    <button className="done-button" onClick={endWorkout}>Complete Workout</button>
-                    <div className="metrics-display">
-                        <h2>Calories Burned: {caloriesBurned.toFixed(2)}</h2>
-                        <h3>Hydration: {hydration} ml</h3>
-                        <h3>Heart Rate: {heartRate} bpm</h3>
-                    </div>
-                </div>
-                <ParticleSys />
+            {/* Metrics Display */}
+            <div className="metrics-display">
+                <h2>Calories Burned: {caloriesBurned.toFixed(2)}</h2>
+                <h3>Hydration: {hydration} ml</h3>
+                <h3>Heart Rate: {heartRate} bpm</h3>
             </div>
         </div>
+
+        {/* Guided Workout */}
+        <div className="guided-workout">
+            <h2>Guided Workout for {workoutNames[currentWorkoutIndex]}</h2>
+            <ul>
+                {exercises[workoutNames[currentWorkoutIndex]].map((exercise, index) => (
+                    <li key={index}>
+                        {exercise.name} - {exercise.sets} Sets of {exercise.reps || `${exercise.duration}s`} Reps
+                    </li>
+                ))}
+            </ul>
+        </div>
+
+        {/* Diet Tracker */}
+        <div className="diet-tracker">
+            <h2>Diet Tracker</h2>
+            <p>Caloric Goal: {caloricIntake} kcal</p>
+            <p>Calories Consumed: {caloriesConsumed} kcal</p>
+            <p>Protein: {protein}g / {proteinGoal}g</p>
+            <p>Carbs: {carbs}g / {carbGoal}g</p>
+            <p>Fat: {fat}g / {fatGoal}g</p>
+            <button onClick={() => logMeal(500, 25, 60, 15)}>Log Meal</button>
+        </div>
+
+        {/* Circular Timer */}
+        <div className="circular-timer">
+            <svg width="200" height="200">
+                <circle cx="100" cy="100" r={radius} fill="none" stroke="#e0e0e0" strokeWidth="10" />
+                <circle
+                    cx="100"
+                    cy="100"
+                    r={radius}
+                    fill="none"
+                    stroke="#007bff"
+                    strokeWidth="10"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={circumference - progress}
+                />
+            </svg>
+            <div className="timer-text">
+                {Math.floor(timeElapsed / 60)}:{String(timeElapsed % 60).padStart(2, '0')}
+            </div>
+            <div className="timer-controls">
+                <button onClick={togglePause}>{isPaused ? "Resume" : "Pause"}</button>
+                <button onClick={endWorkout}>Reset</button>
+            </div>
+        </div>
+
+        {/* Complete Workout */}
+        <button className="done-button" onClick={endWorkout}>
+            Complete Workout
+        </button>
+    </div>
+    <ParticleSys />
+</div>
+
+
+
     );
 };
 
