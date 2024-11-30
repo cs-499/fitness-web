@@ -14,8 +14,14 @@ import LiveWorkout from './components/ss_liveworkout/liveworkout';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+
 function App() {
-  return (
+  
+    return (
+      <div style={{ background: 'linear-gradient(135deg, #1E3A8A, #3B82F6)', minHeight: '100vh' }}>
+        <div className="App">
+
+  
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Landing />} />
@@ -26,11 +32,13 @@ function App() {
         <Route path="/workoutplan" element={<WorkoutPlan />} />
         <Route path="/mealplan" element={<MealPlan />} />
         <Route path="/mealgenerator" element={<MealGenerator />} />
-        <Route path="/recipe/:id" element={<Recipe />} />
+        <Route path="/recipe/:id" element={<Recipe />} /> {/* Updated Route */}
         <Route path="/contact" element={<Contact />} />
         <Route path="/liveworkout" element={<LiveWorkout />} />
       </Routes>
     </BrowserRouter>
+            </div>
+            </div>
   );
 }
 
