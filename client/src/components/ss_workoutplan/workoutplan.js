@@ -2,8 +2,9 @@ import React from 'react';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import './workoutplan.css'; // Your CSS file
+import './workoutplan.css';
 import { getSpecificAnswer } from './getSurveyAnswers.js';
+import groqCloudAi from './groqCloudAIapi.js';
 
 const localizer = momentLocalizer(moment);
 
@@ -11,8 +12,10 @@ class WorkoutCalendar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // Array to store available days
-      availabilityDays: [], 
+      // Store available days with workout plans
+      availabilityDays: [],
+      // Show spinner while loading
+      loading: true,
     };
   }
 
@@ -21,8 +24,12 @@ class WorkoutCalendar extends React.Component {
   }
 
   async fetchAvailableDays() {
-    const availableWeekdays = await getSpecificAnswer(localStorage.getItem('userId'), "How often do you want to work out?");
-    
+    const userId = localStorage.getItem('userId');
+    const availableWeekdays = await getSpecificAnswer(
+      userId,
+      'How often do you want to work out?'
+    );
+
     const currentDate = moment();
     const availabilityDays = [];
 
@@ -33,52 +40,65 @@ class WorkoutCalendar extends React.Component {
       let currentDay = weekStart.clone();
       while (currentDay.isBefore(weekEnd) || currentDay.isSame(weekEnd, 'day')) {
         if (availableWeekdays.includes(currentDay.format('dddd'))) {
+          const workoutPlan = await groqCloudAi(userId); // Fetch workout plan
           availabilityDays.push({
             id: currentDay.format('YYYY-MM-DD'),
-            title: `Available on ${currentDay.format('dddd')}`,
-            start: currentDay.toDate(),
-            end: currentDay.clone().endOf('day').toDate(),
-            color: '#FFD700',
-            // highlight available day
-            highlighted: true 
+            workoutPlan, // Add the workout plan text
+            date: currentDay,
+            color: '#FFD700', // Highlight color
           });
         }
         currentDay.add(1, 'day');
       }
     }
 
-    // Update state with availability for a month
-    this.setState({ availabilityDays });
+    this.setState({ availabilityDays, loading: false }); // Stop loading when complete
   }
 
   render() {
-    const events = this.state.availabilityDays.map((day) => ({
-      id: day.id,
-      title: day.title,
-      start: day.start,
-      end: day.end,
-      color: day.color,
-    }));
+    const { availabilityDays, loading } = this.state;
+
+    // Show spinner while loading
+    if (loading) {
+      return (
+        <div className="spinner-container">
+          <div className="spinner"></div>
+        </div>
+      );
+    }
 
     return (
       <Calendar
         localizer={localizer}
-        events={events}
+        events={availabilityDays.map((day) => ({
+          id: day.id,
+          title: day.workoutPlan, // Display workout plan in the event
+          start: day.date.toDate(),
+          end: day.date.clone().endOf('day').toDate(),
+          color: day.color,
+        }))}
         startAccessor="start"
         endAccessor="end"
         defaultDate={moment().toDate()}
         views={{ week: true }}
         defaultView={Views.WEEK}
-        min={new Date(2025, 1, 1, 0, 0, 0)}
-        max={new Date(2025, 1, 1, 0, 0, 0)}
-        showMultiDayTimes={false}
         eventPropGetter={(event) => {
           const backgroundColor = event.color;
-          return { style: { backgroundColor } };
+          return {
+            style: {
+              backgroundColor,
+              color: 'black',
+              fontWeight: 'bold',
+              fontSize: '0.9em',
+              padding: '10px',
+              whiteSpace: 'pre-wrap',
+              borderRadius: '5px',
+            },
+          };
         }}
         dayPropGetter={(date) => {
           const dayString = moment(date).format('YYYY-MM-DD');
-          const isAvailable = this.state.availabilityDays.some(day => day.id === dayString);
+          const isAvailable = availabilityDays.some((day) => day.id === dayString);
           return isAvailable ? { className: 'highlighted' } : {};
         }}
       />
