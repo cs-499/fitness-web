@@ -1,121 +1,66 @@
-import React, { useEffect, useState } from 'react';
-import '../../App.css';
+import React from 'react';
+import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
+import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './workoutplan.css';
-import NavBar from "../navbar/nav_bar";
-const WorkoutPlan = () => {
+import NavBar from '../navbar/nav_bar';
 
-    const schedule = {
-        sunday: { name: "Rest", exercises: [] },
-        monday: { name: "Chest & Back", exercises: ["Bench Press", "Pull-Ups", "Cable Flys"] },
-        tuesday: { name: "Arms", exercises: ["Bicep Curls", "Tricep Extensions", "Cable Pushdowns"] },
-        wednesday: { name: "Legs", exercises: ["Squats", "Lunges", "Leg Press"] },
-        thursday: { name: "Triceps", exercises: ["Skull Crushers", "Diamond Pushups"] },
-        friday: { name: "Biceps", exercises: ["Curl", "Incline Curl"] },
-        saturday: { name: "Rest", exercises: [] }
-    };
+const localizer = momentLocalizer(moment);
 
-    // Get today's day name
-    const dayNames = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-    const todayIndex = new Date().getDay();
-    const todayName = dayNames[todayIndex];
+class workoutCalendar extends React.Component {
+  // keep this as example, will be replaced by actuall API responses soon...
+  ninjaAPI = {
+    availabilityDays: [
+      {
+        id: 1,
+        username: "Excercise for today",
+        start_at: new Date(),
+        end_at: new Date(new Date().setHours(new Date().getHours() + 2)),
+        color: '#6A1B9A'
+      }
+    ], 
+  };
 
-    const updateCalendar = () => {
-        dayNames.forEach((day, index) => {
-            const dayElement = document.getElementById(day);
-            if (index <= todayIndex) {
-                dayElement.classList.add("disabled");
-            }
-            if (day === todayName) {
-                dayElement.classList.remove("disabled");
-                dayElement.classList.add("active");
-                displayWorkout(day);
-            }
-        });
-    }
-
-    const displayWorkout = (day) => {
-        const dayData = schedule[day];
-        document.getElementById("dayDisplay").textContent = `Today: ${dayData.name}`;
-        
-        // Populate dropdown with exercises
-        const dropdown = document.getElementById("exerciseDropdown");
-        dropdown.innerHTML = "";
-        if (dayData.exercises.length === 0) {
-            dropdown.innerHTML = "<option>No exercises scheduled</option>";
-        } else {
-            dayData.exercises.forEach(exercise => {
-                const option = document.createElement("option");
-                option.textContent = exercise;
-                dropdown.appendChild(option);
-            });
-        }
-    }
-
-    // Add event listeners for clickable days
-    const addEventListener = () => {
-        dayNames.forEach(day => {
-            const dayElement = document.getElementById(day);
-            dayElement.addEventListener("click", () => {
-                if (!dayElement.classList.contains("disabled")) {
-                    displayWorkout(day);
-                }
-            });
-        });
-    }
-    
-    updateCalendar();
-    addEventListener();
+  render() {
+    const excercises = this.ninjaAPI.availabilityDays.map((excercise) => ({
+      id: excercise.id,
+      title: excercise.username,
+      start: new Date(excercise.start_at),
+      end: new Date(excercise.end_at),
+      color: excercise.color,
+      allDay: true,
+    }));
+    const events = [...excercises];
 
     return (
         <>
             <NavBar />
-            
-            <div className='plan'>
-                <div class="calendar-container">
-                    <div class="day-container">
-                        <div class="day-name">Sunday</div>
-                        <div class="day disabled" id="sunday">Rest</div>
-                    </div>
-                    <div class="day-container">
-                        <div class="day-name">Monday</div>
-                        <div class="day disabled" id="monday">Chest & Back</div>
-                    </div>
-                    <div class="day-container">
-                        <div class="day-name">Tuesday</div>
-                        <div class="day disabled" id="tuesday">Arms</div>
-                    </div>
-                    <div class="day-container">
-                        <div class="day-name">Wednesday</div>
-                        <div class="day" id="wednesday">Legs</div>
-                    </div>
-                    <div class="day-container">
-                        <div class="day-name">Thursday</div>
-                        <div class="day" id="thursday">Rest</div>
-                    </div>
-                    <div class="day-container">
-                        <div class="day-name">Friday</div>
-                        <div class="day" id="friday">Biceps</div>
-                    </div>
-                    <div class="day-container">
-                        <div class="day-name">Saturday</div>
-                        <div class="day" id="saturday">Rest</div>
-                    </div>
-                </div>
-                
-                
-                <div id="dayDisplay">Today: Legs</div>
-
-                
-                <select id="exerciseDropdown">
-                    <option>Select an Exercise</option>
-                </select>
-
-                
-                <a href="#" id="videoButton">Video Placeholder</a>
-            </div>
+            <Calendar
+                    localizer={localizer}
+                    events={events}
+                    startAccessor="start"
+                    endAccessor="end"
+                    defaultDate={moment().toDate()}
+                    // Only show the week view 
+                    views={{ week: true }}
+                    defaultView={Views.WEEK}
+                    min={new Date(2025, 1, 1, 0, 0, 0)}
+                    max={new Date(2025, 1, 1, 0, 0, 0)}
+                    showMultiDayTimes={false}
+                    formats={{
+                    monthHeaderFormat: 'MMMM yyyy',
+                    }}
+                    eventPropGetter={event => {
+                    const eventData = events.find(ot => ot.id === event.id);
+                    const backgroundColor = eventData && eventData.color;
+                    return { style: { backgroundColor } };
+                    }}
+                />
         </>
-        
+
+      
     );
+  }
 }
 
-export default WorkoutPlan;
+export default workoutCalendar;
