@@ -1,58 +1,100 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import '../../App.css';
 import NavBar from "../navbar/nav_bar";
-import { useParams } from 'react-router-dom';
+import './recipe.css';
+import axios from 'axios';
 
-function Recipe() {
-    const { id } = useParams(); // This retrieves the recipe ID from the URL
-    const [recipeDetails, setRecipeDetails] = useState(null);
-    const [loading, setLoading] = useState(false);
+const Recipe = () => {
+    const { id } = useParams();
+    const [recipe, setRecipe] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchRecipeDetails = async () => {
+        const fetchRecipe = async () => {
             setLoading(true);
             try {
-                // Assuming the backend to provide details is set up similarly to the list fetch
-                const response = await fetch(`http://localhost:5001/api/recipe/${id}`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                const apiKey = process.env.REACT_APP_SPOONACULAR_API_KEY;
+                if (!apiKey) {
+                    throw new Error('Missing API Key. Please set it in your .env file.');
                 }
-                const data = await response.json();
-                setRecipeDetails(data);
+
+                const { data } = await axios.get(
+                    `https://api.spoonacular.com/recipes/${id}/information?includeNutrition=true&apiKey=${apiKey}`
+                );
+                setRecipe(data);
             } catch (err) {
-                setError(err.message);
-                setRecipeDetails(null);
+                setError(err.response?.data?.message || 'Failed to fetch recipe');
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         };
 
-        fetchRecipeDetails();
-    }, [id]); // This ensures the effect runs again if the ID changes
+        fetchRecipe();
+    }, [id]);
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+    const saveMeal = () => {
+        const savedMeals = JSON.parse(localStorage.getItem('savedMeals')) || [];
+        const calories = recipe.nutrition?.nutrients?.find(nutrient => nutrient.name === 'Calories')?.amount || 'N/A';
+        const meal = {
+            title: recipe.title,
+            calories: `${calories} kcal`,
+            id: recipe.id,
+            timestamp: new Date().toISOString(), // Add ISO timestamp for consistency
+        };
+        localStorage.setItem('savedMeals', JSON.stringify([...savedMeals, meal]));
+        alert('Meal saved to journal!');
+    };
+    
 
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
+
+    if (loading) return <p>Loading recipe...</p>;
+    if (error) return <p>Error: {error}</p>;
 
     return (
         <div>
             <NavBar />
-            {recipeDetails ? (
-                <div>
-                    <h1>{recipeDetails.title}</h1>
-                    <img src={recipeDetails.image} alt={recipeDetails.title} style={{ width: '300px' }} />
-                    <h2>Instructions</h2>
-                    <p>{recipeDetails.instructions}</p>
+            <div className="recipe-container">
+                <h1>{recipe?.title || 'Recipe Title'}</h1>
+                <img src={recipe?.image} alt={recipe?.title || 'Recipe Image'} />
+                <button onClick={saveMeal} style={{
+                    backgroundColor: '#1e293b',
+                    color: 'white',
+                    padding: '0.75rem 1.5rem',
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontSize: '1rem',
+                    fontWeight: 'bold',
+                    marginTop: '1rem'
+                }}>
+                    Save Meal
+                </button>
+                <div className="summary">
+                    {recipe?.summary ? recipe.summary.replace(/<[^>]*>/g, '') : 'No summary available.'}
                 </div>
-            ) : (
-                <p>No details available.</p>
-            )}
+                <div className="ingredients-instructions">
+                    <div className="ingredients">
+                        <h2>Ingredients</h2>
+                        <ul>
+                            {recipe?.extendedIngredients?.map((ingredient) => (
+                                <li key={ingredient.id}>{ingredient.original}</li>
+                            )) || <li>No ingredients available.</li>}
+                        </ul>
+                    </div>
+                    <div className="instructions">
+                        <h2>Instructions</h2>
+                        <ol>
+                            {recipe?.analyzedInstructions?.[0]?.steps.map((step) => (
+                                <li key={step.number}>{step.step}</li>
+                            )) || <li>No instructions available.</li>}
+                        </ol>
+                    </div>
+                </div>
+            </div>
         </div>
     );
-}
+};
 
 export default Recipe;

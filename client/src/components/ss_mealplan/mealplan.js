@@ -1,43 +1,54 @@
-=import React, { useState } from 'react';
+import React, { useState } from 'react';
 import '../../App.css';
+import './mealplan.css';
 import NavBar from "../navbar/nav_bar";
+import { useNavigate } from 'react-router-dom';
 
 const MealPlan = () => {
     document.title = 'ShapeShifter';
 
     const [workoutGoal, setWorkoutGoal] = useState('');
     const [dietGoal, setDietGoal] = useState('');
+    const navigate = useNavigate();
+
     const handleNavigate = () => {
-        // Pass goals as query parameters
+        if (!workoutGoal.trim() && !dietGoal.trim()) {
+            alert("Please provide at least one goal to proceed.");
+            return;
+        }
         const params = new URLSearchParams({ workoutGoal, dietGoal }).toString();
-        window.location.href = `/mealgenerator?${params}`;
+        navigate(`/mealgenerator?${params}`);
     };
 
     return (
         <>
             <NavBar />
-            <h1>Meal Plan</h1>
-            <div className="goal-inputs">
-                <h2>Set Your Goals</h2>
-                <div>
-                    <label>Workout Goal:</label>
-                    <input
-                        type="text"
-                        value={workoutGoal}
-                        onChange={(e) => setWorkoutGoal(e.target.value)}
-                        placeholder="E.g., Gain muscle, lose weight"
-                    />
+            <div className="meal-plan-container">
+                <h1 className="page-title">Meal Plan</h1>
+                <div className="goal-inputs">
+                    <h2 className="subtitle">Set Your Goals</h2>
+                    <div className="input-group">
+                        <label>Workout Goal:</label>
+                        <input
+                            type="text"
+                            value={workoutGoal}
+                            onChange={(e) => setWorkoutGoal(e.target.value)}
+                            placeholder="E.g., Gain muscle, lose weight"
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label>Diet Goal:</label>
+                        <input
+                            type="text"
+                            value={dietGoal}
+                            onChange={(e) => setDietGoal(e.target.value)}
+                            placeholder="E.g., High protein, keto"
+                        />
+                    </div>
+                    <button onClick={handleNavigate} className="generate-button">
+                        Generate Meal Plan
+                    </button>
                 </div>
-                <div>
-                    <label>Diet Goal:</label>
-                    <input
-                        type="text"
-                        value={dietGoal}
-                        onChange={(e) => setDietGoal(e.target.value)}
-                        placeholder="E.g., High protein, keto"
-                    />
-                </div>
-                <button onClick={handleNavigate}>Generate Meal Plan</button>
             </div>
         </>
     );
