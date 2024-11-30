@@ -2,66 +2,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 
-body{
+/* General Styling */
+body {
     background-color: white;
     overflow: visible;
     overflow-x: hidden;
 }
+    /* //display: flex; */
+/* Align all content for better spacing */
+.all {
 
-
-/* General styling */
-/* .all {
-    font-family: Arial, sans-serif;
-    color: #333;
-    display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #f5f5f5;
-} */
-
-/* .Workoutout_Meals {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 900px;
+    align-items: flex-start;
+    flex-wrap: wrap;
     padding: 20px;
-    margin: 20px;
-} */
+    gap: 30px; /* Add spacing between sections */
+}
 
 /* Section Titles */
 .category_text {
-    font-size: 24px;
+    font-size: 28px;
     color: #007bff;
     text-align: center;
     margin-bottom: 20px;
 }
 
-/* Workout Selection */
-select {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    font-size: 16px;
-    background-color: #f9f9f9;
-    color: #333;
-}
-
-/* Guided Workout */
+/* Guided Workout Section */
 .guided-workout {
+    flex: 1 1 45%; /* Take 45% width and adapt to smaller screens */
     margin-top: 20px;
     background: #f0f8ff;
     border-radius: 8px;
     padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .guided-workout h2 {
     color: #007bff;
     font-size: 20px;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .guided-workout ul {
@@ -79,42 +59,34 @@ select {
     border-bottom: none;
 }
 
-/* Diet Tracker */
+/* Diet Tracker Section */
 .diet-tracker {
+    flex: 1 1 45%; /* Take 45% width and adapt to smaller screens */
     margin-top: 20px;
     background: #fff5e1;
     border-radius: 8px;
     padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .diet-tracker h2 {
     color: #e67e22;
     font-size: 20px;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .diet-tracker p {
     margin: 5px 0;
     font-size: 16px;
+    text-align: center;
 }
 
-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-}
 
-button:hover {
-    background-color: #0056b3;
-}
 
-/* Circular Timer */
+/* Circular Timer Section */
 .circular-timer {
+    flex: 1 1 100%; /* Full width */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -136,49 +108,96 @@ button:hover {
     margin-top: 10px;
 }
 
-.timer-controls button {
-    background-color: #28a745;
+
+/* Aligning today's workout and metrics */
+.todayW {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the content horizontally */
+    gap: 20px; /* Space between elements */
+    margin-bottom: 30px; /* Add spacing below */
 }
 
-.timer-controls button:hover {
-    background-color: #218838;
-}
-
-/* Workout Summary */
-.done-button {
-    background-color: #ff6347;
-    color: #fff;
-    font-size: 18px;
-    padding: 10px 20px;
-    margin: 20px 0;
-    display: block;
-    width: 100%;
-    border-radius: 8px;
-}
-
-.done-button:hover {
-    background-color: #e5533d;
-}
-
-/* Metrics Display */
+/* Styling Metrics Display */
 .metrics-display {
-    margin-top: 20px;
-    padding: 15px;
     background: #e9f7ef;
     border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center the text */
+    width: 80%; /* Adjust width for better alignment */
+    margin-top: 20px; /* Space above */
 }
-
-.metrics-display h2, .metrics-display h3 {
-    margin: 5px 0;
+.metrics-display h2,
+.metrics-display h3 {
+    margin: 10px 0;
     color: #333;
 }
-
 .metrics-display h2 {
     font-size: 22px;
     color: #007bff;
 }
-
 .metrics-display h3 {
     font-size: 18px;
     color: #555;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .guided-workout, .diet-tracker {
+        flex: 1 1 100%; /* Stack on smaller screens */
+    }
+}
+
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px; /* Adjust padding for consistent spacing */
+    cursor: pointer;
+    font-size: 16px; /* Keep a consistent font size */
+    line-height: 1.5; /* Ensure proper text alignment */
+    margin: 10px auto;
+    display: flex; /* Flexbox for centering */
+    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Center text vertically */
+    width: auto; /* Allow button to resize based on text */
+    max-width: 100%; /* Prevent button from becoming too wide */
+    text-align: center; /* Ensure proper text alignment */
+    box-sizing: border-box; /* Include padding in width/height */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Prevent text overflow */
+    text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+button:hover {
+    background-color: #0056b3; /* Darken on hover */
+}
+
+/* Adjust Done Button for Consistency */
+.done-button {
+    background-color: #ff6347;
+    color: #fff;
+    font-size: 16px; /* Match the font size with other buttons */
+    padding: 12px 20px; /* Adjust padding for balanced spacing */
+    margin: 20px auto;
+    display: flex; /* Use flexbox */
+    justify-content: center;
+    align-items: center;
+    width: auto; /* Allow resizing */
+    border-radius: 8px;
+    text-align: center;
+    line-height: 1.5; /* Match line height for consistency */
+    box-sizing: border-box; /* Include padding in width/height */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Prevent text overflow */
+    text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+}
+
+.done-button:hover {
+    background-color: #e5533d; /* Darken on hover */
 }
