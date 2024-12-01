@@ -2,7 +2,9 @@ import React from 'react';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import './workoutplan.css'; // Your CSS file
+import './workoutplan.css';
+import { fetchWorkoutPlansFromBackend, saveWorkoutPlansToBackend } from './workoutPlanService';
+import groqCloudAi from './groqCloudAIapi.js';
 import { getSpecificAnswer } from './getSurveyAnswers.js';
 
 const localizer = momentLocalizer(moment);
@@ -11,18 +13,51 @@ class WorkoutCalendar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // Array to store available days
-      availabilityDays: [], 
+      // Days with user availability
+      availabilityDays: [],
+      // Fetched/generated workout plans
+      workoutPlans: {},
+      isLoading: true,
     };
   }
 
   async componentDidMount() {
-    await this.fetchAvailableDays();
+    try {
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        this.setState({ isLoading: false });
+        return;
+      }
+      await this.fetchAvailableDays();
+
+      let workoutPlans = await fetchWorkoutPlansFromBackend(userId);
+      const missingDates = this.state.availabilityDays
+        .filter((day) => !workoutPlans[day.id])
+        .map((day) => day.id);
+
+      if (missingDates.length > 0) {
+        console.log('Generating missing plans with Groq AI...');
+        const generatedPlans = await this.generatePlansWithGroqAI(userId, missingDates);
+
+        workoutPlans = { ...workoutPlans, ...generatedPlans };
+
+        console.log('Saving updated plans to backend...');
+        await saveWorkoutPlansToBackend(userId, workoutPlans);
+      }
+
+      this.setState({ workoutPlans, isLoading: false });
+    } catch (error) {
+      console.error('Error initializing calendar:', error);
+      this.setState({ isLoading: false });
+    }
   }
 
+  /**
+   * Fetches user availability for the next 4 weeks based on a survey response.
+   */
   async fetchAvailableDays() {
-    const availableWeekdays = await getSpecificAnswer(localStorage.getItem('userId'), "How often do you want to work out?");
-    
+    const availableWeekdays = await getSpecificAnswer(localStorage.getItem('userId'), 'How often do you want to work out?');
+
     const currentDate = moment();
     const availabilityDays = [];
 
@@ -38,50 +73,79 @@ class WorkoutCalendar extends React.Component {
             title: `Available on ${currentDay.format('dddd')}`,
             start: currentDay.toDate(),
             end: currentDay.clone().endOf('day').toDate(),
+            // Highlight each available day
             color: '#FFD700',
-            // highlight available day
-            highlighted: true 
+            highlighted: true,
           });
         }
         currentDay.add(1, 'day');
       }
     }
-
-    // Update state with availability for a month
     this.setState({ availabilityDays });
   }
 
+  /**
+   * Generate workout plans for missing dates using Groq AI.
+   */
+  async generatePlansWithGroqAI(userId, missingDates) {
+    const generatedPlans = {};
+
+    for (const date of missingDates) {
+      try {
+        const response = await groqCloudAi(userId, date);
+        if (response.success) {
+          generatedPlans[date] = response.plan;
+        } else {
+          console.error(`Failed to generate plan for ${date}:`, response.error);
+        }
+      } catch (error) {
+        console.error(`Error generating plan for ${date} with Groq AI:`, error);
+      }
+    }
+    return generatedPlans;
+  }
+
   render() {
-    const events = this.state.availabilityDays.map((day) => ({
+    const { availabilityDays, workoutPlans, isLoading } = this.state;
+
+    const events = availabilityDays.map((day) => ({
       id: day.id,
-      title: day.title,
+      title: workoutPlans[day.id] || day.title || 'No excercise available',
       start: day.start,
       end: day.end,
       color: day.color,
     }));
 
     return (
-      <Calendar
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        defaultDate={moment().toDate()}
-        views={{ week: true }}
-        defaultView={Views.WEEK}
-        min={new Date(2025, 1, 1, 0, 0, 0)}
-        max={new Date(2025, 1, 1, 0, 0, 0)}
-        showMultiDayTimes={false}
-        eventPropGetter={(event) => {
-          const backgroundColor = event.color;
-          return { style: { backgroundColor } };
-        }}
-        dayPropGetter={(date) => {
-          const dayString = moment(date).format('YYYY-MM-DD');
-          const isAvailable = this.state.availabilityDays.some(day => day.id === dayString);
-          return isAvailable ? { className: 'highlighted' } : {};
-        }}
-      />
+      <div className="calendar-container">
+        {isLoading ? (
+          <div className="spinner-container">
+            <div className="spinner"></div>
+            <p>Loading workout plans...</p>
+          </div>
+        ) : (
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            defaultDate={moment().toDate()}
+            views={{ week: true }}
+            defaultView={Views.WEEK}
+            eventPropGetter={(event) => ({
+              style: { backgroundColor: event.color || '#ADD8E6' },
+              color: '#000',
+            })}
+            components={{
+              event: ({ event }) => (
+                <div className="workout-plan-box">
+                  <p>{event.title}</p>
+                </div>
+              ),
+            }}
+          />
+        )}
+      </div>
     );
   }
 }
