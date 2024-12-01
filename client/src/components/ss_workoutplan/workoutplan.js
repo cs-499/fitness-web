@@ -4,7 +4,7 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './workoutplan.css';
 import { fetchWorkoutPlansFromBackend, saveWorkoutPlansToBackend } from './workoutPlanService';
-import { groqCloudAi } from './groqCloudAIapi.js';
+import groqCloudAi from './groqCloudAIapi.js';
 import { getSpecificAnswer } from './getSurveyAnswers.js';
 
 const localizer = momentLocalizer(moment);
