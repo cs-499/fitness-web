@@ -3,11 +3,11 @@ import express from 'express';
 import { connectDB } from './connectDB.js';
 import { corsMiddleware } from './middleware/cors.js';
 import { sessionCookie, bodyParse } from './middleware/auth.js';
-import routes from './routes.js';
+import routes from './routes/routes.js';
 import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { getSurveyFromUser } from './controllers/survey.js';
+import workoutRoute from './routes/workoutRoute.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -24,6 +24,7 @@ app.use(express.json());
 
 app.use(routes);
 app.use('/survey', routes);
+app.use('/api/workout-plan', workoutRoute);
 
 // script for starting Flask server for meal-gen API
 const flaskAppPath = path.join(__dirname, 'controllers', 'meal-gen.py');
