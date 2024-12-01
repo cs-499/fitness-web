@@ -1,5 +1,3 @@
-const BACKEND_URL = 'http://localhost:5000/api/workout-plan';
-
 /**
  * Fetch workout plans for a user from the backend.
  */
@@ -7,11 +5,11 @@ export async function fetchWorkoutPlansFromBackend(userId) {
   try {
     console.log(`Fetching workout plans for userId: ${userId}`);
 
-    const response = await fetch(`${BACKEND_URL}/${userId}`, {
+    const response = await fetch(`${process.env.REACT_APP_API_HOST}/api/workout-plan/${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`, // Optional token if needed
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     });
 
@@ -39,11 +37,11 @@ export async function saveWorkoutPlansToBackend(userId, plans) {
   
       console.log('Saving workout plans with body:', { userId, plans: plansArray });
   
-      const response = await fetch('http://localhost:5000/api/workout-plan/', {
+      const response = await fetch(`${process.env.REACT_APP_API_HOST}/api/workout-plan/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Optional token if required
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({ userId, plans: plansArray }),
       });
