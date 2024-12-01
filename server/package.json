@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "devStart": "DOTENV_CONFIG_PATH=src/.env nodemon src/index.js",
-    "test": "node --experimental-require-module ./node_modules/.bin/jest --config=./jest.config.cjs"
+    "test": "node --experimental-require-module ./node_modules/.bin/jest --config=./jest.config.cjs",
     "postinstall": "pip3 install -r requirements.txt"
   },
   "keywords": [],
