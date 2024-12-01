@@ -188,13 +188,14 @@ const Survey = () => {
                 <div key={i}>
                     <label>
                         <input
+                            className='checkboxInput'
                             type="checkbox"
                             name={`${question.question}-${index}`}
                             value={choice}
                             checked={answers[question.question]?.includes(choice) || false}
                             onChange={(e) => handleInputChange(e, question.question)}
                         />
-                        {choice}
+                        <div className='choice'>{choice}</div>
                     </label>
                 </div>
             ));
@@ -205,13 +206,14 @@ const Survey = () => {
                 <div key={i}>
                     <label>
                         <input
+                            className='radioInput'
                             type="radio"
                             name={`${question.question}-${index}`}
                             value={choice}
                             checked={answers[question.question] === choice}
                             onChange={(e) => handleInputChange(e, question.question)}
                         />
-                        {choice}
+                        <div className='radioChoice'>{choice}</div>
                     </label>
                 </div>
             ));
@@ -221,6 +223,7 @@ const Survey = () => {
             return (
                 <div>
                     <input
+                        className='textInput'
                         type="number"
                         name={`${question.question}-${index}`}
                         value={answers[question.question] || ''}
@@ -234,28 +237,32 @@ const Survey = () => {
     };
 
     return (
-        <div className="page">
-            <div className="intake-survey">
-                <div className="intake-question">
+        <>
+        <div className="Wrapper">
+            <div className='questions_And_Answers'>
+                <div className="questions">
                     {/* display the current question based on index */}
-                    <h3>{questions[currentQuestionIndex].question}</h3>
-                    <p>{questions[currentQuestionIndex].subtitle}</p>
+                    <h3 className='questionText'>{questions[currentQuestionIndex].question}</h3>
+                    <p className='questionSubtitle'>{questions[currentQuestionIndex].subtitle}</p>
+                </div>
+                <div className='answers'>
                     {/* render the input fields for the current question */}
                     {renderChoices(questions[currentQuestionIndex], currentQuestionIndex)}
                 </div>
-                <div className="question-buttons">
-                    {/* buttons to navigate through questions */}
-                    <button type="button" onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
-                        Previous
-                    </button>
-                    <h3>{currentQuestionIndex + 1}/{questions.length}</h3>
+            </div>
+            <div className="question-buttons">
+                {/* buttons to navigate through questions */}
+                <button className='changeButton' type="button" onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
+                    Previous
+                </button>
+                <h3>{currentQuestionIndex + 1}/{questions.length}</h3>
 
-                    <button type="button" onClick={currentQuestionIndex === questions.length - 1 ? submitSurvey : handleNext}>
-                        {currentQuestionIndex === questions.length - 1 ? 'Submit' : 'Next'}
-                    </button>
-                </div>
+                <button className='changeButton' type="button" onClick={currentQuestionIndex === questions.length - 1 ? submitSurvey : handleNext}>
+                    {currentQuestionIndex === questions.length - 1 ? 'Submit' : 'Next'}
+                </button>
             </div>
         </div>
+        </>
     );
 };
 

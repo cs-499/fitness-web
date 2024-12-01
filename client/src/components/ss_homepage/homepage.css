@@ -30,7 +30,7 @@
     width: 500px;
     height: 700px;
     background: #164C7A;
-    color: #000000;
+    color: #0e4a98; /* White text for contrast */
     overflow: hidden;
     box-sizing: border-box;
     padding: 10px 30px;

@@ -18,10 +18,11 @@ export const login = async (req, res) => {
         // make it bool, so if false user always goes to survey
         const surveyCompleted = !!surveyResponse;
         // generate JWT token in response
-        const token = jwt.sign({ userId: user._id }, process.env.JVT_SECRET, { expiresIn: '2d' });
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '2d' });
 
         const response = {
             firstTimeLogin: user.firstLogin,
+            username: username,
             surveyCompleted,
             token,
             userId: user._id,
@@ -30,7 +31,7 @@ export const login = async (req, res) => {
         
         req.session.userId = user._id;
 
-        user.isLoggedIn = true;
+        //user.isLoggedIn = true;
         await user.save();
         if (user.firstLogin) {
             user.firstLogin = false;
@@ -48,12 +49,8 @@ export const logout = async(req) => {
     const { userId } = req.body;
     const user = await User.findOne({ userId });
     
-    try{
         user.isLoggedIn = false;
         await user.save();
-    } catch (error) {
-        console.error('error logging out');
-    }
 }
 
 export const register = async (req, res) => {

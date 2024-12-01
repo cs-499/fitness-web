@@ -1,0 +1,158 @@
+.journal-container {
+    max-width: 1000px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: linear-gradient(to bottom right, #ff6b6b, #fddb3a); /* Red to yellow gradient */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    font-family: Arial, sans-serif;
+    color: #1e293b; /* Dark text for readability */
+}
+
+.journal-container h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ffffff; /* White text to stand out on gradient */
+    text-align: center;
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for better readability */
+}
+
+.meal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff; /* White background for contrast */
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.meal-item h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #1e293b;
+}
+
+.meal-item p {
+    margin: 0;
+    font-size: 1rem;
+    color: #555;
+}
+
+.meal-item button {
+    background-color: #dc2626;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    white-space: nowrap; /* Prevent text cutoff */
+}
+
+.meal-item button:hover {
+    background-color: #b91c1c;
+}
+
+.total-calories {
+    margin-top: 2rem;
+    text-align: right; /* Align to the right */
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff; /* White text for better visibility */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.notes-section {
+    margin-top: 3rem;
+}
+
+.notes-section h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff; /* White text for contrast */
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.notes-section textarea {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.notes-section button {
+    display: flex; /* Use flexbox for full control */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin: 1rem auto; /* Center the button in its container */
+    background-color: #1e293b; /* Black background */
+    color: white; /* White text */
+    padding: 0.6rem 2rem; /* Add balanced padding */
+    border: none; /* Remove border */
+    border-radius: 8px; /* Round corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 1rem; /* Standard font size */
+    font-weight: bold; /* Bold text */
+    text-align: center; /* Ensure text alignment */
+    height: 50px; /* Set a fixed height for uniformity */
+    width: 120px; /* Set a fixed width for uniformity */
+    line-height: 1; /* Ensure line height doesn't stretch the text */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: all 0.2s ease-in-out; /* Smooth transition for hover */
+}
+
+.notes-section button:hover {
+    background-color: #111827; /* Darker black on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+.saved-notes {
+    margin-top: 2rem;
+    text-align: right; /* Align the saved notes section to the right */
+}
+
+.note-item {
+    background: #ffffff; /* White background for contrast */
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: flex-end; /* Align all items to the right */
+}
+
+.note-item p {
+    margin: 0.5rem 0; /* Add spacing between text and timestamp */
+    font-size: 1rem;
+    color: #333;
+    word-wrap: break-word; /* Prevent long words from breaking layout */
+    text-align: right; /* Align text to the right */
+}
+
+.note-item button {
+    background-color: #dc2626;
+    color: white;
+    padding: 0.3rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-top: 0.5rem; /* Add spacing above the button */
+    text-align: center; /* Center the button text */
+}
+
+.note-item button:hover {
+    background-color: #b91c1c;
+}
+
+

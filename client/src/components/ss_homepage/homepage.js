@@ -25,10 +25,11 @@ const Homepage = () => {
     };
 
     return (
-        <div className='all'>
-            {/*Navigation bar*/}
-            <NavBar /> 
-            
+        <>
+        {/*Navigation bar*/}
+        <NavBar /> 
+        
+        <div className='all'>    
             {/*All the stuff to do with workouts (Left side of the screen)*/}
             <div className='Workout_Section'>
                 <h1 className='test'>Today's Workout</h1>
@@ -41,13 +42,6 @@ const Homepage = () => {
 
                 {/*Workout Complete*/}
                 <div>
-                    {/*Should probably remove
-                    <button 
-                        className="start-button" 
-                        onClick={() => window.location.href = 'http://localhost:3000/liveworkout'}>
-                        Start Workout
-                    </button>
-                    */}
                     <button className='Bottom_Button'>Workout Complete</button>
                 </div>
             </div>
@@ -95,6 +89,8 @@ const Homepage = () => {
                 
             </div>
         </div>
+        </>
+        
     );
 }
 

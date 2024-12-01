@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../../App.css';
 import ParticleSys from '../particles/particle_sys'; 
 import './register.css';
+import logo from '../images/logo white.svg';
 
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -39,6 +40,11 @@ const Register = () => {
 
     return (
         <div>
+            <div className='shapeShifter'>
+                <img className='logo' src={logo}/>
+                <h2 className='logoText'>ShapeShifter</h2>
+            </div>
+            
             <div className='authcontainer'>
                 <h1 className='authText'>Sign Up</h1>
                 <form onSubmit={handleRegister}>
@@ -73,7 +79,7 @@ const Register = () => {
 //This is to wrap the particles seperatly so they don't refresh when you type something
 const Wrapper = () => {
     return (
-        <><ParticleSys /><Register /></>
+        <><Register /><ParticleSys /></>
     )
 }
 

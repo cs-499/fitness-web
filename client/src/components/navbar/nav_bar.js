@@ -31,12 +31,8 @@ async function handleLogout(event) {
         });
 
 
-        if (response.ok) {
-            localStorage.setItem('isUserLoggedIn', false);
-            localStorage.removeItem('token');
-        } else {
-            //alert(data.message);
-        }        
+        localStorage.setItem('isUserLoggedIn', false);
+        localStorage.removeItem('token');
     } catch (error) {
         console.error(error);
     }
@@ -95,6 +91,7 @@ const NavBar = () => {
             </ul>
 
             <div id="account_nav" className="sidenav">
+                <h1 className="sidenav_username" href="#" >{localStorage.getItem('username')}</h1>
                 <a href="#" className="closebtn" onClick={(e) => { e.preventDefault(); closeNav(); }}>&times;</a>
                 <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(e); logout();}}>Logout</a>
             </div>
