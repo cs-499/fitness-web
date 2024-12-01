@@ -6,6 +6,7 @@ import './workoutplan.css';
 import { fetchWorkoutPlansFromBackend, saveWorkoutPlansToBackend } from './workoutPlanService';
 import groqCloudAi from './groqCloudAIapi.js';
 import { getSpecificAnswer } from './getSurveyAnswers.js';
+import NavBar from '../navbar/nav_bar.js';
 
 const localizer = momentLocalizer(moment);
 
@@ -117,6 +118,8 @@ class WorkoutCalendar extends React.Component {
     }));
 
     return (
+      <>
+      <NavBar />
       <div className="calendar-container">
         {isLoading ? (
           <div className="spinner-container">
@@ -146,6 +149,7 @@ class WorkoutCalendar extends React.Component {
           />
         )}
       </div>
+      </>
     );
   }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../App.css';
 import './landing.css';
+import logo from '../images/logo white.svg';
 import ParticleSys from '../particles/particle_sys'; 
 import { useNavigate } from 'react-router-dom';
 
@@ -33,6 +34,8 @@ const Landing = () => {
           if (response.ok) {
               localStorage.setItem('userId', data.userId);
               localStorage.setItem('token', data.token);
+              localStorage.setItem('isUserLoggedIn', true)
+              localStorage.setItem('username', data.username);
               navigate(data.firstTimeLogin || !data.surveyCompleted ? '/survey' : '/homepage');
           } else {
               alert(data.message);
@@ -43,12 +46,17 @@ const Landing = () => {
   };
 
   return (
-      <div>
+      <div className='wrapper'>
+        <div className='shapeShifter'>
+            <img className='logo' src={logo}/>
+            <h2 className='logoText'>ShapeShifter</h2>
+        </div>
+        
         <div className='authcontainer'>
             <h1 className='authText'>Sign In</h1>
-            <p className='authhelp'>Username:</p>
+            <p className='authhelp'>‎ </p> {/*Leave as is, I don't want to fix padding*/}
             <input id='username' type='text' placeholder='Username' className='authbox' required />
-            <p className='authhelp'>Password:</p>
+            <p className='authhelp'>‎ </p> {/*Leave as is, I don't want to fix padding*/}
             <input id='password' type='password' placeholder='Password' className='authbox' required />
             <div className='button'>
                 <button className='authbutton' onClick={logIn}>Login</button>

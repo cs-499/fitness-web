@@ -22,13 +22,17 @@ export const login = async (req, res) => {
 
         const response = {
             firstTimeLogin: user.firstLogin,
+            username: username,
             surveyCompleted,
             token,
-            userId: user._id
+            userId: user._id,
+            isUserLoggedIn: user.isLoggedIn
         };
-
+        
         req.session.userId = user._id;
 
+        //user.isLoggedIn = true;
+        await user.save();
         if (user.firstLogin) {
             user.firstLogin = false;
             await user.save();
@@ -40,6 +44,14 @@ export const login = async (req, res) => {
         return res.status(500).json({ message: 'Internal Server Error' })
     }
 };
+
+export const logout = async(req) => {
+    const { userId } = req.body;
+    const user = await User.findOne({ userId });
+    
+        user.isLoggedIn = false;
+        await user.save();
+}
 
 export const register = async (req, res) => {
     const { username, password } = req.body;

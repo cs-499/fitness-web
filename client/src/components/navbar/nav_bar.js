@@ -1,5 +1,7 @@
 import React from "react";
 import './nav_bar.css';
+import {useNavigate } from "react-router-dom";
+
 
 /* Set the width of the side navigation to 250px */
 function openNav() {
@@ -11,13 +13,37 @@ function closeNav() {
     document.getElementById("account_nav").style.width = "0";
 } 
 
-function handleLogout(event) {
+async function handleLogout(event) {
     event.preventDefault(); // Prevents the default link behavior
     closeNav(); // Only closes the app on "Logout"
-    // Add any additional logout logic here
-}
+
+    const username = localStorage.getItem('userId')
+
+    try {
+        const response = await fetch(`${process.env.REACT_APP_API_HOST}/logout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                username
+            }),
+        });
+
+
+        localStorage.setItem('isUserLoggedIn', false);
+        localStorage.removeItem('token');
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 
 const NavBar = () => {
+    const navigate = useNavigate();
+    const logout = () => {
+        navigate('/');
+    }
     return(
         <>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
@@ -65,12 +91,9 @@ const NavBar = () => {
             </ul>
 
             <div id="account_nav" className="sidenav">
+                <h1 className="sidenav_username" href="#" >{localStorage.getItem('username')}</h1>
                 <a href="#" className="closebtn" onClick={(e) => { e.preventDefault(); closeNav(); }}>&times;</a>
-                <a href="/about">About</a>
-                <a href="/services">Services</a>
-                <a href="/clients">Clients</a>
-                <a href="/contact">Contact</a>
-                <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(e); }}>Logout</a>
+                <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(e); logout();}}>Logout</a>
             </div>
         </>
     );

@@ -9,6 +9,7 @@
     "@tsparticles/react": "^3.0.0",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.7.7",
+    "babel-plugin-react-css-modules": "^5.2.6",
     "chart.js": "^4.4.6",
     "groq-sdk": "^0.8.0",
     "jquery": "^3.7.1",

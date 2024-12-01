@@ -1,13 +1,39 @@
+.shapeShifter{
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 1;
+}
+
+.logo{
+  padding-top: 2%;
+  width: 400px;
+  height: 150px;
+  margin-bottom: -40px;
+}
+
+.logoText {
+  padding: 0;
+  font-size: 50pt;
+  color: white;
+}
+
 /*Log in Box*/
 .authcontainer {
   width: 400px;
   height: 500px;
+  position: absolute;
+  margin-top: 315px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
   background: #ffffff;
   color: #000000;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   box-sizing: border-box;
   padding: 40px 30px;
   box-shadow: 0px 0px 0px #ffffff;
@@ -35,11 +61,6 @@
   color: #616161;
 }
 
-/*text above input boxes that says what they're for*/
-.authhelp {
-  color: #000000;
-}
-
 /*log in/sign up buttons*/
 .authbutton {
   border: none;
@@ -61,5 +82,5 @@ a {
 }
 
 .button {
-  padding-top: 25px;
+  padding-top: 12px;
 }
