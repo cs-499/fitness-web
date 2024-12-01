@@ -5,6 +5,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './workoutplan.css';
 import { fetchWorkoutPlansFromBackend, saveWorkoutPlansToBackend } from './workoutPlanService';
 import { groqCloudAi } from './groqCloudAIapi.js';
+import { getSpecificAnswer } from './getSurveyAnswers.js';
 
 const localizer = momentLocalizer(moment);
 
@@ -12,9 +13,11 @@ class WorkoutCalendar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      availabilityDays: [], // Days with workout plans
-      workoutPlans: {}, // Fetched/generated workout plans
-      isLoading: true, // Loading spinner state
+      // Days with user availability
+      availabilityDays: [],
+      // Fetched/generated workout plans
+      workoutPlans: {},
+      isLoading: true,
     };
   }
 
@@ -22,34 +25,27 @@ class WorkoutCalendar extends React.Component {
     try {
       const userId = localStorage.getItem('userId');
       if (!userId) {
-        console.error('User ID not found in localStorage.');
         this.setState({ isLoading: false });
         return;
       }
+      await this.fetchAvailableDays();
 
-      console.log('Fetching existing workout plans...');
       let workoutPlans = await fetchWorkoutPlansFromBackend(userId);
-
-      console.log('Checking for missing dates...');
-      const missingDates = this.getMissingDates(workoutPlans);
+      const missingDates = this.state.availabilityDays
+        .filter((day) => !workoutPlans[day.id])
+        .map((day) => day.id);
 
       if (missingDates.length > 0) {
         console.log('Generating missing plans with Groq AI...');
         const generatedPlans = await this.generatePlansWithGroqAI(userId, missingDates);
-        console.log('Generated plans:', generatedPlans);
 
-        // Merge generated plans with existing ones
         workoutPlans = { ...workoutPlans, ...generatedPlans };
 
         console.log('Saving updated plans to backend...');
         await saveWorkoutPlansToBackend(userId, workoutPlans);
       }
 
-      console.log('Generating availability days...');
-      const availabilityDays = this.generateAvailabilityDays(workoutPlans);
-
-      console.log('Updating state...');
-      this.setState({ availabilityDays, workoutPlans, isLoading: false });
+      this.setState({ workoutPlans, isLoading: false });
     } catch (error) {
       console.error('Error initializing calendar:', error);
       this.setState({ isLoading: false });
@@ -57,29 +53,35 @@ class WorkoutCalendar extends React.Component {
   }
 
   /**
-   * Identify dates with missing workout plans.
+   * Fetches user availability for the next 4 weeks based on a survey response.
    */
-  getMissingDates(workoutPlans) {
-    const missingDates = [];
-    const currentDate = moment();
+  async fetchAvailableDays() {
+    const availableWeekdays = await getSpecificAnswer(localStorage.getItem('userId'), 'How often do you want to work out?');
 
-    // Check for the next 4 weeks
+    const currentDate = moment();
+    const availabilityDays = [];
+
     for (let weekOffset = 0; weekOffset < 4; weekOffset++) {
       const weekStart = currentDate.clone().add(weekOffset, 'weeks').startOf('week');
       const weekEnd = weekStart.clone().endOf('week');
 
       let currentDay = weekStart.clone();
-      while (currentDay.isSameOrBefore(weekEnd)) {
-        const dateId = currentDay.format('YYYY-MM-DD');
-        if (!workoutPlans[dateId]) {
-          missingDates.push(dateId);
+      while (currentDay.isBefore(weekEnd) || currentDay.isSame(weekEnd, 'day')) {
+        if (availableWeekdays.includes(currentDay.format('dddd'))) {
+          availabilityDays.push({
+            id: currentDay.format('YYYY-MM-DD'),
+            title: `Available on ${currentDay.format('dddd')}`,
+            start: currentDay.toDate(),
+            end: currentDay.clone().endOf('day').toDate(),
+            // Highlight each available day
+            color: '#FFD700',
+            highlighted: true,
+          });
         }
         currentDay.add(1, 'day');
       }
     }
-
-    console.log('Missing dates:', missingDates);
-    return missingDates;
+    this.setState({ availabilityDays });
   }
 
   /**
@@ -100,38 +102,7 @@ class WorkoutCalendar extends React.Component {
         console.error(`Error generating plan for ${date} with Groq AI:`, error);
       }
     }
-
     return generatedPlans;
-  }
-
-  /**
-   * Generate availability days based on workout plans data.
-   */
-  generateAvailabilityDays(workoutPlans) {
-    const availabilityDays = [];
-    const currentDate = moment();
-
-    for (let weekOffset = 0; weekOffset < 4; weekOffset++) {
-      const weekStart = currentDate.clone().add(weekOffset, 'weeks').startOf('week');
-      const weekEnd = weekStart.clone().endOf('week');
-
-      let currentDay = weekStart.clone();
-      while (currentDay.isSameOrBefore(weekEnd)) {
-        const dateId = currentDay.format('YYYY-MM-DD');
-
-        if (workoutPlans[dateId]) {
-          availabilityDays.push({
-            id: dateId,
-            date: currentDay.clone(),
-            color: '#FFD700', // Highlight color for workout days
-          });
-        }
-
-        currentDay.add(1, 'day');
-      }
-    }
-
-    return availabilityDays;
   }
 
   render() {
@@ -139,9 +110,9 @@ class WorkoutCalendar extends React.Component {
 
     const events = availabilityDays.map((day) => ({
       id: day.id,
-      title: workoutPlans[day.id] || 'Rest day - No workout plan available',
-      start: day.date.toDate(),
-      end: day.date.clone().endOf('day').toDate(),
+      title: workoutPlans[day.id] || day.title || 'No excercise available',
+      start: day.start,
+      end: day.end,
       color: day.color,
     }));
 
@@ -163,6 +134,7 @@ class WorkoutCalendar extends React.Component {
             defaultView={Views.WEEK}
             eventPropGetter={(event) => ({
               style: { backgroundColor: event.color || '#ADD8E6' },
+              color: '#000',
             })}
             components={{
               event: ({ event }) => (
