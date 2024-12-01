@@ -1,35 +1,34 @@
-import Groq from "groq-sdk";
-import getExercisesByExperienceLevel from './ninjaAPI.js';
+import Groq from 'groq-sdk';
 
-const groq = new Groq({ apiKey: process.env.REACT_APP_GROQ_API_KEY, dangerouslyAllowBrowser: true });
+// Initialize Groq SDK
+const groq = new Groq({
+  apiKey: process.env.REACT_APP_GROQ_API_KEY,
+  dangerouslyAllowBrowser: true,
+});
 
-export async function groqCloudAi() {
-    // Fetch exercises based on user's survey responses
-    const exercises = await getExercisesByExperienceLevel();
-    if (!exercises || exercises.length === 0) {
-        console.error('No exercises found from the Ninja API response.');
-        return { error: 'No exercises found.' };
+/**
+ * Use Groq AI to generate a workout plan for a specific date.
+ */
+export async function groqCloudAi(userId, date) {
+  try {
+    const content = `Generate a personalized workout plan for the user on ${date}.`;
+    console.log(`Invoking Groq AI for userId: ${userId}, date: ${date}`);
+
+    const response = await groq.chat.completions.create({
+      messages: [{ role: 'user', content }],
+      model: 'llama3-8b-8192',
+    });
+
+    if (response?.choices?.[0]?.message?.content) {
+      const plan = response.choices[0].message.content.trim();
+      console.log('Groq AI generated plan:', plan);
+      return { success: true, plan };
+    } else {
+      console.error('Groq AI returned no content for date:', date);
+      return { success: false, error: 'No workout plan generated.' };
     }
-
-    const exercisesList = exercises.map(ex => ex.name).join(", ");
-    const content = `Here are some exercises: ${exercisesList}. Please only give me one of this excercises and make sure you only give me back the response of that one excercise.`;
-
-    try {
-        const response = await groq.chat.completions.create({
-            messages: [
-                {
-                    role: "user",
-                    content: content,
-                },
-            ],
-            model: "llama3-8b-8192",
-        });
-
-        return response;
-    } catch (error) {
-        console.error('Error with Groq AI API:', error);
-        return { error: 'Groq AI API call failed.' };
-    }
+  } catch (error) {
+    console.error('Error invoking Groq AI:', error);
+    return { success: false, error: 'Failed to generate workout plan.' };
+  }
 }
-
-export default groqCloudAi;
