@@ -1,8 +1,6 @@
 .App {
   text-align: center;
-  background: linear-gradient(135deg, #1E3A8A, #3B82F6); /* Gradient blue background */
   min-height: 100vh; /* Ensures full height coverage */
-  color: #2761ac; /* White text for contrast */
 }
 
 .App-logo {
