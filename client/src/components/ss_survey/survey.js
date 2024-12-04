@@ -1,134 +1,175 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../App.css';
 import './survey.css';
 
 const Survey = () => {
-    document.title = 'ShapeShifter';
+    document.title = 'Survey';
     const navigate = useNavigate();
+    const [surveyCompleted, setSurveyCompleted] = useState(false);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [answers, setAnswers] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
     const questions = [
         {
             question: 'What dietary preferences do you have?',
+            questionTarget: 'meal',
             subtitle: 'Select all that apply',
             inputType: 'checkbox',
             choices: ["Vegan", "Vegetarian", "Pescatarian", "Kosher", "Halal", "None"]
         },
         {
             question: 'What allergies or restrictions do you have?',
+            questionTarget: 'meal',
             subtitle: 'Select all that apply',
             inputType: 'checkbox',
             choices: ["Nuts", "Gluten", "Shellfish", "Lactose and Dairy", "Eggs", "Soy", "None"]
         },
         {
             question: 'How often do you grocery shop?',
+            questionTarget: 'meal',
             subtitle: '',
             inputType: 'radio',
             choices: ["1-2 Times a week", "3-4 Times a week", "5-6 Times a week", "A little bit every day"]
         },
         {
             question: 'How often do you cook?',
+            questionTarget: 'meal',
             subtitle: '',
             inputType: 'radio',
             choices: ["Once a day", "Twice a day", "Multiple times a day", "Never"]
         },
         {
             question: 'How often do you meal prep?',
+            questionTarget: 'meal',
             subtitle: '',
             inputType: 'radio',
             choices: ["Meal prep for 1-2 days", "Meal prep for 3-4 days", "Meal prep for 5+ days", "Never"]
         },
         {
             question: 'How often do you eat?',
+            questionTarget: 'meal',
             subtitle: '',
             inputType: 'radio',
             choices: ["Once a day", "Twice a day", "Three times a day", "Multiple times a day"]
         },
         {
             question: 'What cooking experience do you have?',
+            questionTarget: 'meal',
             subtitle: '',
             inputType: 'radio',
             choices: ["None", "Amateur", "Homecook", "Professional"]
         },
         {
             question: 'Do you have the following appliances?',
+            questionTarget: 'meal',
             subtitle: 'Select all that apply',
             inputType: 'checkbox',
             choices: ["Oven", "Stovetop", "Microwave", "Refrigerator"]
         },
         {
             question: 'Do you have preferences in ingredients?',
+            questionTarget: 'meal',
             subtitle: 'Select all that apply',
             inputType: 'checkbox',
             choices: ["Organic", "NON-GMO", "Free Range", "Farmed", "Wild Caught", "No"]
         },
         {
             question: 'What is your weekly budget?',
+            questionTarget: 'meal',
             subtitle: '',
             inputType: 'radio',
             choices: ["10-20", "20-50", "50-100", "100-200", "200+"]
         },
         {
             question: 'What are your goals?',
+            questionTarget: 'meal',
             subtitle: 'Select all that apply',
             inputType: 'radio',
             choices: ["Gain muscle", "Lose fat", "Both"]
         },
         {
             question: 'What is your experience level?',
+            questionTarget: 'workout',
             subtitle: '',
             inputType: 'radio',
             choices: ["Beginner", "Intermediate", "Advanced"]
         },
         {
             question: 'How often do you want to work out?',
+            questionTarget: 'workout',
             subtitle: 'Select all the days you want',
             inputType: 'checkbox',
             choices: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         },
         {
             question: 'How long do you want your workouts to be?',
+            questionTarget: 'workout',
             subtitle: '',
             inputType: 'radio',
             choices: ["30-45 Minutes", "45-60 Minutes", "60-90 Minutes", "90+ Minutes"]
         },
         {
             question: 'What equipment do you have available?',
+            questionTarget: 'workout',
             subtitle: 'Select all that apply',
             inputType: 'checkbox',
             choices: ["Bench", "Weights", "Squat Rack", "Cable Machine", "Nothing"]
         },
         {
             question: 'What is your Sex?',
+            questionTarget: 'workout',
             subtitle: '',
             inputType: 'radio',
             choices: ["Male", "Female"]
         },
         {
             question: 'Input weight (lbs)',
+            questionTarget: 'workout',
             subtitle: '',
             inputType: 'text',
             choices: []
         },
         {
             question: 'Input height (cm)',
+            questionTarget: 'workout',
             subtitle: '',
             inputType: 'text',
             choices: []
         }
     ];
-    // state to track the current question index
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [answers, setAnswers] = useState({});
+    // checks if survey was completed
+    useEffect(() => {
+        const checkCompletion = async () => {
+            const userId = localStorage.getItem('userId');
+            const token = localStorage.getItem('token');
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_API_HOST}/survey/check-completion/${userId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                // console.log(response);
+                setSurveyCompleted(response.data.completed);
+                setLoading(false);
+            } catch (err) {
+                console.error('Error checking survey completion:', err);
+                setError('Failed to check survey status.');
+                setLoading(false);
+                navigate('/homepage');
+            }
+        };
 
+        checkCompletion();
+    }, [navigate]);
+    
     // handlers for moving between questions
     const handleNext = () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         }
     };
-
     const handlePrevious = () => {
         if (currentQuestionIndex > 0) {
             setCurrentQuestionIndex(currentQuestionIndex - 1);
@@ -137,52 +178,28 @@ const Survey = () => {
 
     // handler for updating answers
     const handleInputChange = (e, question) => {
-        const { name, value, type, checked } = e.target;
-        setAnswers((prev) => {
+        const { value, type, checked } = e.target;
+        setAnswers(prev => {
             const updatedAnswers = { ...prev };
             if (type === 'checkbox') {
-                // handle checkbox: add/remove choices from an array
                 if (checked) {
-                    if (!updatedAnswers[question]) updatedAnswers[question] = [];
-                    updatedAnswers[question].push(value);
+                    if (!updatedAnswers[question]) {
+                        updatedAnswers[question] = { values: [], type: question.questionTarget };
+                    }
+                    updatedAnswers[question].values.push(value);
                 } else {
-                    updatedAnswers[question] = updatedAnswers[question].filter(item => item !== value);
+                    updatedAnswers[question].values = updatedAnswers[question].values.filter(item => item !== value);
                 }
             } else {
-                updatedAnswers[question] = value;
+                updatedAnswers[question] = { value: value, type: question.questionTarget };
             }
             return updatedAnswers;
         });
     };
 
-    const submitSurvey = async () => {
-        // get userId from local storage (stored from login)
-        const userId = localStorage.getItem('userId');
-        const token = localStorage.getItem('token');
-
-        if (!userId || !token) {
-            return;
-        }
-        try {
-            await axios.post(`${process.env.REACT_APP_API_HOST}/survey/submit`, {
-                userId,
-                answers,
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                }
-            });
-            console.log('Thank you for completing the survey.');
-            navigate('/homepage');
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
     const renderChoices = (question, index) => {
         const { inputType, choices } = question;
-
+    
         if (inputType === 'checkbox') {
             return choices.map((choice, i) => (
                 <div key={i}>
@@ -192,7 +209,7 @@ const Survey = () => {
                             type="checkbox"
                             name={`${question.question}-${index}`}
                             value={choice}
-                            checked={answers[question.question]?.includes(choice) || false}
+                            checked={answers[question.question]?.values?.includes(choice) || false} // Corrected to access the values array
                             onChange={(e) => handleInputChange(e, question.question)}
                         />
                         <div className='choice'>{choice}</div>
@@ -200,7 +217,7 @@ const Survey = () => {
                 </div>
             ));
         }
-
+    
         if (inputType === 'radio') {
             return choices.map((choice, i) => (
                 <div key={i}>
@@ -210,7 +227,7 @@ const Survey = () => {
                             type="radio"
                             name={`${question.question}-${index}`}
                             value={choice}
-                            checked={answers[question.question] === choice}
+                            checked={answers[question.question]?.value === choice} // Ensuring to access the value property for radio inputs
                             onChange={(e) => handleInputChange(e, question.question)}
                         />
                         <div className='radioChoice'>{choice}</div>
@@ -218,7 +235,7 @@ const Survey = () => {
                 </div>
             ));
         }
-
+    
         if (inputType === 'text') {
             return (
                 <div>
@@ -226,7 +243,7 @@ const Survey = () => {
                         className='textInput'
                         type="number"
                         name={`${question.question}-${index}`}
-                        value={answers[question.question] || ''}
+                        value={answers[question.question]?.value || ''} // Ensuring to access the value property for text inputs
                         placeholder="Enter Measurements"
                         min="10"
                         onChange={(e) => handleInputChange(e, question.question)}
@@ -236,32 +253,87 @@ const Survey = () => {
         }
     };
 
+    const submitSurvey = async () => {
+        const formattedAnswers = Object.keys(answers).reduce((acc, key) => {
+          const answer = answers[key];
+          acc[key] = answer.values ? answer.values : answer.value;  // Ensuring arrays or single values are correctly set.
+          return acc;
+        }, {});
+      
+        const userId = localStorage.getItem('userId');
+        const token = localStorage.getItem('token');
+      
+        if (!userId || !token) {
+          console.error("Authentication data is missing.");
+          return;
+        }
+      
+        try {
+          await axios.post(`${process.env.REACT_APP_API_HOST}/survey/submit`, {
+            userId,
+            answers: formattedAnswers,
+          }, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            }
+          });
+          console.log('Thank you for completing the survey.');
+          navigate('/homepage');
+        } catch (error) {
+          console.error('Error submitting survey:', error.response ? error.response.data : error.message);
+        }
+    };
+
+    const handleRedoSurvey = async () => {
+        const userId = localStorage.getItem('userId');
+        const token = localStorage.getItem('token');
+        try {
+            await axios.delete(`${process.env.REACT_APP_API_HOST}/survey/delete-survey/${userId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            setSurveyCompleted(false);
+            setAnswers({});
+            setCurrentQuestionIndex(0);
+        } catch (err) {
+            console.error('Failed to delete previous survey:', err);
+            setError('Failed to delete previous survey.');
+        }
+    };
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+
     return (
         <>
-        <div className="Wrapper">
-            <div className='questions_And_Answers'>
-                <div className="questions">
-                    {/* display the current question based on index */}
-                    <h3 className='questionText'>{questions[currentQuestionIndex].question}</h3>
-                    <p className='questionSubtitle'>{questions[currentQuestionIndex].subtitle}</p>
-                </div>
-                <div className='answers'>
-                    {/* render the input fields for the current question */}
-                    {renderChoices(questions[currentQuestionIndex], currentQuestionIndex)}
-                </div>
+            <div className="Wrapper">
+                {surveyCompleted ? (
+                    <div className="survey-prompt">
+                        <p>You have already completed the survey. Do you want to start a new survey?</p>
+                        <button onClick={() => handleRedoSurvey()}>Start New Survey</button>
+                        <button onClick={() => navigate('/homepage')}>Go to Homepage</button>
+                    </div>
+                ) : (
+                    <div className='questions_And_Answers'>
+                        <div className="questions">
+                            <h3 className='questionText'>{questions[currentQuestionIndex].question}</h3>
+                            <p className='questionSubtitle'>{questions[currentQuestionIndex].subtitle}</p>
+                        </div>
+                        <div className='answers'>
+                            {renderChoices(questions[currentQuestionIndex], currentQuestionIndex)}
+                        </div>
+                        <div className="question-buttons">
+                            <button className='changeButton' type="button" onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
+                                Previous
+                            </button>
+                            <h3>{currentQuestionIndex + 1}/{questions.length}</h3>
+                            <button className='changeButton' type="button" onClick={currentQuestionIndex === questions.length - 1 ? submitSurvey : handleNext}>
+                                {currentQuestionIndex === questions.length - 1 ? 'Submit' : 'Next'}
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
-            <div className="question-buttons">
-                {/* buttons to navigate through questions */}
-                <button className='changeButton' type="button" onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
-                    Previous
-                </button>
-                <h3>{currentQuestionIndex + 1}/{questions.length}</h3>
-
-                <button className='changeButton' type="button" onClick={currentQuestionIndex === questions.length - 1 ? submitSurvey : handleNext}>
-                    {currentQuestionIndex === questions.length - 1 ? 'Submit' : 'Next'}
-                </button>
-            </div>
-        </div>
         </>
     );
 };
