@@ -86,7 +86,7 @@ const Survey = () => {
         },
         {
             question: 'What are your goals?',
-            questionTarget: 'meal',
+            questionTarget: 'both',
             subtitle: 'Select all that apply',
             inputType: 'radio',
             choices: ["Gain muscle", "Lose fat", "Both"]
@@ -178,20 +178,22 @@ const Survey = () => {
 
     // handler for updating answers
     const handleInputChange = (e, question) => {
-        const { value, type, checked } = e.target;
+        const { name, value, type, checked } = e.target;
+        const questionTarget = questions.find(q => q.question === question).questionTarget;
+    
         setAnswers(prev => {
             const updatedAnswers = { ...prev };
             if (type === 'checkbox') {
                 if (checked) {
                     if (!updatedAnswers[question]) {
-                        updatedAnswers[question] = { values: [], type: question.questionTarget };
+                        updatedAnswers[question] = { values: [], questionTarget };
                     }
                     updatedAnswers[question].values.push(value);
                 } else {
                     updatedAnswers[question].values = updatedAnswers[question].values.filter(item => item !== value);
                 }
             } else {
-                updatedAnswers[question] = { value: value, type: question.questionTarget };
+                updatedAnswers[question] = { value, questionTarget };
             }
             return updatedAnswers;
         });
@@ -255,33 +257,37 @@ const Survey = () => {
 
     const submitSurvey = async () => {
         const formattedAnswers = Object.keys(answers).reduce((acc, key) => {
-          const answer = answers[key];
-          acc[key] = answer.values ? answer.values : answer.value;  // Ensuring arrays or single values are correctly set.
-          return acc;
+            const answerDetail = answers[key];
+            if (Array.isArray(answerDetail.values)) {
+                acc[key] = { answer: answerDetail.values, questionTarget: answerDetail.questionTarget };
+            } else {
+                acc[key] = { answer: answerDetail.value, questionTarget: answerDetail.questionTarget };
+            }
+            return acc;
         }, {});
-      
+    
         const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
-      
+    
         if (!userId || !token) {
-          console.error("Authentication data is missing.");
-          return;
+            console.error("Authentication data is missing.");
+            return;
         }
-      
+    
         try {
-          await axios.post(`${process.env.REACT_APP_API_HOST}/survey/submit`, {
-            userId,
-            answers: formattedAnswers,
-          }, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            }
-          });
-          console.log('Thank you for completing the survey.');
-          navigate('/homepage');
+            await axios.post(`${process.env.REACT_APP_API_HOST}/survey/submit`, {
+                userId,
+                answers: formattedAnswers,
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+            console.log('Thank you for completing the survey.');
+            navigate('/homepage');
         } catch (error) {
-          console.error('Error submitting survey:', error.response ? error.response.data : error.message);
+            console.error('Error submitting survey:', error.response ? error.response.data : error.message);
         }
     };
 
