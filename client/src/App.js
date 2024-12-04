@@ -7,7 +7,8 @@ import Survey from './components/ss_survey/survey';
 import WorkoutPlan from './components/ss_workoutplan/workoutplan';
 import Journal from './components/ss_journal/journal';
 import MealPlan from './components/ss_mealplan/mealplan';
-import MealGenerator from './components/ss_mealgenerator/mealgenerator';
+import AiMealSearch from './components/ss_ai-mealsearch/ai-mealsearch';
+import CustomMealSearch from './components/ss_custom-mealsearch/custom-mealsearch';
 import Recipe from './components/ss_recipe/recipe'; // Corrected filename
 import Contact from './components/ss_contact/contact';
 import LiveWorkout from './components/ss_liveworkout/liveworkout';
@@ -31,8 +32,9 @@ function App() {
         <Route path="/journal" element={<Journal />} />
         <Route path="/workoutplan" element={<WorkoutPlan />} />
         <Route path="/mealplan" element={<MealPlan />} />
-        <Route path="/mealgenerator" element={<MealGenerator />} />
-        <Route path="/recipe/:id" element={<Recipe />} /> {/* Updated Route */}
+        <Route path="/ai-mealsearch" element={<AiMealSearch />} />
+        <Route path="/custom-mealsearch" element={<CustomMealSearch />} />
+        <Route path="/recipe/:id" element={<Recipe />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/liveworkout" element={<LiveWorkout />} />
       </Routes>
