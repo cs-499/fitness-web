@@ -12,33 +12,94 @@ const Recipes = () => {
     const [notes, setNotes] = useState([]); // State to hold journal notes
     const [newNote, setNewNote] = useState(''); // State to track new note input
 
-    // Effect hook to load saved meals and notes from localStorage when the component mounts
+    // Fetch meals from local storage (fallback)
     useEffect(() => {
         const savedMeals = JSON.parse(localStorage.getItem('savedMeals') || '[]'); // Load meals, fallback to empty array
-        const savedNotes = JSON.parse(localStorage.getItem('journalNotes') || '[]'); // Load notes, fallback to empty array
         setMeals(savedMeals); // Set meals state
-        setNotes(savedNotes); // Set notes state
     }, []);
 
-    // Function to save a new note to localStorage
-    const saveNote = () => {
-        if (newNote.trim()) { // Ensure the note is not empty
-            const timestamp = new Date().toLocaleString(); // Get the current date and time
-            const updatedNotes = [...notes, { text: newNote.trim(), timestamp }]; // Create a new note with timestamp
-            setNotes(updatedNotes); // Update the notes state
-            setNewNote(''); // Clear the input field
-            localStorage.setItem('journalNotes', JSON.stringify(updatedNotes)); // Save updated notes to localStorage
+    // Fetch notes from the backend API
+    useEffect(() => {
+        const fetchNotes = async () => {
+            const token = localStorage.getItem('token'); // Retrieve auth token
+            if (!token) {
+                console.error('User is not authenticated.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_HOST}/journal`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Pass token for authentication
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setNotes(data); // Update state with notes from backend
+                } else {
+                    console.error('Failed to fetch notes:', await response.text());
+                }
+            } catch (error) {
+                console.error('Error fetching notes:', error);
+            }
+        };
+
+        fetchNotes(); // Fetch notes on component mount
+    }, []);
+
+    // Save a new note to the backend
+    const saveNote = async () => {
+        if (newNote.trim()) {
+            const token = localStorage.getItem('token');
+            const timestamp = new Date().toISOString(); // Use ISO format for consistency
+
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_HOST}/journal`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`, // Pass token for authentication
+                    },
+                    body: JSON.stringify({ text: newNote.trim(), timestamp }), // Send note data to backend
+                });
+
+                if (response.ok) {
+                    const savedNote = await response.json(); // Get the saved note from the response
+                    setNotes((prevNotes) => [...prevNotes, savedNote]); // Append the new note to the state
+                    setNewNote(''); // Clear input field
+                } else {
+                    console.error('Failed to save note:', await response.text());
+                }
+            } catch (error) {
+                console.error('Error saving note:', error);
+            }
         }
     };
 
-    // Function to delete a specific note by index
-    const deleteNote = (index) => {
-        const updatedNotes = notes.filter((_, i) => i !== index); // Filter out the note at the specified index
-        setNotes(updatedNotes); // Update the notes state
-        localStorage.setItem('journalNotes', JSON.stringify(updatedNotes)); // Save updated notes to localStorage
+    // Delete a note from the backend
+    const deleteNote = async (id) => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_HOST}/journal/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Pass token for authentication
+                },
+            });
+
+            if (response.ok) {
+                setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id)); // Remove deleted note from state
+            } else {
+                console.error('Failed to delete note:', await response.text());
+            }
+        } catch (error) {
+            console.error('Error deleting note:', error);
+        }
     };
 
-    // Function to delete a specific meal by its ID
+    // Delete a specific meal by its ID (local storage)
     const deleteMeal = (id) => {
         const updatedMeals = meals.filter((meal) => meal.id !== id); // Filter out the meal with the specified ID
         setMeals(updatedMeals); // Update the meals state
@@ -81,14 +142,14 @@ const Recipes = () => {
                                     <button
                                         onClick={() => deleteMeal(meal.id)} // Delete the meal on button click
                                         style={{
-                                            backgroundColor: '#dc2626', // Red background
-                                            color: 'white', // White text
-                                            padding: '0.5rem 1rem', // Padding
-                                            border: 'none', // No border
-                                            borderRadius: '8px', // Rounded corners
-                                            cursor: 'pointer', // Pointer cursor
-                                            fontSize: '0.9rem', // Font size
-                                            fontWeight: 'bold', // Bold font weight
+                                            backgroundColor: '#dc2626',
+                                            color: 'white',
+                                            padding: '0.5rem 1rem',
+                                            border: 'none',
+                                            borderRadius: '8px',
+                                            cursor: 'pointer',
+                                            fontSize: '0.9rem',
+                                            fontWeight: 'bold',
                                         }}
                                     >
                                         Delete
@@ -98,7 +159,7 @@ const Recipes = () => {
                         </div>
                     ))
                 ) : (
-                    <p>No meals saved yet. Start saving meals from the recipe page!</p> // Message if no meals are saved
+                    <p>No meals saved yet. Start saving meals from the recipe page!</p>
                 )}
 
                 {/* Display total calories if meals are present */}
@@ -120,8 +181,8 @@ const Recipes = () => {
                 <div className="notes-section">
                     <h2>Journal Notes</h2>
                     <textarea
-                        value={newNote} // Bind the textarea value to state
-                        onChange={(e) => setNewNote(e.target.value)} // Update state on input change
+                        value={newNote}
+                        onChange={(e) => setNewNote(e.target.value)}
                         placeholder="Write a new note..."
                         rows="4"
                         style={{
@@ -134,26 +195,25 @@ const Recipes = () => {
                         }}
                     />
                     <button
-                        onClick={saveNote} // Save the note on button click
+                        onClick={saveNote}
                         style={{
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
                             margin: '1rem auto',
-                            backgroundColor: '#1e293b', // Dark blue background
-                            color: 'white', // White text
-                            padding: '0.75rem 1.5rem', // Padding
-                            border: 'none', // No border
-                            borderRadius: '8px', // Rounded corners
-                            cursor: 'pointer', // Pointer cursor
-                            fontSize: '1rem', // Font size
-                            fontWeight: 'bold', // Bold font weight
-                            width: '120px', // Button width
-                            height: '50px', // Button height
-                            textAlign: 'center', // Center text
-                            lineHeight: '1', // Line height
-                            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Shadow effect
-                            transition: 'all 0.2s ease-in-out', // Smooth transition
+                            backgroundColor: '#1e293b',
+                            color: 'white',
+                            padding: '0.75rem 1.5rem',
+                            border: 'none',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            fontSize: '1rem',
+                            fontWeight: 'bold',
+                            width: '120px',
+                            height: '50px',
+                            textAlign: 'center',
+                            lineHeight: '1',
+                            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                         }}
                     >
                         Save
@@ -161,34 +221,30 @@ const Recipes = () => {
 
                     {/* Display saved notes */}
                     <div className="saved-notes">
-                        {notes.length > 0 ? (
-                            notes.map((note, index) => (
-                                <div key={index} className="note-item">
-                                    <p>{note.text}</p> {/* Display note text */}
-                                    <p style={{ fontSize: '0.8rem', color: '#555' }}>
-                                        Saved on: {note.timestamp} {/* Display timestamp */}
-                                    </p>
-                                    <button
-                                        onClick={() => deleteNote(index)} // Delete the note on button click
-                                        style={{
-                                            backgroundColor: '#dc2626', // Red background
-                                            color: 'white', // White text
-                                            padding: '0.3rem 1rem', // Padding
-                                            border: 'none', // No border
-                                            borderRadius: '8px', // Rounded corners
-                                            cursor: 'pointer', // Pointer cursor
-                                            fontSize: '0.8rem', // Font size
-                                            fontWeight: 'bold', // Bold font weight
-                                            marginTop: '0.5rem', // Top margin
-                                        }}
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No notes saved yet. Start writing your thoughts!</p> // Message if no notes are saved
-                        )}
+                        {notes.map((note) => (
+                            <div key={note.id} className="note-item">
+                                <p>{note.text}</p>
+                                <p style={{ fontSize: '0.8rem', color: '#555' }}>
+                                    Saved on: {new Date(note.timestamp).toLocaleString()}
+                                </p>
+                                <button
+                                    onClick={() => deleteNote(note.id)}
+                                    style={{
+                                        backgroundColor: '#dc2626',
+                                        color: 'white',
+                                        padding: '0.3rem 1rem',
+                                        border: 'none',
+                                        borderRadius: '8px',
+                                        cursor: 'pointer',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 'bold',
+                                        marginTop: '0.5rem',
+                                    }}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
