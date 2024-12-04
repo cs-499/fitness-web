@@ -1,60 +1,69 @@
+/* General Reset */
 body, html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     overflow-x: hidden; /* Prevent horizontal scrollbars */
+    font-family: 'Arial', sans-serif; /* Set a clean default font */
+    background-color: #f7f7f7; /* Light gray background for the entire page */
 }
 
-
+/* Recipe Container */
 .recipe-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
-    padding: 20px 0;
+    justify-content: center; /* Center items */
     gap: 20px;
+    padding: 20px;
     background-color: transparent;
 }
 
+/* Individual Recipe Item */
 .recipe-item {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 10px;
-    background-color: #f4f4f4;
+    background-color: #ffffff; /* White card background */
     cursor: pointer;
     border: 1px solid #ddd;
-    width: 30%;
+    width: calc(100% / 3 - 40px); /* Responsive width */
+    max-width: 300px; /* Ensure consistent card size */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
 .recipe-image {
-    display: flex;
-    width: fit-content;
-    margin: 5px;
-    border: 5px;
-    border-radius: 2px;
+    width: 100%; /* Make images responsive */
+    height: auto;
+    border-bottom: 1px solid #ddd;
+    margin: 0;
+    object-fit: cover; /* Keep proper aspect ratio */
 }
 
 .recipe-title {
-    align-items: center;
-    line-height: 16px;
-    margin: auto;
-    min-height: 50px;
-    align-self: center;
     text-align: center;
-    font-size: clamp(12px, 2vw, 16px);
+    font-size: 1rem;
+    padding: 10px;
+    color: #333; /* Dark text for better contrast */
 }
 
 .recipe-item:hover {
     transform: translateY(-5px);
     box-shadow: 0 5px 15px rgba(0, 145, 255, 0.2);
 }
+
+/* Page Title */
 .pageTitle {
-    margin: 2%;
+    font-size: 2rem;
+    color: #1e293b;
+    margin-bottom: 20px;
+    text-align: center;
 }
+
+/* Search Header */
 .searchHeader {
     display: flex;
     flex-direction: column;
@@ -68,17 +77,21 @@ body, html {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Adjust Recipe Container Margin */
 .recipe-container {
     margin-top: 20px; /* Add consistent spacing from the header */
     padding: 0; /* Remove padding to avoid extra space */
 }
 
+/* Search Bar Styling */
 .search {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    flex-wrap: wrap; /* Make inputs stack on smaller screens */
     align-items: center;
     width: 100%;
     gap: 10px; /* Add spacing between inputs */
+    margin-top: 15px;
 }
 
 .searchBox, .searchButton {
@@ -92,6 +105,7 @@ body, html {
 .searchBox {
     flex-grow: 1; /* Allow search box to expand */
     margin-right: 10px; /* Space between input boxes */
+    max-width: 300px; /* Limit width on larger screens */
 }
 
 .searchButton {
@@ -108,7 +122,7 @@ body, html {
     background-color: #0056b3;
 }
 
-
+/* Recommendations Styling */
 .recommendation-container {
     text-align: center;
     margin: 20px 0;
@@ -118,8 +132,52 @@ body, html {
     font-size: 1.2rem;
     color: #1e293b;
     font-weight: bold;
-    background: #f0f8ff;
-    padding: 10px;
-    border-radius: 8px;
+    background: #f0f8ff; /* Light blue background for recommendations */
+    padding: 15px;
+    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 80%; /* Ensure it doesn't stretch too wide */
+    margin: 0 auto; /* Center the recommendation box */
+}
+
+/* Error Message */
+.error {
+    color: #ff4d4d; /* Bright red for errors */
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .recipe-item {
+        width: calc(100% / 2 - 20px); /* Two items per row */
+    }
+
+    .searchBox {
+        max-width: 100%; /* Expand inputs to full width */
+        margin-right: 0;
+    }
+
+    .search {
+        flex-direction: column; /* Stack inputs vertically */
+    }
+
+    .searchButton {
+        width: 100%; /* Full-width button on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .recipe-item {
+        width: 100%; /* One item per row */
+    }
+
+    .pageTitle {
+        font-size: 1.5rem; /* Adjust title size */
+    }
+
+    .recommendation {
+        font-size: 1rem; /* Smaller font for smaller screens */
+    }
 }
