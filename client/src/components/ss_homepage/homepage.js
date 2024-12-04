@@ -19,12 +19,14 @@ async function getWorkoutNames(userId) {
         for (const date in obj) {
             if(date === todayDate){
                 const text = obj[date];
-                const match = text.match(/^(?:\*\*|)\s*([A-Za-z\s\-]+):?/);
-                if(match){
+                //ah regex... matches asterisks (**) or nothing, matches the text Exercise (edge case, AI is weird), matches letters between **, including - for certain cases and stops at :.
+                const match = text.match(/^(?:\*\*|)(?:Exercise:\s*)?([A-Za-z\s\-]+):?/);
+                if (match) {
                     workoutList.push(match[1].trim());
                 }
             }
         }
+        console.log("hey: ", workoutPlans);
         console.log(workoutList);
         return workoutList;    
 }

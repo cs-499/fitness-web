@@ -17,12 +17,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'; // React Router
 
 function App() {
     return (
-<<<<<<< HEAD
       <div style={{minHeight: '100vh' }}>
-=======
-      // Wrapper div with a gradient background to style the entire app
-      <div style={{ background: 'linear-gradient(135deg, #1E3A8A, #3B82F6)', minHeight: '100vh' }}>
->>>>>>> b14bd165c38f9d8bd01ae2a28376156d4cadd8de
         <div className="App">
           {/* BrowserRouter to enable routing */}
           <BrowserRouter>
