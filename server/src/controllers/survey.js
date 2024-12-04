@@ -45,3 +45,43 @@ export const getSurveyFromUser = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const deleteSurvey = async (req, res) => {
+    const { userId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    try {
+        const result = await Survey.deleteMany({ userId: userId });
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: 'No surveys found to delete.' });
+        }
+        res.status(200).json({ message: 'All surveys have been deleted successfully.' });
+    } catch (error) {
+        console.error('Failed to delete surveys:', error);
+        res.status(500).json({ message: 'Failed to delete surveys', error: error.message });
+    }
+};
+
+export const checkSurveyCompletion = async (req, res) => {
+    const { userId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    try {
+        const survey = await Survey.findOne({ userId }).lean();
+
+        if (!survey) {
+            return res.status(404).json({ message: 'No survey found for this user', completed: false });
+        }
+
+        // Check if the answers object has any keys
+        const isCompleted = survey.answers && Object.keys(survey.answers).length > 0;
+        res.status(200).json({ message: 'Survey completion checked', completed: isCompleted });
+    } catch (error) {
+        console.error('Error checking survey completion:', error);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
