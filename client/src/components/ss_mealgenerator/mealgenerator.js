@@ -5,65 +5,315 @@ import NavBar from "../navbar/nav_bar"; // Importing NavBar component
 import './mealgenerator.css'; // Importing CSS file for styling
 import axios from 'axios'; // Axios library for making HTTP requests
 
+// Define workout goals and diet goals
+const workoutGoals = [
+    "gain muscle",
+    "lose weight",
+    "increase energy",
+    "build endurance",
+    "boost immunity",
+    "improve recovery",
+    "enhance strength",
+    "increase flexibility"
+];
+
+const dietGoals = [
+    "high protein",
+    "keto",
+    "low carb",
+    "vegan",
+    "vegetarian",
+    "paleo",
+    "mediterranean",
+    "gluten-free",
+    "balanced"
+];
+
+// Dynamically generate food recommendations
+const foodRecommendations = {};
+
+// Populate the recommendations
+workoutGoals.forEach(workout => {
+    dietGoals.forEach(diet => {
+        const key = `${workout}|${diet}`;
+
+        // Suggest specific foods for each combination
+
+        switch (key) {
+            case "gain muscle|high protein":
+                foodRecommendations[key] = ["Chicken Breast", "Egg Whites", "Quinoa"];
+                break;
+            case "gain muscle|keto":
+                foodRecommendations[key] = ["Grilled Salmon", "Avocado", "Almond Butter"];
+                break;
+            case "gain muscle|low carb":
+                foodRecommendations[key] = ["Steak", "Asparagus", "Hard-Boiled Eggs"];
+                break;
+            case "gain muscle|vegan":
+                foodRecommendations[key] = ["Tofu", "Lentils", "Quinoa"];
+                break;
+            case "gain muscle|vegetarian":
+                foodRecommendations[key] = ["Paneer", "Greek Yogurt", "Chickpeas"];
+                break;
+            case "gain muscle|paleo":
+                foodRecommendations[key] = ["Grass-Fed Beef", "Sweet Potatoes", "Coconut Oil"];
+                break;
+            case "gain muscle|mediterranean":
+                foodRecommendations[key] = ["Feta Cheese", "Olive Oil", "Grilled Fish"];
+                break;
+            case "gain muscle|gluten-free":
+                foodRecommendations[key] = ["Rice Cakes", "Turkey", "Zucchini Noodles"];
+                break;
+            case "gain muscle|balanced":
+                foodRecommendations[key] = ["Chicken Breast", "Brown Rice", "Steamed Vegetables"];
+                break;
+        
+            case "lose weight|high protein":
+                foodRecommendations[key] = ["Lean Turkey", "Cottage Cheese", "Edamame"];
+                break;
+            case "lose weight|keto":
+                foodRecommendations[key] = ["Cauliflower Rice", "Grilled Shrimp", "Avocado"];
+                break;
+            case "lose weight|low carb":
+                foodRecommendations[key] = ["Zucchini Noodles", "Grilled Chicken", "Spinach Salad"];
+                break;
+            case "lose weight|vegan":
+                foodRecommendations[key] = ["Kale Salad", "Chickpea Stew", "Sweet Potatoes"];
+                break;
+            case "lose weight|vegetarian":
+                foodRecommendations[key] = ["Vegetable Soup", "Cottage Cheese", "Quinoa"];
+                break;
+            case "lose weight|paleo":
+                foodRecommendations[key] = ["Grilled Chicken Thighs", "Carrots", "Almonds"];
+                break;
+            case "lose weight|mediterranean":
+                foodRecommendations[key] = ["Hummus", "Tabbouleh", "Grilled Vegetables"];
+                break;
+            case "lose weight|gluten-free":
+                foodRecommendations[key] = ["Quinoa", "Baked Salmon", "Roasted Brussels Sprouts"];
+                break;
+            case "lose weight|balanced":
+                foodRecommendations[key] = ["Turkey", "Brown Rice", "Steamed Vegetables"];
+                break;
+        
+            case "increase energy|high protein":
+                foodRecommendations[key] = ["Greek Yogurt", "Hard-Boiled Eggs", "Tuna Salad"];
+                break;
+            case "increase energy|keto":
+                foodRecommendations[key] = ["Nuts", "Cheese Cubes", "Avocado"];
+                break;
+            case "increase energy|low carb":
+                foodRecommendations[key] = ["Chicken Salad", "Cucumber Slices", "Boiled Eggs"];
+                break;
+            case "increase energy|vegan":
+                foodRecommendations[key] = ["Bananas", "Chia Pudding", "Sweet Potatoes"];
+                break;
+            case "increase energy|vegetarian":
+                foodRecommendations[key] = ["Smoothies", "Oatmeal", "Apples"];
+                break;
+            case "increase energy|paleo":
+                foodRecommendations[key] = ["Berries", "Beef Jerky", "Almonds"];
+                break;
+            case "increase energy|mediterranean":
+                foodRecommendations[key] = ["Olive Oil", "Hummus", "Whole Grain Bread"];
+                break;
+            case "increase energy|gluten-free":
+                foodRecommendations[key] = ["Gluten-Free Crackers", "Nut Butter", "Carrot Sticks"];
+                break;
+            case "increase energy|balanced":
+                foodRecommendations[key] = ["Trail Mix", "Hard-Boiled Eggs", "Dark Chocolate"];
+                break;
+        
+            case "build endurance|high protein":
+                foodRecommendations[key] = ["Grilled Chicken", "Quinoa", "Edamame"];
+                break;
+            case "build endurance|keto":
+                foodRecommendations[key] = ["Salmon", "Avocado", "Egg Muffins"];
+                break;
+            case "build endurance|low carb":
+                foodRecommendations[key] = ["Turkey", "Steamed Broccoli", "Cauliflower Rice"];
+                break;
+            case "build endurance|vegan":
+                foodRecommendations[key] = ["Lentil Soup", "Brown Rice", "Vegetable Stir Fry"];
+                break;
+            case "build endurance|vegetarian":
+                foodRecommendations[key] = ["Cottage Cheese", "Spinach Salad", "Sweet Potatoes"];
+                break;
+            case "build endurance|paleo":
+                foodRecommendations[key] = ["Grilled Chicken", "Carrots", "Avocado"];
+                break;
+            case "build endurance|mediterranean":
+                foodRecommendations[key] = ["Whole Grains", "Fish", "Olive Oil"];
+                break;
+            case "build endurance|gluten-free":
+                foodRecommendations[key] = ["Baked Salmon", "Rice", "Green Beans"];
+                break;
+            case "build endurance|balanced":
+                foodRecommendations[key] = ["Brown Rice", "Turkey", "Roasted Vegetables"];
+                break;
+
+            // Add remaining combinations
+            case "boost immunity|high protein":
+                foodRecommendations[key] = ["Chicken Soup", "Greek Yogurt", "Boiled Eggs"];
+                break;
+            case "boost immunity|keto":
+                foodRecommendations[key] = ["Avocado", "Salmon", "Walnuts"];
+                break;
+            case "boost immunity|low carb":
+                foodRecommendations[key] = ["Spinach Salad", "Grilled Chicken", "Mushroom Soup"];
+                break;
+            case "boost immunity|vegan":
+                foodRecommendations[key] = ["Broccoli", "Orange", "Chickpea Stew"];
+                break;
+            case "boost immunity|vegetarian":
+                foodRecommendations[key] = ["Greek Yogurt", "Bell Peppers", "Tomato Soup"];
+                break;
+            case "boost immunity|paleo":
+                foodRecommendations[key] = ["Chicken Broth", "Sweet Potatoes", "Berries"];
+                break;
+            case "boost immunity|mediterranean":
+                foodRecommendations[key] = ["Hummus", "Olive Oil", "Lemon Soup"];
+                break;
+            case "boost immunity|gluten-free":
+                foodRecommendations[key] = ["Zucchini Noodles", "Citrus Salad", "Bone Broth"];
+                break;
+            case "boost immunity|balanced":
+                foodRecommendations[key] = ["Chicken Breast", "Brown Rice", "Steamed Broccoli"];
+                break;
+
+            case "improve recovery|high protein":
+                foodRecommendations[key] = ["Egg Whites", "Tuna", "Protein Shake"];
+                break;
+            case "improve recovery|keto":
+                foodRecommendations[key] = ["Salmon", "Avocado", "Almond Butter"];
+                break;
+            case "improve recovery|low carb":
+                foodRecommendations[key] = ["Chicken Breast", "Zucchini", "Boiled Eggs"];
+                break;
+            case "improve recovery|vegan":
+                foodRecommendations[key] = ["Lentils", "Chickpeas", "Quinoa"];
+                break;
+            case "improve recovery|vegetarian":
+                foodRecommendations[key] = ["Cottage Cheese", "Spinach Salad", "Almonds"];
+                break;
+            case "improve recovery|paleo":
+                foodRecommendations[key] = ["Grass-Fed Beef", "Sweet Potatoes", "Berries"];
+                break;
+            case "improve recovery|mediterranean":
+                foodRecommendations[key] = ["Olive Oil", "Hummus", "Grilled Fish"];
+                break;
+            case "improve recovery|gluten-free":
+                foodRecommendations[key] = ["Quinoa", "Chicken Thighs", "Carrots"];
+                break;
+            case "improve recovery|balanced":
+                foodRecommendations[key] = ["Brown Rice", "Chicken Breast", "Steamed Vegetables"];
+                break;
+
+            case "enhance strength|high protein":
+                foodRecommendations[key] = ["Grilled Chicken", "Egg Whites", "Steak"];
+                break;
+            case "enhance strength|keto":
+                foodRecommendations[key] = ["Avocado", "Beef Jerky", "Hard-Boiled Eggs"];
+                break;
+            case "enhance strength|low carb":
+                foodRecommendations[key] = ["Zucchini Noodles", "Turkey", "Grilled Vegetables"];
+                break;
+            case "enhance strength|vegan":
+                foodRecommendations[key] = ["Tofu", "Lentils", "Spinach"];
+                break;
+            case "enhance strength|vegetarian":
+                foodRecommendations[key] = ["Paneer", "Greek Yogurt", "Chickpeas"];
+                break;
+            case "enhance strength|paleo":
+                foodRecommendations[key] = ["Grass-Fed Beef", "Sweet Potatoes", "Coconut Oil"];
+                break;
+            case "enhance strength|mediterranean":
+                foodRecommendations[key] = ["Olive Oil", "Feta Cheese", "Grilled Fish"];
+                break;
+            case "enhance strength|gluten-free":
+                foodRecommendations[key] = ["Rice Cakes", "Grilled Chicken", "Steamed Vegetables"];
+                break;
+            case "enhance strength|balanced":
+                foodRecommendations[key] = ["Chicken Breast", "Brown Rice", "Steamed Broccoli"];
+                break;
+
+            case "increase flexibility|high protein":
+                foodRecommendations[key] = ["Turkey", "Egg Whites", "Quinoa"];
+                break;
+            case "increase flexibility|keto":
+                foodRecommendations[key] = ["Avocado", "Salmon", "Cheese"];
+                break;
+            case "increase flexibility|low carb":
+                foodRecommendations[key] = ["Chicken Salad", "Zucchini Noodles", "Egg Muffins"];
+                break;
+            case "increase flexibility|vegan":
+                foodRecommendations[key] = ["Tofu", "Chia Seeds", "Kale"];
+                break;
+            case "increase flexibility|vegetarian":
+                foodRecommendations[key] = ["Greek Yogurt", "Sweet Potatoes", "Spinach"];
+                break;
+            case "increase flexibility|paleo":
+                foodRecommendations[key] = ["Grilled Chicken", "Carrots", "Almonds"];
+                break;
+            case "increase flexibility|mediterranean":
+                foodRecommendations[key] = ["Hummus", "Olive Oil", "Whole Grain Bread"];
+                break;
+            case "increase flexibility|gluten-free":
+                foodRecommendations[key] = ["Quinoa", "Carrot Sticks", "Chicken Breast"];
+                break;
+            case "increase flexibility|balanced":
+                foodRecommendations[key] = ["Brown Rice", "Turkey", "Steamed Vegetables"];
+                break;
+
+                
+            // Add remaining combinations similarly...
+
+            default:
+                foodRecommendations[key] = ["General Healthy Food Option 1", "Option 2", "Option 3"];
+        }
+    });
+});
+
 // Main functional component for generating meals
 function MealGenerator() {
-    // State variables to manage data and UI state
-    const [recipes, setRecipes] = useState([]); // Holds the list of recipes fetched from the API
-    const [recommendation, setRecommendation] = useState([]); // Stores food recommendations based on goals
-    const [error, setError] = useState(null); // Tracks error messages
-    const [query, setQuery] = useState(""); // Tracks the user's search query
-    const [calorieGoal, setCalorieGoal] = useState(""); // Tracks the user's calorie goal
-    const [dietGoal, setDietGoal] = useState(""); // Tracks the user's diet goal
-    const [workoutGoal, setWorkoutGoal] = useState(""); // Tracks the user's workout goal
-    const [isLoading, setIsLoading] = useState(false); // Tracks the loading state
-    const navigate = useNavigate(); // Hook for programmatic navigation
-    const location = useLocation(); // Hook for accessing URL parameters
+    const [recipes, setRecipes] = useState([]);
+    const [recommendation, setRecommendation] = useState([]);
+    const [error, setError] = useState(null);
+    const [query, setQuery] = useState("");
+    const [calorieGoal, setCalorieGoal] = useState("");
+    const [dietGoal, setDietGoal] = useState("");
+    const [workoutGoal, setWorkoutGoal] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    // Predefined food recommendations based on workout and diet goals
-    const foodRecommendations = {
-        // Key format: "workoutGoal|dietGoal"
-        "gain muscle|high protein": ["Chicken Breast", "Egg Whites", "Quinoa"],
-        "gain muscle|keto": ["Avocado", "Grilled Salmon", "Almond Butter"],
-        "lose weight|low carb": ["Zucchini Noodles", "Grilled Chicken", "Spinach Salad"],
-        "increase energy|vegan": ["Bananas", "Chia Pudding", "Sweet Potatoes"],
-        "build endurance|balanced": ["Brown Rice", "Turkey", "Roasted Vegetables"],
-        "boost immunity|vegetarian": ["Broccoli", "Oranges", "Greek Yogurt"],
-        "enhance strength|paleo": ["Grass-Fed Beef", "Sweet Potatoes", "Coconut Oil"],
-        "increase flexibility|mediterranean": ["Olive Oil", "Hummus", "Whole Grain Bread"],
-    };
-
-    // Effect hook to set goals and recommendations based on URL parameters
     useEffect(() => {
-        const params = new URLSearchParams(location.search); // Extract query parameters from the URL
-        const selectedWorkoutGoal = params.get('workoutGoal') || ""; // Get 'workoutGoal' parameter
-        const selectedDietGoal = params.get('dietGoal') || ""; // Get 'dietGoal' parameter
+        const params = new URLSearchParams(location.search);
+        const selectedWorkoutGoal = params.get('workoutGoal') || "";
+        const selectedDietGoal = params.get('dietGoal') || "";
 
-        setWorkoutGoal(selectedWorkoutGoal); // Update workout goal state
-        setDietGoal(selectedDietGoal); // Update diet goal state
+        setWorkoutGoal(selectedWorkoutGoal);
+        setDietGoal(selectedDietGoal);
 
-        // Generate recommendation key and fetch corresponding foods
         const key = `${selectedWorkoutGoal.toLowerCase()}|${selectedDietGoal.toLowerCase()}`;
         const recommendations = foodRecommendations[key] || [];
 
-        // Update recommendation or set error if no match found
         if (recommendations.length > 0) {
             setRecommendation(recommendations);
         } else {
             setError("No recommendations available for the selected combination.");
         }
-    }, [location.search]); // Run effect whenever the URL's search parameters change
+    }, [location.search]);
 
-    // Function to handle recipe search based on user input
     const handleSearch = async () => {
         if (!query.trim()) {
-            setError('Please enter a food keyword or choose from the suggestions.'); // Validate input
+            setError('Please enter a food keyword or choose from the suggestions.');
             return;
         }
 
-        setError(null); // Clear previous error
-        setIsLoading(true); // Set loading state to true
+        setError(null);
+        setIsLoading(true);
 
-        // Retrieve API key from environment variables
         const apiKey = process.env.REACT_APP_SPOONACULAR_API_KEY;
         if (!apiKey) {
             setError('Missing Spoonacular API Key. Please set your Spoonacular API key in the .env file.');
@@ -71,45 +321,41 @@ function MealGenerator() {
             return;
         }
 
-        // Construct API endpoint and parameters
         const endpoint = `https://api.spoonacular.com/recipes/complexSearch`;
         const params = {
-            apiKey, // API Key for authentication
-            query: query.trim(), // User's search query
-            maxCalories: calorieGoal || undefined, // Calorie goal (if provided)
-            diet: dietGoal || undefined, // Diet type (if provided)
-            number: 10, // Limit number of results
+            apiKey,
+            query: query.trim(),
+            maxCalories: calorieGoal || undefined,
+            diet: dietGoal || undefined,
+            number: 10,
         };
 
         try {
-            const { data } = await axios.get(endpoint, { params }); // Fetch recipes from API
+            const { data } = await axios.get(endpoint, { params });
             if (data.results.length === 0) {
-                setError('No recipes found. Try adjusting your search criteria.'); // Handle no results
+                setError('No recipes found. Try adjusting your search criteria.');
                 return;
             }
-            setRecipes(data.results); // Update recipes state with API results
+            setRecipes(data.results);
         } catch (err) {
-            setError(err.response?.data?.message || 'Failed to fetch recipes'); // Handle API errors
+            setError(err.response?.data?.message || 'Failed to fetch recipes');
         } finally {
-            setIsLoading(false); // Reset loading state
+            setIsLoading(false);
         }
     };
 
-    // Render the component
     return (
         <div>
-            <NavBar /> {/* Navigation bar */}
+            <NavBar />
             <div className="searchHeader">
                 <h1 className="pageTitle">Meal Plan Recipes</h1>
                 <div className="goal-container">
-                    {/* Display selected goals */}
                     {workoutGoal && <p className="userGoal"><strong>Workout Goal:</strong> {workoutGoal}</p>}
                     {dietGoal && <p className="userGoal"><strong>Diet Goal:</strong> {dietGoal}</p>}
                 </div>
                 <div className="recommendation-container">
-                    {/* Display recommendations or error messages */}
                     {error && <p className="error">{error}</p>}
-                    {recommendation && recommendation.length > 0 && (
+                    {recommendation.length > 0 && (
                         <div className="recommendation">
                             <p><strong>Recommended Foods for Your Goals:</strong></p>
                             <ul>
@@ -121,7 +367,6 @@ function MealGenerator() {
                     )}
                 </div>
                 <div className="search">
-                    {/* Input fields for search query and calorie goal */}
                     <input
                         className="searchBox"
                         type="text"
@@ -137,23 +382,21 @@ function MealGenerator() {
                         onChange={(e) => setCalorieGoal(e.target.value)}
                         placeholder="Enter a calorie goal"
                     />
-                    <button className="searchButton" onClick={handleSearch}>Generate</button> {/* Trigger search */}
+                    <button className="searchButton" onClick={handleSearch}>Generate</button>
                 </div>
             </div>
 
-            {/* Display loading message */}
             {isLoading && <p>Loading recommendations...</p>}
 
-            {/* Display recipe results */}
             <div className="recipe-container">
                 {recipes.map((recipe) => (
                     <div
                         key={recipe.id}
                         className="recipe-item"
-                        onClick={() => navigate(`/recipe/${recipe.id}`)} // Navigate to recipe details
+                        onClick={() => navigate(`/recipe/${recipe.id}`)}
                     >
-                        <img className="recipe-image" src={recipe.image} alt={recipe.title} /> {/* Recipe image */}
-                        <div className="recipe-title">{recipe.title}</div> {/* Recipe title */}
+                        <img className="recipe-image" src={recipe.image} alt={recipe.title} />
+                        <div className="recipe-title">{recipe.title}</div>
                     </div>
                 ))}
             </div>
@@ -161,4 +404,4 @@ function MealGenerator() {
     );
 }
 
-export default MealGenerator; // Export component for use in other parts of the app
+export default MealGenerator;
