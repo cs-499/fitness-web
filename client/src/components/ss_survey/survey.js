@@ -87,7 +87,7 @@ const Survey = () => {
         {
             question: 'What are your goals?',
             questionTarget: 'both',
-            subtitle: 'Select all that apply',
+            subtitle: '',
             inputType: 'radio',
             choices: ["Gain muscle", "Lose fat", "Both"]
         },
@@ -178,19 +178,20 @@ const Survey = () => {
 
     // handler for updating answers
     const handleInputChange = (e, question) => {
-        const { name, value, type, checked } = e.target;
+        const { value, type, checked } = e.target;
         const questionTarget = questions.find(q => q.question === question).questionTarget;
     
         setAnswers(prev => {
             const updatedAnswers = { ...prev };
             if (type === 'checkbox') {
-                if (checked) {
-                    if (!updatedAnswers[question]) {
-                        updatedAnswers[question] = { values: [], questionTarget };
-                    }
+                if (!updatedAnswers[question]) {
+                    updatedAnswers[question] = { values: [], questionTarget };
+                }
+                const currentIndex = updatedAnswers[question].values.indexOf(value);
+                if (checked && currentIndex === -1) {
                     updatedAnswers[question].values.push(value);
-                } else {
-                    updatedAnswers[question].values = updatedAnswers[question].values.filter(item => item !== value);
+                } else if (!checked && currentIndex !== -1) {
+                    updatedAnswers[question].values.splice(currentIndex, 1);
                 }
             } else {
                 updatedAnswers[question] = { value, questionTarget };
@@ -256,6 +257,16 @@ const Survey = () => {
     };
 
     const submitSurvey = async () => {
+        // makes sure questions are answered
+        const answeredQuestions = Object.keys(answers).length;
+        const totalQuestions = questions.length;
+
+        if (answeredQuestions !== totalQuestions) {
+            console.log('Please answer all required questions before submitting the survey.');
+            navigate('/survey');
+            return;
+        }
+    
         const formattedAnswers = Object.keys(answers).reduce((acc, key) => {
             const answerDetail = answers[key];
             if (Array.isArray(answerDetail.values)) {
@@ -285,6 +296,11 @@ const Survey = () => {
                 }
             });
             console.log('Thank you for completing the survey.');
+            try {
+                updatePalate(formattedAnswers);
+            } catch (error) {
+                console.error('Error updating palate', error);
+            }
             navigate('/homepage');
         } catch (error) {
             console.error('Error submitting survey:', error.response ? error.response.data : error.message);
@@ -304,6 +320,65 @@ const Survey = () => {
         } catch (err) {
             console.error('Failed to delete previous survey:', err);
             setError('Failed to delete previous survey.');
+        }
+    };
+
+    const updatePalate = async (surveyAnswers) => {
+        // console.log("Updated answers: ", surveyAnswers);
+        const userId = localStorage.getItem('userId');
+        const token = localStorage.getItem('token');
+    
+        if (!userId || !token) {
+            console.error("Authentication data is missing.");
+            return;
+        }
+    
+        // extracting spending range and converting it to bounds
+        const spendingRange = surveyAnswers["What is your weekly budget?"]["answer"];
+        let lowerBound = 0, upperBound = 0;
+
+        if (typeof spendingRange === 'string' && spendingRange.includes('-')) {
+            [lowerBound, upperBound] = spendingRange.split('-').map(value => parseFloat(value));
+        }
+    
+        const palateData = {
+            userId,
+            dietary_preferences: {
+                allergies: surveyAnswers["What allergies or restrictions do you have?"]["answer"],
+                diet: surveyAnswers["What dietary preferences do you have?"]["answer"],
+                ingredients: surveyAnswers["Do you have preferences in ingredients?"]["answer"]
+            },
+            misc: {
+                cooking_frequency: surveyAnswers["How often do you cook?"]["answer"],
+                shopping_frequency: surveyAnswers["How often do you grocery shop?"]["answer"],
+                prepping_frequency: surveyAnswers["How often do you meal prep?"]["answer"],
+                proficiency: surveyAnswers["What cooking experience do you have?"]["answer"]
+            },
+            appliances: surveyAnswers["Do you have the following appliances?"]["answer"],
+            spending_details: {
+                spending_goal: {
+                    lower_bound: lowerBound,
+                    upper_bound: upperBound
+                }
+            },
+            goal_type: {
+                goal_type: surveyAnswers["What are your goals?"]["answer"]
+            }
+        };
+    
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_HOST}/meals/update/${userId}`, palateData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+    
+            if (response.status === 200) {
+                console.log('Palate updated successfully.');
+            }
+        } catch (error) {
+            console.error('Error updating palate:', error.response ? error.response.data : error.message);
         }
     };
 
