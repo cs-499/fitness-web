@@ -45,7 +45,7 @@ export const getSurveyFromUser = async (req, res) => {
         if (questionTarget) {
             const filteredResponses = surveyResponses.map(survey => ({
                 ...survey._doc,
-                answers: Array.from(survey.answers).filter(([question, answer]) => answer.questionTarget === questionTarget)
+                answers: Array.from(survey.answers).filter(([question, answer]) => answer.questionTarget === questionTarget || answer.questionTarget === "both")
             })).filter(survey => survey.answers.length > 0);  // ensure to filter out surveys with no matching questionTarget answers
 
             return res.status(200).json(filteredResponses);
