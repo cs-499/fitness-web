@@ -3,44 +3,56 @@ import Survey from '../models/createSurvey.js';
 
 export const submitSurvey = async (req, res) => {
     const { userId, answers } = req.body;
-    // throw 400's if user does not exist
+
     if (!userId) {
-        return res.status(400);
+        return res.status(400).json({ message: 'User ID is required' });
     }
+
     try {
         const newSurveyResponse = new Survey({
             userId,
             answers: new Map()
         });
-        for (const question in answers) {
-            const answer = answers[question];
-            // If answer is an array, use Set to prevent duplicates
-            if (Array.isArray(answer)) {
-                newSurveyResponse.answers.set(question, [...new Set(answer)]);
-            } else {
-                newSurveyResponse.answers.set(question, [answer]);
-            }
+
+        // iterate through the answers object and add questionTarget to each entry
+        for (const [question, answerDetail] of Object.entries(answers)) {
+            const { answer, questionTarget } = answerDetail;
+            const value = Array.isArray(answer) ? [...new Set(answer)] : [answer];
+            newSurveyResponse.answers.set(question, { value, questionTarget });
         }
+
         await newSurveyResponse.save();
         res.status(201).json({ message: 'Survey saved successfully!' });
     } catch (error) {
-        res.status(500).json({error: error.message });
+        res.status(500).json({ error: error.message, message: 'Failed to save survey' });
     }
 };
 
 export const getSurveyFromUser = async (req, res) => {
     const { userId } = req.params;
-    // Check for userId in the database
+    const questionTarget = req.query.questionTarget;  // retrieve questionTarget from query parameters
+
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: 'Invalid user ID' });
     }
     try {
         const surveyResponses = await Survey.find({ userId });
         if (!surveyResponses.length) {
-            return res.status(404).json({ message: 'No survey for this user' });
+            return res.status(404).json({ message: 'No survey found for this user' });
         }
+
+        // filter responses by questionTarget if specified
+        if (questionTarget) {
+            const filteredResponses = surveyResponses.map(survey => ({
+                ...survey._doc,
+                answers: Array.from(survey.answers).filter(([question, answer]) => answer.questionTarget === questionTarget)
+            })).filter(survey => survey.answers.length > 0);  // ensure to filter out surveys with no matching questionTarget answers
+
+            return res.status(200).json(filteredResponses);
+        }
+
+        // if no questionTarget specified, return all responses
         res.status(200).json(surveyResponses);
-        return surveyResponses;
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
