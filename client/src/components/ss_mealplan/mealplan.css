@@ -1,208 +1,115 @@
-/* General styling for the Meal Plan page */
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
     margin: 0;
     padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
 }
 
-h1 {
-    text-align: center;
-    color: #333;
-    margin-top: 20px;
-    font-size: 2.5rem;
+.meal-plan-container {
+    max-width: 600px;
+    margin: 50px auto; /* Center the container */
+    padding: 20px;
+    background-color: #ffffff; /* White background for the form */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center-align text */
+}
+
+.page-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #1e293b; /* Darker blue color for the title */
+    font-weight: bold;
 }
 
 .goal-inputs {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 500px;
+    gap: 20px; /* Space between inputs */
 }
 
-.goal-inputs h2 {
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 1.8rem;
+.subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #555; /* Subtle gray color for the subtitle */
 }
 
-.goal-inputs label {
-    font-size: 1rem;
-    color: #555;
-    margin: 10px 0 5px;
-    align-self: flex-start;
-}
-
-.goal-inputs input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    margin-bottom: 20px;
-    box-sizing: border-box;
-}
-
-.goal-inputs input:focus {
-    outline: none;
-    border-color: #007BFF;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-/* Updated button-container styling */
-.button-container {
-    display: flex;
-    justify-content: center; /* Center the button horizontally */
-    margin-top: 20px; /* Add spacing above the button */
-    width: 100%; /* Ensures it spans the container width */
-}
-
-button {
-    padding: 15px 30px; /* Adjust padding for a more prominent button */
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 10px; /* Slightly larger border-radius for a modern look */
-    font-size: 1.1rem; /* Larger font size for readability */
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effects */
-    width: 100%; /* Make the button span the container width */
-    max-width: 300px; /* Set a maximum width for larger screens */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    text-align: center; /* Center the button text */
-}
-
-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    transform: translateY(-2px); /* Subtle lift effect */
-}
-
-button:active {
-    background-color: #003f7f; /* Even darker blue on click */
-    transform: translateY(0); /* Reset the lift effect */
-}
-
-
-/* Responsive styling */
-@media (max-width: 600px) {
-    .goal-inputs {
-        width: 90%;
-    }
-
-    h1 {
-        font-size: 2rem;
-    }
-
-    .goal-inputs h2 {
-        font-size: 1.5rem;
-    }
-
-    .goal-inputs input {
-        font-size: 0.9rem;
-    }
-}
-
-
-.button-container {
-    display: flex;
-    justify-content: center; /* Center the button horizontally */
-    align-items: center; /* Center vertically if needed */
-    margin-top: 20px; /* Add spacing above the button */
-    width: 100%; /* Span full width of the container */
-    text-align: center;
-}
-
-
-.generate-button {
-    background-color: #1e293b; /* Dark background */
-    color: white; /* White text for contrast */
-    padding: 0.75rem 1.5rem; /* Adjust padding for a larger button */
-    font-size: 1.2rem; /* Increase font size for prominence */
-    font-weight: bold; /* Bold text for emphasis */
-    border: none; /* Remove border */
-    border-radius: 12px; /* Rounder corners for a modern look */
-    cursor: pointer; /* Pointer cursor on hover */
-    width: 300px; /* Fixed width for the button */
-    height: 50px; /* Fixed height for uniformity */
-    text-align: center; /* Center text within the button */
-    line-height: 1.5; /* Adjust line height for better readability */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-    transition: all 0.3s ease; /* Smooth hover and focus effects */
-}
-
-/* Hover effect for the button */
-.generate-button:hover {
-    background-color: #111827; /* Slightly darker background on hover */
-    transform: scale(1.05); /* Slight zoom effect */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* More pronounced shadow on hover */
-}
-
-/* Responsive styling for smaller screens */
-@media (max-width: 600px) {
-    .generate-button {
-        font-size: 1rem; /* Adjust font size for smaller screens */
-        padding: 0.6rem 1.2rem; /* Adjust padding for better fit */
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Center the entire page content */
-.meal-plan-container {
+/* Input Groups */
+.input-group {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh; /* Full height of the viewport */
-    background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+    align-items: flex-start;
+    text-align: left;
 }
 
-/* Title Styling */
-.page-title {
-    font-size: 2.5rem;
-    color: white;
-    margin-bottom: 2rem;
-    text-align: center;
+.input-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 1rem;
 }
 
-/* Center the button horizontally under the title */
-.button-container-centered {
-    display: flex;
-    justify-content: center;
-    width: 100%; /* Full width of the container */
+.text-input,
+.dropdown {
+    width: 100%; /* Full width for inputs and dropdowns */
+    height: 40px;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.text-input:focus,
+.dropdown:focus {
+    outline: none;
+    border-color: #007BFF; /* Blue border on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle shadow on focus */
+}
+
+.dropdown {
+    background-color: #fff;
+    cursor: pointer;
 }
 
 /* Button Styling */
 .generate-button {
-    padding: 15px 30px;
-    background-color: #1e293b;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.2rem;
+    width: 100%;
+    height: 45px;
+    background-color: #007BFF; /* Blue button */
+    color: #fff;
+    font-size: 16px;
     font-weight: bold;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Hover effects */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .generate-button:hover {
-    background-color: #0056b3;
-    transform: scale(1.1); /* Slight enlargement on hover */
+    background-color: #0056b3; /* Darker blue on hover */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Subtle shadow on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .meal-plan-container {
+        width: 90%;
+        margin: 20px auto;
+    }
+
+    .page-title {
+        font-size: 1.8rem;
+    }
+
+    .subtitle {
+        font-size: 1.3rem;
+    }
+
+    .generate-button {
+        font-size: 15px;
+        height: 40px;
+    }
 }

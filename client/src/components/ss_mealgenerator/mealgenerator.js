@@ -2,56 +2,53 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import NavBar from "../navbar/nav_bar";
 import './mealgenerator.css';
-import axios from 'axios';
+import axios from 'axios'; // Import axios here
 
 function MealGenerator() {
     const [recipes, setRecipes] = useState([]);
-    const [recommendation, setRecommendation] = useState("");
+    const [recommendation, setRecommendation] = useState([]);
     const [error, setError] = useState(null);
     const [query, setQuery] = useState("");
     const [calorieGoal, setCalorieGoal] = useState("");
     const [dietGoal, setDietGoal] = useState("");
+    const [workoutGoal, setWorkoutGoal] = useState(""); // Track user input for workout goals
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        setDietGoal(params.get('dietGoal') || "");
-        setQuery(params.get('workoutGoal') || "");
-        fetchRecommendation(params.get('workoutGoal'), params.get('dietGoal'));
-    }, [location.search]);
-
-    const fetchRecommendation = async (workoutGoal, dietGoal) => {
-        if (!workoutGoal && !dietGoal) return;
-        setIsLoading(true);
-        try {
-            const apiKey = process.env.REACT_APP_OPENAI_API_KEY; // Replace with your API key
-            const response = await axios.post(
-                "https://api.openai.com/v1/completions",
-                {
-                    model: "text-davinci-003",
-                    prompt: `Provide a short recommendation of foods for someone with the workout goal "${workoutGoal}" and diet goal "${dietGoal}".`,
-                    max_tokens: 50,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${apiKey}`,
-                    },
-                }
-            );
-            setRecommendation(response.data.choices[0].text.trim());
-        } catch (err) {
-            console.error("Error fetching recommendation:", err);
-            setError("Failed to fetch food recommendations. Please try again.");
-        } finally {
-            setIsLoading(false);
-        }
+    // Predefined Food Recommendations
+    const foodRecommendations = {
+        "gain muscle|high protein": ["Chicken Breast", "Egg Whites", "Quinoa"],
+        "gain muscle|keto": ["Avocado", "Grilled Salmon", "Almond Butter"],
+        "lose weight|low carb": ["Zucchini Noodles", "Grilled Chicken", "Spinach Salad"],
+        "increase energy|vegan": ["Bananas", "Chia Pudding", "Sweet Potatoes"],
+        "build endurance|balanced": ["Brown Rice", "Turkey", "Roasted Vegetables"],
+        "boost immunity|vegetarian": ["Broccoli", "Oranges", "Greek Yogurt"],
+        "enhance strength|paleo": ["Grass-Fed Beef", "Sweet Potatoes", "Coconut Oil"],
+        "increase flexibility|mediterranean": ["Olive Oil", "Hummus", "Whole Grain Bread"],
     };
 
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const selectedWorkoutGoal = params.get('workoutGoal') || "";
+        const selectedDietGoal = params.get('dietGoal') || "";
+
+        setWorkoutGoal(selectedWorkoutGoal);
+        setDietGoal(selectedDietGoal);
+
+        const key = `${selectedWorkoutGoal.toLowerCase()}|${selectedDietGoal.toLowerCase()}`;
+        const recommendations = foodRecommendations[key] || [];
+
+        if (recommendations.length > 0) {
+            setRecommendation(recommendations);
+        } else {
+            setError("No recommendations available for the selected combination.");
+        }
+    }, [location.search]);
+
     const handleSearch = async () => {
-        if (!query.trim() && !calorieGoal.trim()) {
-            setError('Please enter a food keyword or calorie goal');
+        if (!query.trim()) {
+            setError('Please enter a food keyword or choose from the suggestions.');
             return;
         }
 
@@ -60,7 +57,7 @@ function MealGenerator() {
 
         const apiKey = process.env.REACT_APP_SPOONACULAR_API_KEY;
         if (!apiKey) {
-            setError('Missing API Key. Please set your Spoonacular API key in the .env file.');
+            setError('Missing Spoonacular API Key. Please set your Spoonacular API key in the .env file.');
             setIsLoading(false);
             return;
         }
@@ -93,11 +90,21 @@ function MealGenerator() {
             <NavBar />
             <div className="searchHeader">
                 <h1 className="pageTitle">Meal Plan Recipes</h1>
+                <div className="goal-container">
+                    {workoutGoal && <p className="userGoal"><strong>Workout Goal:</strong> {workoutGoal}</p>}
+                    {dietGoal && <p className="userGoal"><strong>Diet Goal:</strong> {dietGoal}</p>}
+                </div>
                 <div className="recommendation-container">
-                    {recommendation && (
-                        <p className="recommendation">
-                            Recommended Foods: {recommendation}
-                        </p>
+                    {error && <p className="error">{error}</p>}
+                    {recommendation && recommendation.length > 0 && (
+                        <div className="recommendation">
+                            <p><strong>Recommended Foods for Your Goals:</strong></p>
+                            <ul>
+                                {recommendation.map((food, index) => (
+                                    <li key={index}>{food}</li>
+                                ))}
+                            </ul>
+                        </div>
                     )}
                 </div>
                 <div className="search">
@@ -120,7 +127,7 @@ function MealGenerator() {
                 </div>
             </div>
 
-            {isLoading && <p>Loading recipes...</p>}
+            {isLoading && <p>Loading recommendations...</p>}
             {error && <p className="error">{error}</p>}
             <div className="recipe-container">
                 {recipes.map((recipe) => (
