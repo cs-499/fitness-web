@@ -7,9 +7,10 @@ import Survey from './components/ss_survey/survey';
 import WorkoutPlan from './components/ss_workoutplan/workoutplan';
 import Journal from './components/ss_journal/journal';
 import MealPlan from './components/ss_mealplan/mealplan';
-import AiMealSearch from './components/ss_ai-mealsearch/ai-mealsearch';
-import CustomMealSearch from './components/ss_custom-mealsearch/custom-mealsearch';
-import Recipe from './components/ss_recipe/recipe'; // Corrected filename
+import BasicSearch from './components/ss_basicsearch/basicsearch';
+import BasicGenerator from './components/ss_basicgenerator/basicgenerator';
+import AdvancedSearch from './components/ss_advancedsearch/advancedsearch';
+import Recipe from './components/ss_recipe/recipe';
 import Contact from './components/ss_contact/contact';
 import LiveWorkout from './components/ss_liveworkout/liveworkout';
 
@@ -32,8 +33,9 @@ function App() {
         <Route path="/journal" element={<Journal />} />
         <Route path="/workoutplan" element={<WorkoutPlan />} />
         <Route path="/mealplan" element={<MealPlan />} />
-        <Route path="/ai-mealsearch" element={<AiMealSearch />} />
-        <Route path="/custom-mealsearch" element={<CustomMealSearch />} />
+        <Route path="/basicsearch" element={<BasicSearch />} />
+        <Route path="/basicgenerator" element={<BasicGenerator />} />
+        <Route path="/advancedsearch" element={<AdvancedSearch />} />
         <Route path="/recipe/:id" element={<Recipe />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/liveworkout" element={<LiveWorkout />} />
