@@ -83,17 +83,25 @@ export const checkSurveyCompletion = async (req, res) => {
     }
 
     try {
-        const survey = await Survey.findOne({ userId }).lean();
+        // fetch all surveys for the user
+        const surveys = await Survey.find({ userId }).sort({ createdAt: -1 }).lean();
 
-        if (!survey) {
-            return res.status(404).json({ message: 'No survey found for this user', completed: false });
+        if (surveys.length > 1) {
+            await verifyCompletion(surveys);
         }
 
-        // Check if the answers object has any keys
-        const isCompleted = survey.answers && Object.keys(survey.answers).length > 0;
+        const isCompleted = surveys.length > 0 && surveys[0].answers && Object.keys(surveys[0].answers).length > 0;
         res.status(200).json({ message: 'Survey completion checked', completed: isCompleted });
     } catch (error) {
         console.error('Error checking survey completion:', error);
         res.status(500).json({ message: 'Internal server error', error: error.message });
     }
+};
+
+const verifyCompletion = async (surveys) => {
+    const latestSurvey = surveys[0];
+    const surveysToDelete = surveys.slice(1);
+
+    // delete all surveys except the latest one
+    await Survey.deleteMany({ _id: { $in: surveysToDelete.map(s => s._id) } });
 };
