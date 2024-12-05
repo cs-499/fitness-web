@@ -6,7 +6,7 @@ const palateSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
-    recipe_history: [{
+    recipe_history: [{  // max 10
         recipeID: { type: String, required: true },
         recipe_name: { type: String, required: true }
     }],
