@@ -1,32 +1,41 @@
 export const getSpecificAnswer = async (userId, surveyQuestion) => {
     try {
+        const token = localStorage.getItem('token');
         const response = await fetch(`${process.env.REACT_APP_API_HOST}/survey/${userId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Authorization': `Bearer ${token}`,
             },
         });
 
-        const surveyResponses = await response.json();
+        let surveyResponses = await response.json();
+        // console.log("response: ", surveyResponses);
 
         if (!Array.isArray(surveyResponses)) {
             console.error('Expected an array but got:', surveyResponses);
             return null;
         }
 
-        for (const response of surveyResponses) {
-            if (response.answers) {
-                // Convert the Map to an object if it's a Map
-                const answersObject = response.answers instanceof Map ? Object.fromEntries(response.answers) : response.answers;
-                if (answersObject[surveyQuestion]) {
-                    return answersObject[surveyQuestion];
-                }
+        // filter answers by 'workout' questionTarget
+        surveyResponses = surveyResponses.map(survey => ({
+            ...survey,
+            answers: Object.fromEntries(
+                Object.entries(survey.answers).filter(([question, details]) => details.questionTarget === 'workout')
+            )
+        }));
+
+        // console.log("Filtered surveyResponses for 'workout':", surveyResponses);
+
+        //find the specific answer to the surveyQuestion within the filtered responses
+        for (const survey of surveyResponses) {
+            if (survey.answers[surveyQuestion]) {
+                return survey.answers[surveyQuestion].value;
             }
         }
         return null;
     } catch (error) {
-        console.error(`No answer found for question: "${surveyQuestion}"`, error);
+        console.error(`Error fetching answer for question: "${surveyQuestion}"`, error);
         return null;
     }
 };
