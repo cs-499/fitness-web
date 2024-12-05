@@ -143,26 +143,23 @@ const Survey = () => {
     ];
     // checks if survey was completed
     useEffect(() => {
+        const checkCompletion = async () => {
+            const userId = localStorage.getItem('userId');
+            const token = localStorage.getItem('token');
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_API_HOST}/survey/check-completion/${userId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                // console.log(response);
+                setSurveyCompleted(response.data.completed);
+                setLoading(false);
+            } catch (err) {
+                console.error('Error checking survey completion:', err);
+                navigate('/homepage');
+            }
+        };
         checkCompletion();
     }, [navigate]);
-
-    const checkCompletion = async () => {
-        const userId = localStorage.getItem('userId');
-        const token = localStorage.getItem('token');
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_API_HOST}/survey/check-completion/${userId}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            // console.log(response);
-            setSurveyCompleted(response.data.completed);
-            setLoading(false);
-        } catch (err) {
-            console.error('Error checking survey completion:', err);
-            setError('Failed to check survey status.');
-            setLoading(false);
-            navigate('/homepage');
-        }
-    };
 
     // handlers for moving between questions
     const handleNext = () => {
