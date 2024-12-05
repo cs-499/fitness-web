@@ -1,6 +1,26 @@
 import mongoose from 'mongoose';
 import Palate from '../models/createPalate.js';
 
+/*
+    uploadRecipe,
+    retrieveRecipes,
+    updateCurrentCalories,
+    updateCaloriesThisWeek,
+    updateCalorieGoal,
+    retrieveSpendingGoal,
+    updateSpendingGoal,
+    resetSpending,
+    updateGoalType,
+    getDietaryPreferences,
+    updateDietaryPreferences,
+    getMiscDetails,
+    updateMiscDetails,
+    getAppliances,
+    updateAppliances,
+    updatePalate,
+    getPalate
+ */
+
 export const uploadRecipe = async (req, res) => {
     const { userId, newRecipe } = req.body;
 
@@ -51,10 +71,9 @@ export const retrieveRecipes = async (req, res) => {
     }
 };
 
-// update calories to 0 at beginning of each week in mealplan frontend
-export const updateCaloriesThisWeek = async (req, res) => {
-    const { userId } = req.params;
-    const { calories } = req.body;
+// update calories to be 0 each day in mealplan frontend
+export const updateCurrentCalories = async (req, res) => {
+    const { userId, calories } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: 'Invalid user ID' });
@@ -67,15 +86,49 @@ export const updateCaloriesThisWeek = async (req, res) => {
     try {
         const userPalate = await Palate.findOne({ userId });
         if (userPalate) {
-            userPalate.calorie_details.calories_this_week = calories;
+            userPalate.calorie_details.current_calories = calories;
             await userPalate.save();
-            res.status(200).json({ message: 'Calories updated successfully', data: userPalate.calorie_details });
+            res.status(200).json({ message: 'Current calories updated successfully', data: userPalate.calorie_details });
         } else {
             res.status(404).json({ message: 'User palate not found' });
         }
     } catch (error) {
-        console.error('Error updating calories:', error);
-        res.status(500).json({ message: 'Failed to update calories', error: error.message });
+        console.error('Error updating current calories:', error);
+        res.status(500).json({ message: 'Failed to update current calories', error: error.message });
+    }
+};
+
+// update calories to 0 for each day at beginning of each week in mealplan frontend
+export const updateCaloriesThisWeek = async (req, res) => {
+    const { userId, day, amount } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    if (!day || amount === undefined || amount < 0) {
+        return res.status(400).json({ message: 'Valid day and calorie amount are required' });
+    }
+
+    try {
+        const userPalate = await Palate.findOne({ userId });
+        if (userPalate) {
+            // Check if the entry for the day already exists
+            const existingDay = userPalate.calorie_details.calories_this_week.find(entry => entry.day === day);
+            if (existingDay) {
+                existingDay.amount = amount; // Update existing day amount
+            } else {
+                // Add new calorie entry for the day
+                userPalate.calorie_details.calories_this_week.push({ day, amount });
+            }
+            await userPalate.save();
+            res.status(200).json({ message: 'Daily calories updated successfully', data: userPalate.calorie_details.calories_this_week });
+        } else {
+            res.status(404).json({ message: 'User palate not found' });
+        }
+    } catch (error) {
+        console.error('Error updating daily calories:', error);
+        res.status(500).json({ message: 'Failed to update daily calories', error: error.message });
     }
 };
 

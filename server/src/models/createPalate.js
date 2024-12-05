@@ -11,7 +11,11 @@ const palateSchema = new mongoose.Schema({
         recipe_name: { type: String, required: true }
     }],
     calorie_details: {
-        calories_this_week: { type: Number, default: 0 },
+        calories_this_week: [{
+            day: { type: String },
+            amount: {type: Number }
+        }],
+        current_calories: { type: Number, default: 0 },
         calorie_goal: { type: Number, default: 0 }
     },
     spending_details: {

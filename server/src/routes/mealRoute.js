@@ -2,6 +2,7 @@ import express from 'express';
 import {
     uploadRecipe,
     retrieveRecipes,
+    updateCurrentCalories,
     updateCaloriesThisWeek,
     updateCalorieGoal,
     retrieveSpendingGoal,
@@ -31,6 +32,7 @@ router.get('/recipes/:userId', verifyToken, retrieveRecipes);
 // routes for handling calorie details
 router.post('/update-calories-this-week/:userId', verifyToken, updateCaloriesThisWeek);
 router.put('/update-calorie-goal/:userId', verifyToken, updateCalorieGoal);
+router.put('/update-current-calories/:userId', verifyToken, updateCurrentCalories);
 
 // routes for handling spending details
 router.get('/spending-goal/:userId', verifyToken, retrieveSpendingGoal);
