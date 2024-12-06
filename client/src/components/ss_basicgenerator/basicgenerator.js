@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'; // Core React functionality and hooks
 import { useNavigate, useLocation } from 'react-router-dom'; // React Router for navigation and location handling
 import NavBar from "../navbar/nav_bar"; // Importing NavBar component
-import './mealgenerator.css'; // Importing CSS file for styling
+import './basicgenerator.css'; // Importing CSS file for styling
 import axios from 'axios'; // Axios library for making HTTP requests
 
 // Define workout goals and diet goals
@@ -275,7 +275,7 @@ workoutGoals.forEach(workout => {
 });
 
 // Main functional component for generating meals
-function MealGenerator() {
+function BasicGenerator() {
     const [recipes, setRecipes] = useState([]);
     const [recommendation, setRecommendation] = useState([]);
     const [error, setError] = useState(null);
@@ -404,4 +404,4 @@ function MealGenerator() {
     );
 }
 
-export default MealGenerator;
+export default BasicGenerator;

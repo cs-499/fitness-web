@@ -1,39 +1,13 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import '../../App.css';
-import './mealplan.css';
-import NavBar from "../navbar/nav_bar";
-import { useNavigate } from 'react-router-dom';
-=======
 // Import necessary libraries and components
 import React, { useState } from 'react'; // React library and useState hook for state management
 import '../../App.css'; // Main CSS file for global styling
-import './mealplan.css'; // CSS file specific to the MealPlan component
+import './basicsearch.css'; // CSS file specific to the MealPlan component
 import NavBar from "../navbar/nav_bar"; // NavBar component for navigation
 import { useNavigate } from 'react-router-dom'; // React Router hook for programmatic navigation
->>>>>>> main
 
 // Main functional component for setting meal plan goals
-const MealPlan = () => {
-<<<<<<< HEAD
-    const navigate = useNavigate();
-    const [loading, setLoading] = useState();
-    const [error, setError] = useState('');
-
-    useEffect(() => {
-        document.title = 'Meal Plan Homepage';
-    }, []);
-
-
-    const handleNavigate = (searchType) => {
-        if (searchType === "BASIC") {
-            navigate(`/basicsearch`);
-        } else if (searchType === "ADVANCED") {
-            navigate(`/advancedsearch`);
-        }
-=======
-    document.title = 'ShapeShifter'; // Set the document title for the browser tab
+const BasicSearch = () => {
+    document.title = 'Basic Search'; // Set the document title for the browser tab
 
     // State variables for tracking user-selected goals
     const [workoutGoal, setWorkoutGoal] = useState(''); // Tracks the selected workout goal
@@ -50,25 +24,10 @@ const MealPlan = () => {
 
         // Construct URL parameters for navigation
         const params = new URLSearchParams({ workoutGoal, dietGoal }).toString();
-        navigate(`/mealgenerator?${params}`); // Navigate to the meal generator page with query parameters
->>>>>>> main
+        navigate(`/basicgenerator?${params}`); // Navigate to the meal generator page with query parameters
     };
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
-
     return (
-<<<<<<< HEAD
-        <div>
-            <NavBar />
-            <div className="navigate-container">
-                <button className='BASIC' onClick={() => handleNavigate("BASIC")}>
-                    Basic Search
-                </button>
-                <button className='ADVANCED' onClick={() => handleNavigate("ADVANCED")}>
-                    Advanced Search
-                </button>
-=======
         <>
             <NavBar /> {/* Include the navigation bar */}
             <div className="meal-plan-container">
@@ -122,17 +81,9 @@ const MealPlan = () => {
                         Generate Meal Plan
                     </button>
                 </div>
->>>>>>> main
             </div>
-            <div className="container">
-
-            </div>
-        </div>
+        </>
     );
 };
 
-<<<<<<< HEAD
-export default MealPlan;
-=======
-export default MealPlan; // Export the component for use in other parts of the application
->>>>>>> main
+export default BasicSearch; // Export the component for use in other parts of the application
