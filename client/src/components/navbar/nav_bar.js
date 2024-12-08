@@ -20,7 +20,7 @@ async function handleLogout(event) {
     const username = localStorage.getItem('userId')
 
     try {
-        const response = await fetch(`${process.env.REACT_APP_API_HOST}/logout`, {
+        await fetch(`${process.env.REACT_APP_API_HOST}/logout`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
