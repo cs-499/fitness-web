@@ -1,111 +1,95 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #f7f7f7;
-    color: #333;
+.mealplan {
+    text-align: center;
+    min-height: 100vh;
 }
 
-.meal-plan-container {
-    max-width: 600px;
-    margin: 50px auto; 
-    padding: 20px;
-    background-color: #ffffff; 
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center; 
-}
-
-.page-title {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #1e293b; 
-    font-weight: bold;
-}
-
-.goal-inputs {
+.meal-interface {
     display: flex;
+    justify-content: center;
     flex-direction: column;
-    gap: 20px; 
-}
-
-.subtitle {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: #555; 
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-}
-
-.input-group label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 1rem;
-}
-
-.text-input,
-.dropdown {
-    width: 100%; 
-    height: 40px;
-    padding: 5px 10px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.text-input:focus,
-.dropdown:focus {
-    outline: none;
-    border-color: #007BFF;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-.dropdown {
-    background-color: #fff;
-    cursor: pointer;
-}
-
-.generate-button {
+    max-width: 100vw;
     width: 100%;
-    height: 45px;
-    background-color: #007BFF; 
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.left-container,
+.right-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    border: 1px solid white;
+    border-radius: 10px;
+    background-color: #444444; /* manually lightened color */
+    padding: 10px;
+    margin: 10px;
+    box-sizing: border-box;
+}
+
+.navigate-container {
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    border: 10px;
+    margin: 10px auto;
+    border-radius: 10px;
+    width: 75%;
+}
+
+.BASIC, .ADVANCED {
+    flex: 1;
+    padding: 10px;
+    margin-right: 50px;
+    margin-left: 50px;
+    text-align: center;
+    border: 1px solid black;
     border-radius: 5px;
+}
+
+.calorie-tracker {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-between;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.calorie-input, .goal-input {
+    flex: 1;
+    margin: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.spending-input, .budget-input {
+    flex: 1;
+    margin: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.reset-goal-button {
+    color: #2761ac;
+    background-image: url('../images/reset.png');
+    background-size: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 25px;
+    height: 25px;
+    border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.generate-button:hover {
-    background-color: #0056b3;
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+.reset-goal-button:hover {
+    opacity: 0.8;
 }
 
-@media (max-width: 768px) {
-    .meal-plan-container {
-        width: 90%;
-        margin: 20px auto;
-    }
-
-    .page-title {
-        font-size: 1.8rem;
-    }
-
-    .subtitle {
-        font-size: 1.3rem;
-    }
-
-    .generate-button {
-        font-size: 15px;
-        height: 40px;
-    }
+.row1, .row2 {
+    display: flex;
 }
