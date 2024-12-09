@@ -4,6 +4,7 @@ import requests
 import os
 from dotenv import load_dotenv
 from flask_pymongo import PyMongo
+import requests
 
 # Load environment variables
 load_dotenv()
@@ -16,6 +17,15 @@ CORS(app)  # Enable CORS for all domains
 
 # Setup MongoDB connection
 app.config["MONGO_URI"] = "mongodb://localhost:27017/api"
+
+def fetch_survey_from_user(user_id, token):
+    url = f'http://<node-server-url>/{user_id}'  # Replace <node-server-url> with your actual Node.js server URL
+    headers = {'Authorization': f'Bearer {token}'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
 
 @app.route("/api/recipes", methods=["GET"])
 def get_recipes():

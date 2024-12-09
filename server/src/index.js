@@ -8,6 +8,8 @@ import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import workoutRoute from './routes/workoutRoute.js';
+import mealRoute from './routes/mealRoute.js';
+import surveyRoute from './routes/surveyRoute.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,8 +25,9 @@ app.use(sessionCookie);
 app.use(express.json());
 
 app.use(routes);
-app.use('/survey', routes);
+app.use('/survey', surveyRoute);
 app.use('/api/workout-plan', workoutRoute);
+app.use('/meals', mealRoute);
 
 // script for starting Flask server for meal-gen API
 const flaskAppPath = path.join(__dirname, 'controllers', 'meal-gen.py');
