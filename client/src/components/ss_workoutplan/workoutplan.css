@@ -1,3 +1,5 @@
+/*Not sure why there is some of the survey styling in here, but don't remove it, it'll break the survey */
+
 .question {
   display: none;
 }
@@ -45,14 +47,10 @@ h3 {
   color: white;
 }
 
-/* Calendar Styling */
-
-/* Ensure the day cells are positioned correctly */
 .rbc-day-bg {
   position: relative;
 }
 
-/* Add styles to highlight available days */
 .rbc-day-bg.highlighted {
   background-color: #FFD700 !important;
   border-radius: 5px !important;
@@ -102,6 +100,5 @@ h3 {
 }
 
 .rbc-event {
-  /* Force text color to black */
   color: #000 !important;
 }

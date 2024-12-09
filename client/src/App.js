@@ -20,7 +20,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 function App() {
   
     return (
-      <div style={{ background: 'linear-gradient(135deg, #1E3A8A, #3B82F6)', minHeight: '100vh' }}>
+      <div style={{minHeight: '100vh' }}>
         <div className="App">
 
   

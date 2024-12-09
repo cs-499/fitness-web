@@ -13,6 +13,7 @@ const Survey = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
+    // Array of survey questions with details
     const questions = [
         {
             question: 'What dietary preferences do you have?',
@@ -150,7 +151,6 @@ const Survey = () => {
                 const response = await axios.get(`${process.env.REACT_APP_API_HOST}/survey/check-completion/${userId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
-                // console.log(response);
                 setSurveyCompleted(response.data.completed);
                 setLoading(false);
             } catch (err) {
@@ -161,7 +161,6 @@ const Survey = () => {
         checkCompletion();
     }, [navigate]);
 
-    // handlers for moving between questions
     const handleNext = () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -173,7 +172,6 @@ const Survey = () => {
         }
     };
 
-    // handler for updating answers
     const handleInputChange = (e, question) => {
         const { value, type, checked } = e.target;
         const questionTarget = questions.find(q => q.question === question).questionTarget;
@@ -209,7 +207,7 @@ const Survey = () => {
                             type="checkbox"
                             name={`${question.question}-${index}`}
                             value={choice}
-                            checked={answers[question.question]?.values?.includes(choice) || false} // Corrected to access the values array
+                            checked={answers[question.question]?.values?.includes(choice) || false}
                             onChange={(e) => handleInputChange(e, question.question)}
                         />
                         <div className='choice'>{choice}</div>
@@ -227,7 +225,7 @@ const Survey = () => {
                             type="radio"
                             name={`${question.question}-${index}`}
                             value={choice}
-                            checked={answers[question.question]?.value === choice} // Ensuring to access the value property for radio inputs
+                            checked={answers[question.question]?.value === choice}
                             onChange={(e) => handleInputChange(e, question.question)}
                         />
                         <div className='radioChoice'>{choice}</div>
@@ -243,7 +241,7 @@ const Survey = () => {
                         className='textInput'
                         type="number"
                         name={`${question.question}-${index}`}
-                        value={answers[question.question]?.value || ''} // Ensuring to access the value property for text inputs
+                        value={answers[question.question]?.value || ''}
                         placeholder="Enter Measurements"
                         min="10"
                         onChange={(e) => handleInputChange(e, question.question)}
@@ -321,7 +319,6 @@ const Survey = () => {
     };
 
     const updatePalate = async (surveyAnswers) => {
-        // console.log("Updated answers: ", surveyAnswers);
         const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
     
@@ -330,7 +327,6 @@ const Survey = () => {
             return;
         }
     
-        // extracting spending range and converting it to bounds
         const spendingRange = surveyAnswers["What is your weekly budget?"]["answer"];
         let lowerBound = 0, upperBound = 0;
 

@@ -1,14 +1,12 @@
 .App {
   text-align: center;
-  background: linear-gradient(135deg, #1E3A8A, #3B82F6); /* Gradient blue background */
-  min-height: 100vh; /* Ensures full height coverage */
-  color: #2761ac; /* White text for contrast */
+  min-height: 100vh; 
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
-  filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.3)); /* Modern shadow */
+  filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.3)); 
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -18,26 +16,26 @@
 }
 
 .App-header {
-  background: linear-gradient(135deg, #073591, #176bac); /* Subtle blue gradient */
+  background: linear-gradient(135deg, #073591, #176bac); 
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: #ffffff; /* White text for readability */
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); /* Subtle text shadow */
+  color: #ffffff; 
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); 
 }
 
 .App-link {
-  color: #ffcc00; /* Bright yellow for visibility */
+  color: #ffcc00; 
   font-weight: bold;
   text-decoration: none;
-  transition: color 0.3s ease; /* Smooth hover effect */
+  transition: color 0.3s ease; 
 }
 
 .App-link:hover {
-  color: #ffd700; /* Slightly brighter yellow on hover */
+  color: #ffd700; 
 }
 
 @keyframes App-logo-spin {

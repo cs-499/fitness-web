@@ -5,6 +5,7 @@ import './mealplan.css';
 import NavBar from "../navbar/nav_bar";
 import { useNavigate } from 'react-router-dom';
 
+// Main functional component for setting meal plan goals
 const MealPlan = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState();
@@ -20,6 +21,35 @@ const MealPlan = () => {
 
     useEffect(() => {
         document.title = 'Meal Plan Homepage';
+
+        /* 
+        const printAll = async () => {
+            const userId = localStorage.getItem('userId');
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_HOST}/survey/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                let surveyResponses = await response.json();
+                
+                surveyResponses = surveyResponses.map(survey => ({
+                    ...survey,
+                    answers: Object.fromEntries(
+                        Object.entries(survey.answers).filter(([question, details]) => details.questionTarget === 'workout')
+                    )
+                }));
+                console.log("Response: ", surveyResponses);
+            } catch (error) {
+                console.error("Error retrieving survey: ", error);
+            }
+        }
+        printAll();
+        */
     }, []);
 
     useEffect(() => {

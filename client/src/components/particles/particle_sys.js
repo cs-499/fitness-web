@@ -7,7 +7,6 @@ import { loadFull } from "tsparticles";
 import './particle_sys.css'
 export default function Particle() {
 
-//particle and initialization stuff
   const [init, setInit] = useState(false);
   useEffect(() => {
     console.log("init");
@@ -21,7 +20,6 @@ export default function Particle() {
   const particlesLoaded = (container) => {
   };
 
-  //rendering
   return (
     //This is the entire particle system and its settings
         <div className="background">

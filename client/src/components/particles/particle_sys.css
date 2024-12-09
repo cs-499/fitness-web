@@ -1,4 +1,3 @@
-/*This is for the gradient - Will be included wherever there are particles*/
 .background {
     background: linear-gradient(rgb(21, 76, 121), rgb(118, 181, 197));
     height: 100vh;

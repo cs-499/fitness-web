@@ -4,64 +4,57 @@ import NavBar from "../navbar/nav_bar";
 
 const Recipes = () => {
     document.title = 'ShapeShifter';
+
     const [meals, setMeals] = useState([]);
     const [notes, setNotes] = useState([]);
     const [newNote, setNewNote] = useState('');
 
-    // Load saved meals and notes from local storage
     useEffect(() => {
-        const savedMeals = JSON.parse(localStorage.getItem('savedMeals') || '[]'); // Fallback to an empty array
-        const savedNotes = JSON.parse(localStorage.getItem('journalNotes') || '[]'); // Fallback to an empty array
+        const savedMeals = JSON.parse(localStorage.getItem('savedMeals') || '[]');
+        const savedNotes = JSON.parse(localStorage.getItem('journalNotes') || '[]');
         setMeals(savedMeals);
         setNotes(savedNotes);
     }, []);
 
-    // Save a new note to the list
     const saveNote = () => {
         if (newNote.trim()) {
-            const timestamp = new Date().toLocaleString(); // Get the current date and time
-            const updatedNotes = [...notes, { text: newNote.trim(), timestamp }]; // Add note with timestamp
+            const timestamp = new Date().toLocaleString();
+            const updatedNotes = [...notes, { text: newNote.trim(), timestamp }];
             setNotes(updatedNotes);
             setNewNote('');
             localStorage.setItem('journalNotes', JSON.stringify(updatedNotes));
         }
     };
 
-    // Delete a note
     const deleteNote = (index) => {
         const updatedNotes = notes.filter((_, i) => i !== index);
         setNotes(updatedNotes);
         localStorage.setItem('journalNotes', JSON.stringify(updatedNotes));
     };
 
-    // Delete a meal
     const deleteMeal = (id) => {
         const updatedMeals = meals.filter((meal) => meal.id !== id);
         setMeals(updatedMeals);
         localStorage.setItem('savedMeals', JSON.stringify(updatedMeals));
     };
 
-    // Calculate total calories
     const totalCalories = meals.reduce((sum, meal) => {
         const calories = parseFloat(meal.calories);
         return !isNaN(calories) ? sum + calories : sum;
     }, 0);
 
-
-// Group meals by date
-const groupedMeals = meals.reduce((grouped, meal) => {
-    const date = meal.timestamp ? new Date(meal.timestamp).toLocaleDateString() : 'Unknown Date'; // Parse timestamp
-    if (!grouped[date]) grouped[date] = [];
-    grouped[date].push(meal);
-    return grouped;
-}, {});
+    const groupedMeals = meals.reduce((grouped, meal) => {
+        const date = meal.timestamp ? new Date(meal.timestamp).toLocaleDateString() : 'Unknown Date';
+        if (!grouped[date]) grouped[date] = [];
+        grouped[date].push(meal);
+        return grouped;
+    }, {});
 
     return (
         <>
             <NavBar />
             <div className="journal-container">
                 <h1>Your Saved Meals</h1>
-
                 {Object.keys(groupedMeals).length > 0 ? (
                     Object.entries(groupedMeals).map(([date, mealsForDate]) => (
                         <div key={date} style={{ marginBottom: '2rem' }}>
@@ -96,7 +89,6 @@ const groupedMeals = meals.reduce((grouped, meal) => {
                 ) : (
                     <p>No meals saved yet. Start saving meals from the recipe page!</p>
                 )}
-
                 {meals.length > 0 && (
                     <div
                         style={{
@@ -110,8 +102,6 @@ const groupedMeals = meals.reduce((grouped, meal) => {
                         Total Calories: {totalCalories.toFixed(2)} kcal
                     </div>
                 )}
-
-                {/* Notes Section */}
                 <div className="notes-section">
                     <h2>Journal Notes</h2>
                     <textarea
@@ -153,7 +143,6 @@ const groupedMeals = meals.reduce((grouped, meal) => {
                     >
                         Save
                     </button>
-
                     <div className="saved-notes">
                         {notes.length > 0 ? (
                             notes.map((note, index) => (

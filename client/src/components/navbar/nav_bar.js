@@ -1,23 +1,20 @@
 import React from "react";
 import './nav_bar.css';
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-
-/* Set the width of the side navigation to 250px */
 function openNav() {
     document.getElementById("account_nav").style.width = "250px";
 }
 
-/* Set the width of the side navigation to 0 */
 function closeNav() {
     document.getElementById("account_nav").style.width = "0";
-} 
+}
 
 async function handleLogout(event) {
-    event.preventDefault(); // Prevents the default link behavior
-    closeNav(); // Only closes the app on "Logout"
+    event.preventDefault();
+    closeNav();
 
-    const username = localStorage.getItem('userId')
+    const username = localStorage.getItem('userId');
 
     try {
         await fetch(`${process.env.REACT_APP_API_HOST}/logout`, {
@@ -25,28 +22,32 @@ async function handleLogout(event) {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: new URLSearchParams({
-                username
-            }),
+            body: new URLSearchParams({ username }),
         });
-
 
         localStorage.setItem('isUserLoggedIn', false);
         localStorage.removeItem('token');
     } catch (error) {
         console.error(error);
     }
-};
-
+}
 
 const NavBar = () => {
     const navigate = useNavigate();
+
     const logout = () => {
         navigate('/');
-    }
-    return(
+    };
+
+    return (
         <>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
+            <link 
+                rel="stylesheet" 
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" 
+                integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" 
+                crossOrigin="anonymous" 
+                referrerPolicy="no-referrer" 
+            />
             <ul className="navbar_ul">
                 <li className="homeNav">
                     <a href="/homepage">
@@ -91,9 +92,9 @@ const NavBar = () => {
             </ul>
 
             <div id="account_nav" className="sidenav">
-                <h1 className="sidenav_username" href="#" >{localStorage.getItem('username')}</h1>
+                <h1 className="sidenav_username">{localStorage.getItem('username')}</h1>
                 <a href="#" className="closebtn" onClick={(e) => { e.preventDefault(); closeNav(); }}>&times;</a>
-                <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(e); logout();}}>Logout</a>
+                <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(e); logout(); }}>Logout</a>
             </div>
         </>
     );

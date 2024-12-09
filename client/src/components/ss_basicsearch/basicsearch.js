@@ -1,49 +1,42 @@
-// Import necessary libraries and components
-import React, { useState } from 'react'; // React library and useState hook for state management
-import '../../App.css'; // Main CSS file for global styling
-import './basicsearch.css'; // CSS file specific to the MealPlan component
-import NavBar from "../navbar/nav_bar"; // NavBar component for navigation
-import { useNavigate } from 'react-router-dom'; // React Router hook for programmatic navigation
+import React, { useState } from 'react';
+import '../../App.css';
+import './basicsearch.css';
+import NavBar from "../navbar/nav_bar";
+import { useNavigate } from 'react-router-dom';
 
-// Main functional component for setting meal plan goals
 const BasicSearch = () => {
-    document.title = 'Basic Search'; // Set the document title for the browser tab
+    document.title = 'Basic Search';
 
-    // State variables for tracking user-selected goals
-    const [workoutGoal, setWorkoutGoal] = useState(''); // Tracks the selected workout goal
-    const [dietGoal, setDietGoal] = useState(''); // Tracks the selected diet goal
-    const navigate = useNavigate(); // Hook for navigation to other routes
+    const [workoutGoal, setWorkoutGoal] = useState('');
+    const [dietGoal, setDietGoal] = useState('');
+    const navigate = useNavigate();
 
-    // Function to handle navigation to the meal generator page with selected goals
     const handleNavigate = () => {
-        // Check if both workout and diet goals are selected
         if (!workoutGoal.trim() || !dietGoal.trim()) {
-            alert("Please select both a workout goal and a diet goal to proceed."); // Show alert if input is incomplete
+            alert("Please select both a workout goal and a diet goal to proceed.");
             return;
         }
 
-        // Construct URL parameters for navigation
         const params = new URLSearchParams({ workoutGoal, dietGoal }).toString();
-        navigate(`/basicgenerator?${params}`); // Navigate to the meal generator page with query parameters
+        navigate(`/basicgenerator?${params}`);
     };
 
     return (
         <>
-            <NavBar /> {/* Include the navigation bar */}
+            <NavBar />
             <div className="meal-plan-container">
-                <h1 className="page-title">Meal Plan</h1> {/* Page title */}
+                <h1 className="page-title">Meal Plan</h1>
                 <div className="goal-inputs">
-                    <h2 className="subtitle">Set Your Goals</h2> {/* Subtitle for the goal input section */}
+                    <h2 className="subtitle">Set Your Goals</h2>
 
-                    {/* Workout Goal Dropdown */}
                     <div className="input-group">
-                        <label>Workout Goal:</label> {/* Label for the workout goal dropdown */}
+                        <label>Workout Goal:</label>
                         <select
-                            value={workoutGoal} // Bind state to the dropdown
-                            onChange={(e) => setWorkoutGoal(e.target.value)} // Update state on selection
-                            className="dropdown" // Apply styling to the dropdown
+                            value={workoutGoal}
+                            onChange={(e) => setWorkoutGoal(e.target.value)}
+                            className="dropdown"
                         >
-                            <option value="">Select a Workout Goal</option> {/* Placeholder option */}
+                            <option value="">Select a Workout Goal</option>
                             <option value="gain muscle">Gain Muscle</option>
                             <option value="lose weight">Lose Weight</option>
                             <option value="increase energy">Increase Energy</option>
@@ -55,15 +48,14 @@ const BasicSearch = () => {
                         </select>
                     </div>
 
-                    {/* Diet Goal Dropdown */}
                     <div className="input-group">
-                        <label>Diet Goal:</label> {/* Label for the diet goal dropdown */}
+                        <label>Diet Goal:</label>
                         <select
-                            value={dietGoal} // Bind state to the dropdown
-                            onChange={(e) => setDietGoal(e.target.value)} // Update state on selection
-                            className="dropdown" // Apply styling to the dropdown
+                            value={dietGoal}
+                            onChange={(e) => setDietGoal(e.target.value)}
+                            className="dropdown"
                         >
-                            <option value="">Select a Diet Goal</option> {/* Placeholder option */}
+                            <option value="">Select a Diet Goal</option>
                             <option value="high protein">High Protein</option>
                             <option value="keto">Keto</option>
                             <option value="low carb">Low Carb</option>
@@ -76,7 +68,6 @@ const BasicSearch = () => {
                         </select>
                     </div>
 
-                    {/* Button to trigger meal plan generation */}
                     <button onClick={handleNavigate} className="generate-button">
                         Generate Meal Plan
                     </button>
@@ -86,4 +77,4 @@ const BasicSearch = () => {
     );
 };
 
-export default BasicSearch; // Export the component for use in other parts of the application
+export default BasicSearch;

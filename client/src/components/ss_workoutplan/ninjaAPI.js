@@ -6,7 +6,7 @@ const apiKey = process.env.REACT_APP_NINJA_API;
 const experienceToDifficulty = {
     'Beginner': 'beginner',
     'Intermediate': 'intermediate',
-    'advanced': 'expert',
+    'Advanced': 'expert',
 };
 
 // Get exercises based on the user’s experience level
@@ -35,7 +35,6 @@ const getExercisesByExperienceLevel = async () => {
             url: `https://api.api-ninjas.com/v1/exercises?difficulty=${difficulty}`,
             headers: { 'X-Api-Key': apiKey },
             success: function (result) {
-                // Always resolve with an array
                 resolve(result || []);
             },
             error: function ajaxError(jqXHR) {
