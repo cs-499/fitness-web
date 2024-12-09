@@ -31,7 +31,7 @@ export const login = async (req, res) => {
         
         req.session.userId = user._id;
 
-        //user.isLoggedIn = true;
+        user.isLoggedIn = true;
         await user.save();
         if (user.firstLogin) {
             user.firstLogin = false;
