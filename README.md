@@ -12,11 +12,13 @@
 ### Install mongo db
 ### Start client
 ```
+cd client
 npm install
 npm start
 ```
 ### Start server (API)
 ```
+cd server/src
 npm install
 node index.js OR npm run devStart
 ```
