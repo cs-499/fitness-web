@@ -1,6 +1,5 @@
 import { getSpecificAnswer } from './getSurveyAnswers.js';
 
-// Get exercises based on the user’s experience level
 const filters = async () => {
     const userId = localStorage.getItem('userId');
     const lengthQuestion = "How long do you want your workouts to be?";
@@ -8,10 +7,9 @@ const filters = async () => {
 
     if (!workoutLength || workoutLength.length === 0) {
         console.log('No workout length found.');
-        return "Three"; //default
+        return "Three"; 
     }
 
-    // eslint-disable-next-line default-case
     switch(workoutLength[0]){
         case "30-45 Minutes":
             return "Three";

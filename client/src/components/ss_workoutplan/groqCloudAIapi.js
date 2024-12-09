@@ -13,7 +13,6 @@ const groq = new Groq({
  */
 const groqCloudAi = async () => {
     try {
-        // Get exercises based on the user's experience level
         const exercises = await getExercisesByExperienceLevel();
         const selectedExercise = exercises[Math.floor(Math.random() * exercises.length)];
         

@@ -1,59 +1,51 @@
-// Import necessary libraries and components
-import React from 'react'; // React library for creating components
-import '../../App.css'; // Global CSS file
-import './landing.css'; // CSS specific to the landing page
-import logo from '../images/logo white.svg'; // Logo image for the landing page
-import ParticleSys from '../particles/particle_sys'; // Particle system for background effects
-import { useNavigate } from 'react-router-dom'; // React Router hook for programmatic navigation
+import React from 'react'; 
+import '../../App.css'; 
+import './landing.css'; 
+import logo from '../images/logo white.svg'; 
+import ParticleSys from '../particles/particle_sys'; 
+import { useNavigate } from 'react-router-dom'; 
 
 const Landing = () => {
-  document.title = 'ShapeShifter'; // Set the document title for the browser tab
-  const navigate = useNavigate(); // Hook for navigation
+  document.title = 'ShapeShifter'; 
+  const navigate = useNavigate(); 
 
-  // Function to navigate to the registration page
   const createAcc = () => {
-      navigate('/register'); // Redirect to the registration page
+      navigate('/register');
   };
 
-  // Function to handle the login process
   const logIn = async () => {
-      const username = document.getElementById('username').value; // Get the username from the input field
-      const password = document.getElementById('password').value; // Get the password from the input field
+      const username = document.getElementById('username').value; 
+      const password = document.getElementById('password').value; 
 
       try {
-          // Send a POST request to the login endpoint
           const response = await fetch(`${process.env.REACT_APP_API_HOST}/login`, {
-              method: 'POST', // HTTP method
+              method: 'POST',
               headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded', // Specify the content type
+                  'Content-Type': 'application/x-www-form-urlencoded', 
               },
-              body: new URLSearchParams({ // Encode the username and password into URL-encoded format
+              body: new URLSearchParams({ 
                   username,
                   password,
               }),
           });
 
-          const data = await response.json(); // Parse the response as JSON
+          const data = await response.json(); 
 
           if (response.ok) {
-              // If login is successful, store user data in localStorage
-              localStorage.setItem('userId', data.userId); // Store user ID
-              localStorage.setItem('token', data.token); // Store authentication token
-              localStorage.setItem('isUserLoggedIn', true); // Mark the user as logged in
-              localStorage.setItem('username', data.username); // Store the username
+              localStorage.setItem('userId', data.userId); 
+              localStorage.setItem('token', data.token); 
+              localStorage.setItem('isUserLoggedIn', true); 
+              localStorage.setItem('username', data.username); 
 
-              // Navigate to the survey page if it's the user's first login or the survey is incomplete
               navigate(data.firstTimeLogin || !data.surveyCompleted ? '/survey' : '/homepage'); 
           } else {
-              // If the login fails, display an error message
               alert(data.message);
           }        
       } catch (error) {
-          console.error(error); // Log any errors in the console
+          console.error(error);
       }
   };
 
-  // Render the landing page
   return (
       <div className='wrapper'>
         {/* Logo and branding */}
@@ -83,4 +75,4 @@ const Landing = () => {
   );
 };
 
-export default Landing; // Export the component for use in other parts of the application
+export default Landing;

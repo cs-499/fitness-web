@@ -1,50 +1,43 @@
-// Import necessary libraries and components
-import React, { useState } from 'react'; // React library and useState hook for managing state
-import '../../App.css'; // Global CSS file
-import ParticleSys from '../particles/particle_sys'; // Particle system for background animation
-import './register.css'; // CSS file specific to the registration component
-import logo from '../images/logo white.svg'; // Logo image for the registration page
+import React, { useState } from 'react'; 
+import '../../App.css'; 
+import ParticleSys from '../particles/particle_sys'; 
+import './register.css'; 
+import logo from '../images/logo white.svg'; 
 
-// Registration component
 const Register = () => {
-    // State variables to track username and password inputs
-    const [username, setUsername] = useState(''); // Username state
-    const [password, setPassword] = useState(''); // Password state
+    const [username, setUsername] = useState(''); 
+    const [password, setPassword] = useState('');
 
     // Handle the registration form submission
     const handleRegister = async (event) => {
-        event.preventDefault(); // Prevent the default form submission behavior (page refresh)
+        event.preventDefault(); 
 
         try {
-            // Send a POST request to the backend API for registration
             const response = await fetch(`${process.env.REACT_APP_API_HOST}/register`, {
-                method: 'POST', // HTTP method
+                method: 'POST', 
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded', // Specify the content type
+                    'Content-Type': 'application/x-www-form-urlencoded', 
                 },
-                body: new URLSearchParams({ // Encode the username and password into URL-encoded format
+                body: new URLSearchParams({
                     username,
                     password,
                 }),
             });
 
-            const data = await response.text(); // Parse the response as text
+            const data = await response.text(); 
 
             if (response.ok) {
-                // If the registration is successful, show an alert and redirect to the landing page
                 alert('Registration successful! You can now log in.');
-                window.location.href = '/'; // Redirect to the home page
+                window.location.href = '/';
             } else {
-                // If the response is not successful, show the error message returned by the server
                 alert(data);
             }
         } catch (error) {
-            console.error('Error:', error); // Log any errors in the console
-            alert('Error during registration.'); // Show a generic error message
+            console.error('Error:', error);
+            alert('Error during registration.');
         }
     };
 
-    // Render the registration form
     return (
         <div>
             {/* Logo and branding */}
@@ -59,21 +52,21 @@ const Register = () => {
                 <form onSubmit={handleRegister}> {/* Form submission handler */}
                     <p className='authhelp'>Username:</p> {/* Label for username input */}
                     <input
-                        type='text' // Input type
-                        value={username} // Bind value to username state
-                        onChange={(e) => setUsername(e.target.value)} // Update username state on input
-                        placeholder='Enter Username' // Placeholder text
-                        className='authbox' // CSS class for styling
-                        required // Make the field mandatory
+                        type='text' 
+                        value={username} 
+                        onChange={(e) => setUsername(e.target.value)} 
+                        placeholder='Enter Username' 
+                        className='authbox' 
+                        required 
                     />
                     <p className='authhelp'>Password:</p> {/* Label for password input */}
                     <input
-                        type='password' // Input type
-                        value={password} // Bind value to password state
-                        onChange={(e) => setPassword(e.target.value)} // Update password state on input
-                        placeholder='Enter Password' // Placeholder text
-                        className='authbox' // CSS class for styling
-                        required // Make the field mandatory
+                        type='password' 
+                        value={password} 
+                        onChange={(e) => setPassword(e.target.value)} 
+                        placeholder='Enter Password'
+                        className='authbox' 
+                        required 
                     />
                     <div className='button'> {/* Button container */}
                         <button type='submit' className='authbutton'>Register</button> {/* Submit button */}
@@ -84,7 +77,6 @@ const Register = () => {
     );
 };
 
-// Wrapper component to include particles without refreshing them on typing
 const Wrapper = () => {
     return (
         <>
@@ -94,4 +86,4 @@ const Wrapper = () => {
     );
 };
 
-export default Wrapper; // Export the wrapper component for use in other parts of the application
+export default Wrapper;

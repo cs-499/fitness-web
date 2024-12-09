@@ -1,13 +1,9 @@
-//This is just the particle system, can be imported to any page by including <ParticleSys /> in the rendering
-//don't forget to import ParticleSys from '../particles/particle_sys' at the top before you include it
-
 import { useCallback, useEffect, useState } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadFull } from "tsparticles";
 import './particle_sys.css'
 export default function Particle() {
 
-//particle and initialization stuff
   const [init, setInit] = useState(false);
   useEffect(() => {
     console.log("init");
@@ -21,7 +17,6 @@ export default function Particle() {
   const particlesLoaded = (container) => {
   };
 
-  //rendering
   return (
     //This is the entire particle system and its settings
         <div className="background">
