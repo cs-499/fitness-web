@@ -35,7 +35,6 @@ const getExercisesByExperienceLevel = async () => {
             url: `https://api.api-ninjas.com/v1/exercises?difficulty=${difficulty}`,
             headers: { 'X-Api-Key': apiKey },
             success: function (result) {
-                // Always resolve with an array
                 resolve(result || []);
             },
             error: function ajaxError(jqXHR) {

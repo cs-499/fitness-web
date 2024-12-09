@@ -1,4 +1,3 @@
-/* General Styling */
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
@@ -7,7 +6,6 @@ body {
     color: #333;
 }
 
-/* NavBar Styling */
 .navbar {
     background-color: #1e293b;
     color: white;
@@ -31,7 +29,6 @@ body {
     color: #38bdf8;
 }
 
-/* Recipe Container */
 .recipe-container {
     max-width: 1000px;
     min-width: 0px;
@@ -43,10 +40,9 @@ body {
 }
 
 .recipe-container:empty {
-    display: none; /* Hide the container */
+    display: none; 
 }
 
-/* Recipe Title */
 .recipe-container h1 {
     font-size: 2.5rem;
     font-weight: bold;
@@ -55,7 +51,6 @@ body {
     margin-bottom: 1rem;
 }
 
-/* Recipe Image */
 .recipe-container img {
     display: block;
     margin: 1.5rem auto;
@@ -64,7 +59,6 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Summary Section */
 .recipe-container .summary {
     font-size: 1.1rem;
     line-height: 1.8;
@@ -74,7 +68,6 @@ body {
     padding: 0 1rem;
 }
 
-/* Ingredients and Instructions */
 .ingredients-instructions {
     display: flex;
     gap: 2rem;
@@ -83,7 +76,7 @@ body {
 
 .ingredients-instructions .ingredients,
 .ingredients-instructions .instructions {
-    flex: 1; /* Ensure both sections take equal width */
+    flex: 1;
     background: #f8f9fa;
     padding: 1.5rem;
     border-radius: 12px;
@@ -113,7 +106,6 @@ body {
     margin-bottom: 0.8rem;
 }
 
-/* Footer */
 .footer {
     background-color: #1e293b;
     color: white;
@@ -129,7 +121,6 @@ body {
     font-weight: 600;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .ingredients-instructions {
         flex-direction: column;

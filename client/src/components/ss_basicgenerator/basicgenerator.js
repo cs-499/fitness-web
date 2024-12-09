@@ -1,11 +1,9 @@
-// Import necessary libraries and components
-import React, { useState, useEffect } from 'react'; // Core React functionality and hooks
-import { useNavigate, useLocation } from 'react-router-dom'; // React Router for navigation and location handling
-import NavBar from "../navbar/nav_bar"; // Importing NavBar component
-import './basicgenerator.css'; // Importing CSS file for styling
-import axios from 'axios'; // Axios library for making HTTP requests
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import NavBar from "../navbar/nav_bar";
+import './basicgenerator.css'; 
+import axios from 'axios'; 
 
-// Define workout goals and diet goals
 const workoutGoals = [
     "gain muscle",
     "lose weight",
@@ -29,7 +27,6 @@ const dietGoals = [
     "balanced"
 ];
 
-// Dynamically generate food recommendations
 const foodRecommendations = {};
 
 // Populate the recommendations
@@ -265,16 +262,12 @@ workoutGoals.forEach(workout => {
                 foodRecommendations[key] = ["Brown Rice", "Turkey", "Steamed Vegetables"];
                 break;
 
-                
-            // Add remaining combinations similarly...
-
             default:
                 foodRecommendations[key] = ["General Healthy Food Option 1", "Option 2", "Option 3"];
         }
     });
 });
 
-// Main functional component for generating meals
 function BasicGenerator() {
     const [recipes, setRecipes] = useState([]);
     const [recommendation, setRecommendation] = useState([]);

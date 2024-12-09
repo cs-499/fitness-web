@@ -1,5 +1,3 @@
-// This page will be the Homepage where you see your workouts
-
 import React, { useEffect, useState } from 'react';
 import '../../App.css';
 import './homepage.css';
@@ -19,18 +17,15 @@ async function getWorkoutNames(userId) {
         for (const date in obj) {
             if(date === todayDate){
                 const text = obj[date];
-                //ah regex... matches asterisks (**) or nothing, matches the text Exercise (edge case, AI is weird), matches letters between **, including - for certain cases and stops at :.
                 const numberedListMatches = text.match(/\d+\.\s*([A-Za-z\s\-]+(?:\s+\([^)]*\))?)/g);
 
                 if (numberedListMatches) {
-                // Extract exercises from numbered lists
                 numberedListMatches.forEach(match => {
                     const exerciseName = match.match(/\d+\.\s*([A-Za-z\s\-]+(?:\s+\([^)]*\))?)/)[1];
                     workoutList.push(exerciseName.trim());
                 });
                 } else {
                     console.log("I am being run")
-                // Regex for single-line exercises
                     const singleLineMatch = text.match(/(?:\*\*|)(?:Exercise:\s*)?([A-Za-z\s\-]+):?/);
                     workoutList.push(singleLineMatch[1].trim());
                 }

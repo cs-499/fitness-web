@@ -21,7 +21,6 @@
   color: white;
 }
 
-/*Log in Box*/
 .authcontainer {
   width: 400px;
   height: 500px;
@@ -37,11 +36,10 @@
   box-sizing: border-box;
   padding: 40px 30px;
   box-shadow: 0px 0px 0px #ffffff;
-  z-index: 1; /* <-------------- This is what puts the element above the particles btw*/
+  z-index: 1; 
   border-radius: 3%;
 }
 
-/*Log In / Sign Up text that tells you what this page is for*/
 .authText {
   margin: 0;
   padding: 0 0 20px;
@@ -49,7 +47,6 @@
   color: #000000;
 }
 
-/*Email and password input box*/
 .authbox {
   width: 100%;
   margin-bottom: 15px;
@@ -61,7 +58,6 @@
   color: #616161;
 }
 
-/*log in/sign up buttons*/
 .authbutton {
   border: none;
   outline: none;
