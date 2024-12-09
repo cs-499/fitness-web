@@ -20,7 +20,7 @@ npm start
 ```
 cd server/src
 npm install
-node index.js OR npm run devStart
+node index.js
 ```
 ### Run tests
 ```
