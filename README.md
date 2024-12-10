@@ -10,6 +10,10 @@
 
 ## Development
 ### Install mongo db
+```
+visit https://www.mongodb.com/docs/manual/administration/install-community/
+```
+
 ### Start client
 ```
 cd client
