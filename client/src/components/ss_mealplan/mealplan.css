@@ -7,6 +7,14 @@ body {
     color: #333;
 }
 
+.BASIC {
+    font-size: 50pt;
+    width: 500px;
+    height: 200px;
+    position: relative;
+    margin-top: 15%;
+}
+
 .meal-plan-container {
     max-width: 600px;
     margin: 50px auto; /* Center the container */

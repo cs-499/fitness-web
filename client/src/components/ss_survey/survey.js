@@ -80,7 +80,7 @@ const Survey = () => {
             choices: ["Organic", "NON-GMO", "Free Range", "Farmed", "Wild Caught", "No"]
         },
         {
-            question: 'What is your weekly budget?',
+            question: 'What is your weekly budget? (USD)',
             questionTarget: 'meal',
             subtitle: '',
             inputType: 'radio',
@@ -136,7 +136,7 @@ const Survey = () => {
             choices: []
         },
         {
-            question: 'Input height (cm)',
+            question: "Input height in feet (eg 6'4)",
             questionTarget: 'workout',
             subtitle: '',
             inputType: 'text',

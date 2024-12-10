@@ -62,9 +62,9 @@ const MealPlan = () => {
                 <button className='BASIC' onClick={() => handleNavigate("BASIC")}>
                     Basic Search
                 </button>
-                <button className='ADVANCED' onClick={() => handleNavigate("ADVANCED")}>
+                {/*<button className='ADVANCED' onClick={() => handleNavigate("ADVANCED")}>
                     Advanced Search
-                </button>
+                </button>*/}
             </div>
             <div className="container">
 
