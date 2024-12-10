@@ -5,12 +5,14 @@ import {
     updateCurrentCalories,
     getCurrentCalories,
     updateCaloriesThisWeek,
+    resetCurrentCalories,
     getCaloriesThisWeek,
     resetWeek,
     updateCalorieGoal,
     getCalorieGoal,
     getSpendingGoal,
     updateSpendingGoal,
+    updateBudget,
     resetSpending,
     updateGoalType,
     getDietaryPreferences,
@@ -37,6 +39,7 @@ router.get('/recipes/:userId', verifyToken, getRecipes);
 
 // routes for handling calorie details
 router.put('/update-current-calories/:userId', verifyToken, updateCurrentCalories);
+router.put('/reset-current-calories/:userId', verifyToken, resetCurrentCalories);
 router.get('/get-current-calories/:userId', verifyToken, getCurrentCalories);
 router.post('/update-calories-this-week/:userId', verifyToken, updateCaloriesThisWeek);
 router.get('/get-calories-this-week/:userId', verifyToken, getCaloriesThisWeek);
@@ -45,8 +48,9 @@ router.put('/update-calorie-goal/:userId', verifyToken, updateCalorieGoal);
 router.get('/calorie-goal/:userId', verifyToken, getCalorieGoal);
 
 // routes for handling spending details
-router.get('/spending-goal/:userId', verifyToken, getSpendingGoal);
+router.get('/get-spending-goal/:userId', verifyToken, getSpendingGoal);
 router.put('/update-spending-goal/:userId', verifyToken, updateSpendingGoal);
+router.put('/update-budget/:userId', verifyToken, updateBudget);
 router.post('/reset-spending/:userId', verifyToken, resetSpending);
 
 // route for updating goal type
