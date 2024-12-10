@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/static/css/main.de7a653b.css",
+    "main.js": "/static/js/main.b384a83d.js",
+    "static/js/453.d69dade9.chunk.js": "/static/js/453.d69dade9.chunk.js",
+    "static/media/chest.png": "/static/media/chest.1317ff9f20afeb6109ee.png",
+    "static/media/abs.jpg": "/static/media/abs.dcccc5acf706e256af18.jpg",
+    "static/media/biceps.webp": "/static/media/biceps.08b8813496798e1361ce.webp",
+    "static/media/legs.avif": "/static/media/legs.1845254b38792903118c.avif",
+    "static/media/logo white.svg": "/static/media/logo white.667d96a94c0de4af97cef2f661b305be.svg",
+    "index.html": "/index.html",
+    "main.de7a653b.css.map": "/static/css/main.de7a653b.css.map",
+    "main.b384a83d.js.map": "/static/js/main.b384a83d.js.map",
+    "453.d69dade9.chunk.js.map": "/static/js/453.d69dade9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.de7a653b.css",
+    "static/js/main.b384a83d.js"
+  ]
+}
