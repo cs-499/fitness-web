@@ -1,5 +1,3 @@
-// This page will be the Homepage where you see your workouts
-
 import React, { useEffect, useState } from 'react';
 import '../../App.css';
 import './homepage.css';

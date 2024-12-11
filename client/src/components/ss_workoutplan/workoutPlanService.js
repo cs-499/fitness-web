@@ -1,6 +1,3 @@
-/**
- * Fetch workout plans for a user from the backend.
- */
 export async function fetchWorkoutPlansFromBackend(userId) {
   try {
     console.log(`Fetching workout plans for userId: ${userId}`);
@@ -23,13 +20,10 @@ export async function fetchWorkoutPlansFromBackend(userId) {
     return data.workoutPlans || {};
   } catch (error) {
     console.error('Error fetching workout plans:', error);
-    return {}; // Return empty object on error
+    return {}; 
   }
 }
 
-/**
- * Save or update workout plans for a user in the backend.
- */
 export async function saveWorkoutPlansToBackend(userId, plans) {
     try {
       // Convert `plans` object to an array of { date, plan }

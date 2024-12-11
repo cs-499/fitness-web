@@ -3,12 +3,16 @@ import Palate from '../models/createPalate.js';
 
 /*
     uploadRecipe,
-    retrieveRecipes,
+    getRecipes,
     updateCurrentCalories,
+    getCurrentCalories,
     updateCaloriesThisWeek,
+    getCaloriesThisWeek,
     updateCalorieGoal,
-    retrieveSpendingGoal,
+    getCalorieGoal,
+    getSpendingGoal,
     updateSpendingGoal,
+    updateBudget,
     resetSpending,
     updateGoalType,
     getDietaryPreferences,
@@ -20,6 +24,8 @@ import Palate from '../models/createPalate.js';
     updatePalate,
     getPalate
  */
+
+// app.use('/meals', mealRoute); // note /meals before frontend requests/submissions
 
 export const uploadRecipe = async (req, res) => {
     const { userId, newRecipe } = req.body;
@@ -51,7 +57,7 @@ export const uploadRecipe = async (req, res) => {
     }
 };
 
-export const retrieveRecipes = async (req, res) => {
+export const getRecipes = async (req, res) => {
     const { userId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -73,34 +79,93 @@ export const retrieveRecipes = async (req, res) => {
 
 // update calories to be 0 each day in mealplan frontend
 export const updateCurrentCalories = async (req, res) => {
-    const { userId, calories } = req.body;
+    const { userId } = req.params;
+    const { calories, date } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: 'Invalid user ID' });
     }
 
-    if (calories === undefined || calories < 0) {
+    if (calories === undefined || typeof calories !== 'number' || calories < 0) {
         return res.status(400).json({ message: 'Valid calorie value is required' });
     }
 
     try {
         const userPalate = await Palate.findOne({ userId });
         if (userPalate) {
-            userPalate.calorie_details.current_calories = calories;
+            if (calories > 0) {
+                userPalate.calorie_details.date = date;
+            }
+            userPalate.calorie_details.current_calories += calories;
             await userPalate.save();
-            res.status(200).json({ message: 'Current calories updated successfully', data: userPalate.calorie_details });
+            res.status(200).json({
+                message: 'Current calories updated successfully',
+                data: userPalate.calorie_details
+            });
         } else {
             res.status(404).json({ message: 'User palate not found' });
         }
     } catch (error) {
-        console.error('Error updating current calories:', error);
-        res.status(500).json({ message: 'Failed to update current calories', error: error.message });
+        console.error('Error updating current calories:', error.message, error.data);
+    }
+};
+
+export const resetCurrentCalories = async (req, res) => {
+    const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    try {
+        const userPalate = await Palate.findOne({ userId });
+        if (userPalate) {
+            // Reset current calories to 0 and update the date
+            userPalate.calorie_details.current_calories = 0;
+            userPalate.calorie_details.date = new Date();
+
+            await userPalate.save();
+            res.status(200).json({
+                message: 'Current calories reset successfully',
+                data: userPalate.calorie_details
+            });
+        } else {
+            res.status(404).json({ message: 'User palate not found' });
+        }
+    } catch (error) {
+        console.error('Error resetting current calories:', error);
+        res.status(500).json({ message: 'Failed to reset current calories', error: error.message });
+    }
+};
+
+export const getCurrentCalories = async (req, res) => {
+    const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    try {
+        const userPalate = await Palate.findOne({ userId });
+        if (userPalate) {
+            res.status(200).json({
+                message: 'Current calories retrieved successfully',
+                currentCalories: userPalate.calorie_details.current_calories,
+                date: userPalate.calorie_details.date
+            });
+        } else {
+            res.status(404).json({ message: 'User palate not found' });
+        }
+    } catch (error) {
+        console.error('Error retrieving current calories:', error);
+        res.status(500).json({ message: 'Failed to retrieve current calories', error: error.message });
     }
 };
 
 // update calories to 0 for each day at beginning of each week in mealplan frontend
 export const updateCaloriesThisWeek = async (req, res) => {
-    const { userId, day, amount } = req.body;
+    const { userId } = req.params;
+    const { day, amount, date } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: 'Invalid user ID' });
@@ -113,27 +178,81 @@ export const updateCaloriesThisWeek = async (req, res) => {
     try {
         const userPalate = await Palate.findOne({ userId });
         if (userPalate) {
-            // Check if the entry for the day already exists
-            const existingDay = userPalate.calorie_details.calories_this_week.find(entry => entry.day === day);
-            if (existingDay) {
-                existingDay.amount = amount; // Update existing day amount
+            // Check for an existing entry for the day
+            const existingEntry = userPalate.calories_this_week.find(entry => entry.day === day);
+
+            if (existingEntry) {
+                // Update existing entry
+                existingEntry.amount = amount;
+                existingEntry.dateUpdated = date;
             } else {
-                // Add new calorie entry for the day
-                userPalate.calorie_details.calories_this_week.push({ day, amount });
+                // Add new entry
+                userPalate.calories_this_week.push({ day, amount, dateUpdated: date });
             }
+
             await userPalate.save();
-            res.status(200).json({ message: 'Daily calories updated successfully', data: userPalate.calorie_details.calories_this_week });
+            res.status(200).json({ message: 'Daily calories updated successfully', data: userPalate.calories_this_week });
         } else {
             res.status(404).json({ message: 'User palate not found' });
         }
     } catch (error) {
-        console.error('Error updating daily calories:', error);
+        console.error('Error updating daily calories:', error.message);
         res.status(500).json({ message: 'Failed to update daily calories', error: error.message });
     }
 };
 
+export const getCaloriesThisWeek = async (req, res) => {
+    const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    try {
+        const userPalate = await Palate.findOne({ userId });
+
+        if (!userPalate) {
+            return res.status(404).json({ message: 'User palate not found' });
+        }
+
+        const { calories_this_week } = userPalate;
+        // console.log(calories_this_week.dateUpdated);
+
+        res.status(200).json({
+            message: 'Calories for this week retrieved successfully',
+            data: calories_this_week,
+        });
+    } catch (error) {
+        console.error('Error fetching weekly calories:', error);
+        res.status(500).json({ message: 'Failed to fetch weekly calories', error: error.message });
+    }
+};
+
+export const resetWeek = async (req, res) => {
+    const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    try {
+        const userPalate = await Palate.findOne({ userId });
+        if (userPalate) {
+            userPalate.calories_this_week = [];
+            await userPalate.save();
+            res.status(200).json({ message: 'Weekly calorie data reset successfully' });
+        } else {
+            res.status(404).json({ message: 'User palate not found' });
+        }
+    } catch (error) {
+        console.error('Error resetting weekly calorie data:', error);
+        res.status(500).json({ message: 'Failed to reset weekly calorie data', error: error.message });
+    }
+};
+
 export const updateCalorieGoal = async (req, res) => {
-    const { userId, newCalorieGoal } = req.body;
+    const { userId } = req.params;
+    const { newCalorieGoal } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: 'Invalid user ID' });
@@ -141,7 +260,7 @@ export const updateCalorieGoal = async (req, res) => {
 
     try {
         const result = await Palate.findOneAndUpdate(
-            { userId },
+            { "userId" : userId },
             { "calorie_details.calorie_goal": newCalorieGoal },
             { new: true }
         );
@@ -157,7 +276,27 @@ export const updateCalorieGoal = async (req, res) => {
     }
 };
 
-export const retrieveSpendingGoal = async (req, res) => {
+export const getCalorieGoal = async (req, res) => {
+    const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    try {
+        const userPalate = await Palate.findOne({ userId });
+        if (userPalate && userPalate.calorie_details && userPalate.calorie_details.calorie_goal !== undefined) {
+            res.status(200).json({ calorieGoal: userPalate.calorie_details.calorie_goal });
+        } else {
+            res.status(404).json({ message: 'Calorie goal not found' });
+        }
+    } catch (error) {
+        console.error('Error retrieving calorie goal:', error);
+        res.status(500).json({ message: 'Failed to retrieve calorie goal', error: error.message });
+    }
+};
+
+export const getSpendingGoal = async (req, res) => {
     const { userId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -178,7 +317,8 @@ export const retrieveSpendingGoal = async (req, res) => {
 };
 
 export const updateSpendingGoal = async (req, res) => {
-    const { userId, lowerBound, upperBound } = req.body;
+    const { userId } = req.params;
+    const { lowerBound, upperBound } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: 'Invalid user ID' });
@@ -205,9 +345,39 @@ export const updateSpendingGoal = async (req, res) => {
     }
 };
 
+export const updateBudget = async () => {
+    const { userId } = req.params;
+    const { budget } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+    if (budget === undefined) {
+        return res.status(400).json({ message: 'Budget is required' });
+    }
+
+    try {
+        const result = await Palate.findOneAndUpdate({ userId });
+
+        if (result.spending_details.lowerBound != 0.0 && result.spending_details.upperBound != 0.0) {
+            result.spending_details.budget = mongoose.Types.Decimal128.fromString(budget.toString());
+            result.spending_details.lowerBound = 0.0;
+            result.spending_details.upperBound = 0.0;
+        } else {
+            result.spending_details.budget = mongoose.Types.Decimal128.fromString(budget.toString());
+        }
+
+        await result.save();
+        res.status(200).json({ message: 'Budget updated successfully', data: result.spending_details.spending_goal });
+    } catch (error) {
+        console.error('Error updating budget:', error);
+        res.status(500).json({ message: 'Failed to update budget', error: error.message });
+    }
+}
+
 export const updateSpendingThisWeek = async (req, res) => {
     const { userId } = req.params;
-    const { spending } = req.body;
+    const { spending, date } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: 'Invalid user ID' });
@@ -221,9 +391,16 @@ export const updateSpendingThisWeek = async (req, res) => {
     try {
         const userPalate = await Palate.findOne({ userId });
         if (userPalate) {
-            userPalate.spending_details.spending_this_week = spending;
+            const newSpending = {
+                amount : mongoose.Types.Decimal128.fromString(spending.toString()),
+                date: date || new Date(),
+            };
+            userPalate.spending_details.spending_this_week.push(newSpending);
             await userPalate.save();
-            res.status(200).json({ message: 'Spending this week updated successfully', data: userPalate.spending_details });
+            res.status(200).json({ 
+                message: 'Spendingupdated successfully', 
+                data: userPalate.spending_details.spending_this_week
+            });
         } else {
             res.status(404).json({ message: 'User palate not found' });
         }

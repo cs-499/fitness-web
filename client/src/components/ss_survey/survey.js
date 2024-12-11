@@ -4,7 +4,6 @@ import axios from 'axios';
 import '../../App.css';
 import './survey.css';
 
-// Functional component for the Survey page
 const Survey = () => {
     document.title = 'Survey';
     const navigate = useNavigate();
@@ -80,7 +79,7 @@ const Survey = () => {
             choices: ["Organic", "NON-GMO", "Free Range", "Farmed", "Wild Caught", "No"]
         },
         {
-            question: 'What is your weekly budget? (USD)',
+            question: 'What is your weekly budget?',
             questionTarget: 'meal',
             subtitle: '',
             inputType: 'radio',
@@ -136,7 +135,7 @@ const Survey = () => {
             choices: []
         },
         {
-            question: "Input height in feet (eg 6'4)",
+            question: "Input height in feet",
             questionTarget: 'workout',
             subtitle: '',
             inputType: 'text',
@@ -152,7 +151,6 @@ const Survey = () => {
                 const response = await axios.get(`${process.env.REACT_APP_API_HOST}/survey/check-completion/${userId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
-                // console.log(response);
                 setSurveyCompleted(response.data.completed);
                 setLoading(false);
             } catch (err) {
@@ -163,7 +161,6 @@ const Survey = () => {
         checkCompletion();
     }, [navigate]);
 
-    // Handler to move to the next question
     const handleNext = () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -175,7 +172,6 @@ const Survey = () => {
         }
     };
 
-    // Handler to update user responses
     const handleInputChange = (e, question) => {
         const { value, type, checked } = e.target;
         const questionTarget = questions.find(q => q.question === question).questionTarget;
@@ -211,7 +207,7 @@ const Survey = () => {
                             type="checkbox"
                             name={`${question.question}-${index}`}
                             value={choice}
-                            checked={answers[question.question]?.values?.includes(choice) || false} // Corrected to access the values array
+                            checked={answers[question.question]?.values?.includes(choice) || false}
                             onChange={(e) => handleInputChange(e, question.question)}
                         />
                         <div className='choice'>{choice}</div>
@@ -229,7 +225,7 @@ const Survey = () => {
                             type="radio"
                             name={`${question.question}-${index}`}
                             value={choice}
-                            checked={answers[question.question]?.value === choice} // Ensuring to access the value property for radio inputs
+                            checked={answers[question.question]?.value === choice}
                             onChange={(e) => handleInputChange(e, question.question)}
                         />
                         <div className='radioChoice'>{choice}</div>
@@ -245,7 +241,7 @@ const Survey = () => {
                         className='textInput'
                         type="number"
                         name={`${question.question}-${index}`}
-                        value={answers[question.question]?.value || ''} // Ensuring to access the value property for text inputs
+                        value={answers[question.question]?.value || ''}
                         placeholder="Enter Measurements"
                         min="10"
                         onChange={(e) => handleInputChange(e, question.question)}
@@ -323,7 +319,6 @@ const Survey = () => {
     };
 
     const updatePalate = async (surveyAnswers) => {
-        // console.log("Updated answers: ", surveyAnswers);
         const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
     
@@ -332,7 +327,6 @@ const Survey = () => {
             return;
         }
     
-        // extracting spending range and converting it to bounds
         const spendingRange = surveyAnswers["What is your weekly budget?"]["answer"];
         let lowerBound = 0, upperBound = 0;
 
@@ -418,4 +412,4 @@ const Survey = () => {
     );
 };
 
-export default Survey; // Export the component for use in other parts of the application
+export default Survey;

@@ -11,8 +11,6 @@ import BasicSearch from './components/ss_basicsearch/basicsearch';
 import BasicGenerator from './components/ss_basicgenerator/basicgenerator';
 import AdvancedSearch from './components/ss_advancedsearch/advancedsearch';
 import Recipe from './components/ss_recipe/recipe';
-import Contact from './components/ss_contact/contact';
-import LiveWorkout from './components/ss_liveworkout/liveworkout';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -37,8 +35,6 @@ function App() {
         <Route path="/basicgenerator" element={<BasicGenerator />} />
         <Route path="/advancedsearch" element={<AdvancedSearch />} />
         <Route path="/recipe/:id" element={<Recipe />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/liveworkout" element={<LiveWorkout />} />
       </Routes>
     </BrowserRouter>
             </div>

@@ -10,7 +10,6 @@ export const getSpecificAnswer = async (userId, surveyQuestion) => {
         });
 
         let surveyResponses = await response.json();
-        // console.log("response: ", surveyResponses);
 
         if (!Array.isArray(surveyResponses)) {
             console.error('Expected an array but got:', surveyResponses);
@@ -24,8 +23,6 @@ export const getSpecificAnswer = async (userId, surveyQuestion) => {
                 Object.entries(survey.answers).filter(([question, details]) => details.questionTarget === 'workout')
             )
         }));
-
-        // console.log("Filtered surveyResponses for 'workout':", surveyResponses);
 
         //find the specific answer to the surveyQuestion within the filtered responses
         for (const survey of surveyResponses) {
