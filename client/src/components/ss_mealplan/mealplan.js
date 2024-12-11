@@ -36,7 +36,7 @@ const MealPlan = () => {
     const [error, setError] = useState('');
     const [calorieGoal, setCalorieGoal] = useState('');
     const [enteredCalories, setEnteredCalories] = useState('');
-    const [weekCalories, setWeekCalories] = useState([]);
+    const [weekCalories, setGraphData] = useState([]);
     const [isGoalLocked, setIsGoalLocked] = useState(false);
     const [isBudgetLocked, setIsBudgetLocked] = useState(false);
     const [currentCalories, setCurrent] = useState(0);
@@ -44,7 +44,11 @@ const MealPlan = () => {
     const [budget, setBudget] = useState('');
     const [spending, setEnteredSpending] = useState('');
     const [graphTitle, setGraphTitle] = useState('');
-    // const [mockDate, setMockDate] = useState('');   // for debugging
+    const [mockDate, setMockDate] = useState('');   // for debugging
+    const [weekHistory, setWeekHistory] = useState([]);
+    const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
+    const [historySize, setHistorySize] = useState(0);
+    const [currentWeekData, setCurrentWeekData] = useState([]);
 
     useEffect(() => {
         document.title = 'Meal Plan Homepage';
@@ -80,41 +84,54 @@ const MealPlan = () => {
     }, []);
 
     useEffect(() => {
-        // fetch current goal
-        fetchCalorieGoal();
-    }, []);
-
-    useEffect(() => {
-        getCurrentCalories();
-        // scheduled event for daily/weekly change
-        schedule();
-        // getWeek();
-        // resetWeek();
-        // setMockDate("2024-12-14T00:00:00.000Z");
-    }, []);
-
-    // const getCurrentDate = () => {
-    //     return mockDate ? new Date(mockDate) : new Date();
-    // };  // function for debugging
-
-    useEffect(() => {
-        if (currentCalories != 0){
-            console.log(currentCalories, lastDate);
+        setMockDate("2024-12-16T01:00:00.000Z");
+        if (fetchCalorieGoal() && getCurrentCalories()){
+            try {
+                schedule();
+            // // fetch current goal
+            // fetchCalorieGoal();
+            // // fetch current calories
+            // getCurrentCalories();
+            } catch (error) {
+                console.error("Problem fetching inital data");
+            }
         }
+    }, [mockDate]);
+
+    const getCurrentDate = () => {
+        return mockDate ? new Date(mockDate) : new Date();
+    };  // function for debugging
+
+    useEffect(() => {
+        console.log(currentCalories, lastDate);
     }, [currentCalories, lastDate]);
 
     useEffect(() => {
-        getWeekData();
-
-        // graph title
-        const currentDate = new Date();
-        const currentDay = currentDate.toLocaleDateString('en-US', { weekday: 'long' });
-        if (currentDay === 'Monday') {
-            setGraphTitle('Calories Consumed Last Week');
-        } else {
-            setGraphTitle('Calories Consumed This Week');
+        // load weekHistory from localStorage
+        const storedHistory = localStorage.getItem('weekHistory');
+        if (storedHistory) {
+            const parsedHistory = JSON.parse(storedHistory);
+            setWeekHistory(parsedHistory);
+    
+            setCurrentWeekIndex(parsedHistory.length);
+            setHistorySize(parsedHistory.length);
         }
     }, []);
+    
+    useEffect(() => {
+        // save weekHistory to localStorage on update
+        if (weekHistory.length > 0) {
+            localStorage.setItem('weekHistory', JSON.stringify(weekHistory));
+        }
+    }, [weekHistory]);
+
+    useEffect(() => {
+        if (weekHistory.length > 0) {
+            renderGraph(currentWeekIndex);
+        } else {
+            renderGraph();
+        }
+    }, [weekHistory, currentWeekIndex]);
 
     const fetchCalorieGoal = async () => {
         const userId = localStorage.getItem('userId');
@@ -185,6 +202,28 @@ const MealPlan = () => {
         }
     };
 
+    const handlePreviousWeek = async () => {
+        if (currentWeekIndex === historySize) {
+            const weekData = await getWeek();
+            setCurrentWeekData(weekData);
+        }
+        if (currentWeekIndex > 0) {
+            const newIndex = currentWeekIndex - 1;
+            setCurrentWeekIndex(newIndex);
+            renderGraph(newIndex);
+        }
+    };
+    
+    const handleNextWeek = async () => {
+        const newIndex = currentWeekIndex + 1;
+        setCurrentWeekIndex(newIndex);
+        if (currentWeekIndex === historySize){
+            renderGraph(currentWeekData);
+        } else {
+            renderGraph(newIndex);
+        }
+    };
+
     const handleCalorieSubmit = async () => {
         const calories = parseInt(enteredCalories, 10);
     
@@ -195,8 +234,7 @@ const MealPlan = () => {
     
         const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
-        const date = new Date().toISOString();
-        // const date = mockDate;
+        const date = getCurrentDate().toISOString();
     
         try {
             await axios.put(`${process.env.REACT_APP_API_HOST}/meals/update-current-calories/${userId}`,
@@ -209,7 +247,9 @@ const MealPlan = () => {
                 }
             );
             setEnteredCalories('');
-            getCurrentCalories();
+            await getCurrentCalories();
+            window.location.reload();
+            // console.log("current calories set: ", currentCalories);
         } catch (error) {
             console.error('Error updating current calories:', error.response?.data || error.message);
         }
@@ -223,11 +263,12 @@ const MealPlan = () => {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            setCurrent(response.data.currentCalories);
-            setLastDate(response.data.date);
+            setCurrent(response.data.current_calories);
+            // setLastDate(response.data.date);
+            setLastDate(mockDate);
 
-            // console.log("current calories: ", currentCalories);
-            // console.log("date of last entry: ", lastDate);
+            // console.log("current calories: ", response.data.current_calories);
+            // console.log("date of last entry: ", response.data.date);
         } catch (error){
             console.error("Could not retrieve current calories", error.message);
         }
@@ -238,7 +279,7 @@ const MealPlan = () => {
         const token = localStorage.getItem('token');
     
         try {
-            const response = await axios.put(`${process.env.REACT_APP_API_HOST}/meals/reset-current-calories/${userId}`, {}, {
+            await axios.put(`${process.env.REACT_APP_API_HOST}/meals/reset-current-calories/${userId}`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             // console.log("Calories reset:", response.data);
@@ -248,41 +289,63 @@ const MealPlan = () => {
     };
 
     const schedule = async () => {
-        const userId = localStorage.getItem('userId');
-        const token = localStorage.getItem('token');
-    
         try {
             // 1: get current and last entry dates
-            const currentDateObj = new Date(); // current date
-            // const currentDate = getCurrentDate();
+            const currentDateObj = getCurrentDate(); // current date
             const currentDate = currentDateObj.toISOString().split('T')[0]; // YYYY-MM-DD format
     
             // ensure the current calories and last date are fetched
-            await getCurrentCalories();
+            // await getCurrentCalories();
             const lastEntryDate = lastDate ? lastDate.split('T')[0] : '';
             // 2: format day name
-            // const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' });
             const dayName = currentDateObj.toLocaleDateString('en-US', { weekday: 'long' });
             
-            if (dayName === 'Monday') {
-                // console.log("Today is Monday. Resetting last week's data.");
+            const sundayEndOfDay = new Date(currentDateObj);
+            sundayEndOfDay.setHours(23, 59, 59, 999);    // last second of sunday
+            const mondayBeginning = new Date(currentDateObj);
+            mondayBeginning.setHours(0, 0, 0, 1);   // first second of monday
+
+            // console.log("THIS: ", currentDate, dayName);
+            // console.log("WEEK HISTORY: ", weekHistory);
+
+            const previousWeek = await getWeek();
+
+            if (dayName === "Sunday" && currentDateObj > sundayEndOfDay && previousWeek.length === 7) {            
+                // date of the Monday of the previous week
+                const previousMonday = new Date(currentDateObj);
+                previousMonday.setDate(previousMonday.getDate() - 6); // Move back 6 days from Sunday
+                const mondayDate = `${previousMonday.getMonth() + 1}/${previousMonday.getDate()}`; // Format MM/DD
+            
+                setWeekHistory(prev => [...prev, { [mondayDate]: previousWeek }]);
+                await resetWeek();
+            } else if (dayName === "Monday" && currentDateObj > mondayBeginning && previousWeek.length === 7) {
+                // console.log("THIS");
+                // date of the Monday of the previous week
+                const previousMonday = new Date(currentDateObj);
+                previousMonday.setDate(previousMonday.getDate() - 7); // Move back 7 days from Monday
+                const mondayDate = `${previousMonday.getMonth() + 1}/${previousMonday.getDate()}`; // Format MM/DD
+            
+                setWeekHistory(prev => [...prev, { [mondayDate]: previousWeek }]);
                 await resetWeek();
             }
-    
+            
+            // console.error("current date", currentDate, "last entry date", lastEntryDate);
             // check if the current date matches the last entry date
-            if (currentDate !== lastEntryDate) {
+            if (currentDate !== lastEntryDate && lastEntryDate !== " ") {
+                // console.error("current date", currentDate, "last entry date", lastEntryDate);
+                // console.log("current date", currentDate, "last entry date", lastEntryDate);
                 // console.log("New day detected. Updating calories for the previous day.");
     
                 // 3: update calories_this_week with the last entry's data
-                await axios.post(`${process.env.REACT_APP_API_HOST}/meals/update-calories-this-week/${userId}`,
-                    { day: dayName, amount: currentCalories, date: lastDate },
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`,
-                        },
-                    }
-                );
+                // await axios.post(`${process.env.REACT_APP_API_HOST}/meals/update-calories-this-week/${userId}`,
+                //     { day: dayName, amount: currentCalories, date: lastDate },
+                //     {
+                //         headers: {
+                //             'Content-Type': 'application/json',
+                //             'Authorization': `Bearer ${token}`,
+                //         },
+                //     }
+                // );
     
                 // console.log("Updated calories_this_week with the last entry's data.");
     
@@ -313,23 +376,42 @@ const MealPlan = () => {
         };
     };
 
-    const getWeekData = async () => {
+    const renderGraph = async (weekIndex = currentWeekIndex, weekDataInput = null) => {
         setLoading(true);
     
         try {
-            const weekData = await getWeek();
-            console.log(weekData);
-    
-            // map the week data to ensure all days (Monday to Sunday) are represented
             const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-            const formattedData = daysOfWeek.map(day => {
-                const entry = weekData.find(item => item.day === day);
-                return entry ? entry.amount : 0; // default amount to 0 if no entry exists for the day
-            });
     
-            setWeekCalories(formattedData);
+            if (weekDataInput) {
+                const formattedData = daysOfWeek.map(day => {
+                    const entry = weekDataInput.find(item => item.day === day);
+                    return entry ? entry.amount : 0;
+                });
+    
+                setGraphData(formattedData);
+            } else if (weekIndex < weekHistory.length && weekIndex >= 0) {
+                const weekKey = Object.keys(weekHistory[weekIndex])[0];
+                const weekData = weekHistory[weekIndex][weekKey];
+    
+                setGraphTitle(`Calorie Consumption From ${weekKey}`);
+                const formattedData = daysOfWeek.map(day => {
+                    const entry = weekData.find(item => item.day === day);
+                    return entry ? entry.amount : 0;
+                });
+    
+                setGraphData(formattedData);
+            } else {
+                const weekData = await getWeek();
+                const formattedData = daysOfWeek.map(day => {
+                    const entry = weekData.find(item => item.day === day);
+                    return entry ? entry.amount : 0;
+                });
+    
+                setGraphData(formattedData);
+                setGraphTitle("Calories Consumed This Week");
+            }
         } catch (error) {
-            console.error("Error getting calories this week:", error);
+            console.error("Error rendering graph data:", error);
         } finally {
             setLoading(false);
         }
@@ -463,6 +545,22 @@ const MealPlan = () => {
                         </div>
                         <div className='calorie-graph'>
                             <Line data={data} options={options} />
+                        </div>
+                        <div className="week-navigation">
+                            <button
+                                onClick={handlePreviousWeek}
+                                className="prev-week"
+                                disabled={currentWeekIndex <= 0}
+                            >
+                                Previous Week
+                            </button>
+                            <button
+                                onClick={handleNextWeek}
+                                className="next-week"
+                                disabled={currentWeekIndex >= weekHistory.length}
+                            >
+                                Next Week
+                            </button>
                         </div>
                     </div>
                     <div className='right-container'>
