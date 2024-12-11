@@ -84,7 +84,7 @@ const MealPlan = () => {
     }, []);
 
     useEffect(() => {
-        setMockDate("2024-12-16T01:00:00.000Z");
+        setMockDate("2024-12-02T01:00:00.000Z");
         if (fetchCalorieGoal() && getCurrentCalories()){
             try {
                 schedule();
@@ -111,10 +111,25 @@ const MealPlan = () => {
         const storedHistory = localStorage.getItem('weekHistory');
         if (storedHistory) {
             const parsedHistory = JSON.parse(storedHistory);
-            setWeekHistory(parsedHistory);
-    
-            setCurrentWeekIndex(parsedHistory.length);
-            setHistorySize(parsedHistory.length);
+
+            // sort the parsed history based on the keys in MM/DD format
+            const sortedHistory = parsedHistory.sort((a, b) => {
+                const keyA = Object.keys(a)[0];
+                const keyB = Object.keys(b)[0];
+                
+                const [monthA, dayA] = keyA.split('/').map(Number);
+                const [monthB, dayB] = keyB.split('/').map(Number);
+
+                if (monthA !== monthB) {
+                    return monthA - monthB;
+                }
+                return dayA - dayB;
+            });
+
+            setWeekHistory(sortedHistory);
+
+            setCurrentWeekIndex(sortedHistory.length);
+            setHistorySize(sortedHistory.length);
         }
     }, []);
     

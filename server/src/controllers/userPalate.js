@@ -93,20 +93,38 @@ export const updateCurrentCalories = async (req, res) => {
     try {
         const userPalate = await Palate.findOne({ userId });
         if (userPalate) {
+            const dayName = new Date(date).toLocaleDateString('en-US', { weekday: 'long' });
+
+            const dayEntry = userPalate.calories_this_week.find(entry => entry.day === dayName);
+            if (dayEntry) {
+                dayEntry.amount += calories;
+                dayEntry.dateUpdated = date;
+            } else {
+                userPalate.calories_this_week.push({
+                    day: dayName,
+                    amount: calories,
+                    dateUpdated: date
+                });
+            }
+
             if (calories > 0) {
                 userPalate.calorie_details.date = date;
             }
             userPalate.calorie_details.current_calories += calories;
+
             await userPalate.save();
+
             res.status(200).json({
                 message: 'Current calories updated successfully',
-                data: userPalate.calorie_details
+                data: userPalate.calorie_details,
+                weekData: userPalate.calories_this_week
             });
         } else {
             res.status(404).json({ message: 'User palate not found' });
         }
     } catch (error) {
         console.error('Error updating current calories:', error.message, error.data);
+        res.status(500).json({ message: 'Failed to update calories', error: error.message });
     }
 };
 
@@ -150,7 +168,7 @@ export const getCurrentCalories = async (req, res) => {
         if (userPalate) {
             res.status(200).json({
                 message: 'Current calories retrieved successfully',
-                currentCalories: userPalate.calorie_details.current_calories,
+                current_calories: userPalate.calorie_details.current_calories,
                 date: userPalate.calorie_details.date
             });
         } else {
