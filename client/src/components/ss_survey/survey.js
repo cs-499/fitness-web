@@ -135,7 +135,7 @@ const Survey = () => {
             choices: []
         },
         {
-            question: 'Input height (cm)',
+            question: "Input height in feet",
             questionTarget: 'workout',
             subtitle: '',
             inputType: 'text',

@@ -7,6 +7,7 @@ import WorkoutImage3 from '../images/biceps.webp';
 import WorkoutImage4 from '../images/abs.jpg';
 import { fetchWorkoutPlansFromBackend } from '../ss_workoutplan/workoutPlanService';
 import NavBar from "../navbar/nav_bar";
+import getNumberOfWorkouts from "../ss_workoutplan/filters";
 
 async function getWorkoutNames(userId) {
     const workoutList = [];
@@ -17,17 +18,22 @@ async function getWorkoutNames(userId) {
         for (const date in obj) {
             if(date === todayDate){
                 const text = obj[date];
-                const numberedListMatches = text.match(/\d+\.\s*([A-Za-z\s\-]+(?:\s+\([^)]*\))?)/g);
-
-                if (numberedListMatches) {
-                numberedListMatches.forEach(match => {
-                    const exerciseName = match.match(/\d+\.\s*([A-Za-z\s\-]+(?:\s+\([^)]*\))?)/)[1];
+                //ah regex... matches asterisks (**) or nothing, matches the text Exercise (edge case, AI is weird), matches letters between **, including - for certain cases and stops at :.
+                const unnumberedMatches = text.match(/\*\*([A-Za-z\s\-]+)\*\*/g);
+                if (unnumberedMatches) {
+                  unnumberedMatches.forEach(match => {
+                    const exerciseName = match.match(/\*\*([A-Za-z\s\-]+)\*\*/)[1];
                     workoutList.push(exerciseName.trim());
-                });
-                } else {
-                    console.log("I am being run")
-                    const singleLineMatch = text.match(/(?:\*\*|)(?:Exercise:\s*)?([A-Za-z\s\-]+):?/);
-                    workoutList.push(singleLineMatch[1].trim());
+                  });
+                }
+            
+                // Regex for numbered exercises
+                const numberedMatches = text.match(/\d+\.\s*\*\*([A-Za-z\s\-]+)\*\*/g);
+                if (numberedMatches) {
+                  numberedMatches.forEach(match => {
+                    const exerciseName = match.match(/\*\*([A-Za-z\s\-]+)\*\*/)[1];
+                    workoutList.push(exerciseName.trim());
+                  });
                 }
             }
         }

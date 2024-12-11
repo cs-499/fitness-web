@@ -2,6 +2,39 @@
     text-align: center;
     min-height: 100vh;
 }
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+/*.BASIC {
+    font-size: 50pt;
+    width: 500px;
+    height: 200px;
+    position: relative;
+    margin-top: 15%;
+}*/
+
+.meal-plan-container {
+    max-width: 600px;
+    margin: 50px auto; /* Center the container */
+    padding: 20px;
+    background-color: #ffffff; /* White background for the form */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center-align text */
+}
+
+.page-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #1e293b; /* Darker blue color for the title */
+    font-weight: bold;
+}
 
 .meal-interface {
     display: flex;
