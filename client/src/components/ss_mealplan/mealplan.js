@@ -90,7 +90,7 @@ const MealPlan = () => {
         schedule();
         // getWeek();
         // resetWeek();
-        // setMockDate("2024-12-14T00:00:00.000Z")
+        // setMockDate("2024-12-14T00:00:00.000Z");
     }, []);
 
     // const getCurrentDate = () => {
@@ -98,7 +98,9 @@ const MealPlan = () => {
     // };  // function for debugging
 
     useEffect(() => {
-        console.log(currentCalories, lastDate);
+        if (currentCalories != 0){
+            console.log(currentCalories, lastDate);
+        }
     }, [currentCalories, lastDate]);
 
     useEffect(() => {
@@ -194,7 +196,7 @@ const MealPlan = () => {
         const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
         const date = new Date().toISOString();
-        // const date = getCurrentDate();
+        // const date = mockDate;
     
         try {
             await axios.put(`${process.env.REACT_APP_API_HOST}/meals/update-current-calories/${userId}`,
@@ -316,6 +318,7 @@ const MealPlan = () => {
     
         try {
             const weekData = await getWeek();
+            console.log(weekData);
     
             // map the week data to ensure all days (Monday to Sunday) are represented
             const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
