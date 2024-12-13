@@ -26,10 +26,6 @@ cd server/src
 npm install
 node index.js
 ```
-### Run tests
-```
-npm test
-```
 
 ### Docker
 #### Initiate entire stack (client, server API, mongodb) and spin them as containers
