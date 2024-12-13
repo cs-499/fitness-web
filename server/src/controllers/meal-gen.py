@@ -13,13 +13,13 @@ if not API_KEY:
     raise EnvironmentError("Failed to load SPOONACULAR_API key from environment.")
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all domains
+CORS(app)  
 
 # Setup MongoDB connection
 app.config["MONGO_URI"] = "mongodb://localhost:27017/api"
 
 def fetch_survey_from_user(user_id, token):
-    url = f'http://<node-server-url>/{user_id}'  # Replace <node-server-url> with your actual Node.js server URL
+    url = f'http://<node-server-url>/{user_id}'
     headers = {'Authorization': f'Bearer {token}'}
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
@@ -37,7 +37,7 @@ def get_recipes():
     params = {
         "apiKey": API_KEY,
         "query": query,
-        "number": 9  # Adjust the number of results as needed
+        "number": 9 
     }
 
     try:
