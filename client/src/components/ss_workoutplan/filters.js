@@ -1,6 +1,6 @@
 import { getSpecificAnswer } from './getSurveyAnswers.js';
 
-const filters = async () => {
+const getNumberOfExercises = async () => {
     const userId = localStorage.getItem('userId');
     const lengthQuestion = "How long do you want your workouts to be?";
     const workoutLength = await getSpecificAnswer(userId, lengthQuestion);
@@ -20,4 +20,4 @@ const filters = async () => {
     }
 };
 
-export default filters;
+export default getNumberOfExercises;
