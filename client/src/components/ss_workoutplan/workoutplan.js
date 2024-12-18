@@ -74,7 +74,7 @@ class WorkoutCalendar extends React.Component {
             start: currentDay.toDate(),
             end: currentDay.clone().endOf('day').toDate(),
             // Highlight each available day
-            color: '#FFD700',
+            color: '#00CED1',
             highlighted: true,
           });
         }

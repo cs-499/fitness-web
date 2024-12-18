@@ -16,7 +16,7 @@ const groqCloudAi = async () => {
         const exercises = await getExercisesByExperienceLevel();
         const selectedExercise = exercises[Math.floor(Math.random() * exercises.length)];
 
-        const content = `Include the following exercise: ${selectedExercise.name} (${selectedExercise.muscle}, ${selectedExercise.type}). One exercise only and nothing else in your response.`;
+        const content = `Include the following exercise:(${selectedExercise.muscle}, ${selectedExercise.type}). One exercise only and nothing else in your response.`;
 
         console.log(`Invoking Groq AI with content: ${content}`);
 
