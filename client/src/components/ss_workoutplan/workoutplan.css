@@ -52,16 +52,16 @@ h3 {
 }
 
 .rbc-day-bg.highlighted {
-  background-color: #FFD700 !important;
+  background-color: #00CED1 !important;
   border-radius: 5px !important;
 }
 
 .rbc-day-bg.highlighted:hover {
-  background-color: #ffcc00 !important;
+  background-color: #00CED1 !important;
 }
 
 .rbc-event {
-  background-color: #FFD700 !important;
+  background-color: #00CED1 !important;
   border-radius: 5px !important;
   color: white !important;
   font-weight: bold;
@@ -69,7 +69,7 @@ h3 {
 }
 
 .rbc-event:hover {
-  background-color: #ffcc00 !important;
+  background-color: #00CED1 !important;
   cursor: pointer;
 }
 
