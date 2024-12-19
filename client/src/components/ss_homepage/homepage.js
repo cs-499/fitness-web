@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../App.css';
 import './homepage.css';
-import WorkoutImage from '../images/chest.png';
-import WorkoutImage2 from '../images/legs.avif';
-import WorkoutImage3 from '../images/biceps.webp';
-import WorkoutImage4 from '../images/abs.jpg';
 import { fetchWorkoutPlansFromBackend } from '../ss_workoutplan/workoutPlanService';
 import NavBar from "../navbar/nav_bar";
 import getNumberOfWorkouts from "../ss_workoutplan/filters";
