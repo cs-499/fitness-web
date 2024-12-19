@@ -48,10 +48,9 @@ button {
   text-align: center;
 }
 
-/* Add styles for "Go to Homepage" button */
 .go-to-homepage-btn {
   margin: 20px;
-  padding: 12px 24px; /* Added more padding for better fit */
+  padding: 12px 24px;
   font-size: 16px;
   background-color: #007BFF;
   color: #fff;
