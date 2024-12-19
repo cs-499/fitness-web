@@ -6,6 +6,7 @@ import './workoutplan.css';
 import { fetchWorkoutPlansFromBackend, saveWorkoutPlansToBackend } from './workoutPlanService';
 import groqCloudAi from './groqCloudAIapi.js';
 import { getSpecificAnswer } from './getSurveyAnswers.js';
+import { useNavigate } from 'react-router-dom';
 
 const localizer = momentLocalizer(moment);
 
@@ -52,9 +53,6 @@ class WorkoutCalendar extends React.Component {
     }
   }
 
-  /**
-   * Fetches user availability for the next 4 weeks based on a survey response.
-   */
   async fetchAvailableDays() {
     const availableWeekdays = await getSpecificAnswer(localStorage.getItem('userId'), 'How often do you want to work out?');
 
@@ -73,7 +71,6 @@ class WorkoutCalendar extends React.Component {
             title: `Available on ${currentDay.format('dddd')}`,
             start: currentDay.toDate(),
             end: currentDay.clone().endOf('day').toDate(),
-            // Highlight each available day
             color: '#00CED1',
             highlighted: true,
           });
@@ -84,9 +81,6 @@ class WorkoutCalendar extends React.Component {
     this.setState({ availabilityDays });
   }
 
-  /**
-   * Generate workout plans for missing dates using Groq AI.
-   */
   async generatePlansWithGroqAI(userId, missingDates) {
     const generatedPlans = {};
 
@@ -110,7 +104,7 @@ class WorkoutCalendar extends React.Component {
 
     const events = availabilityDays.map((day) => ({
       id: day.id,
-      title: workoutPlans[day.id] || day.title || 'No excercise available',
+      title: workoutPlans[day.id] || day.title || 'No exercise available',
       start: day.start,
       end: day.end,
       color: day.color,
@@ -118,6 +112,7 @@ class WorkoutCalendar extends React.Component {
 
     return (
       <div className="calendar-container">
+        <GoToHomepageButton />
         {isLoading ? (
           <div className="spinner-container">
             <div className="spinner"></div>
@@ -149,5 +144,27 @@ class WorkoutCalendar extends React.Component {
     );
   }
 }
+
+const GoToHomepageButton = () => {
+  const navigate = useNavigate();
+
+  return (
+    <button
+      onClick={() => navigate('/homepage')}
+      style={{
+        margin: '20px',
+        padding: '10px 20px',
+        fontSize: '16px',
+        backgroundColor: '#007BFF',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+      }}
+    >
+      Homepage
+    </button>
+  );
+};
 
 export default WorkoutCalendar;
