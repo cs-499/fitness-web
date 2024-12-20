@@ -12,12 +12,12 @@ const getNumberOfExercises = async () => {
 
     switch (workoutLength[0]) {
         case "30-45 Minutes":
-            return "Three";
+            return "Two";
         case "45-60 Minutes":
-            return "Five";
+            return "Three";
         case "60-90 Minutes":
         case "90+ Minutes":
-            return "Six";
+            return "Four";
         default:
             console.log('Unexpected workout length:', workoutLength[0]);
             return "Three";
