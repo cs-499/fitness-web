@@ -1,5 +1,6 @@
 import Groq from 'groq-sdk';
 import getExercisesByExperienceLevel from './ninjaAPI.js';
+import getNumberOfExercises from './filters.js';
 
 const groq = new Groq({
     apiKey: process.env.REACT_APP_GROQ_API_KEY,
@@ -14,9 +15,10 @@ const groqCloudAi = async () => {
     try {
         // Get exercises based on the user's experience level
         const exercises = await getExercisesByExperienceLevel();
+        const numExercises = await getNumberOfExercises();
         const selectedExercise = exercises[Math.floor(Math.random() * exercises.length)];
 
-        const content = `Include the following exercise:(${selectedExercise.muscle}, ${selectedExercise.type}). One exercise only and nothing else in your response.`;
+        const content = `Include the following exercise:(${selectedExercise.muscle}, ${selectedExercise.type}). Genrate ${numExercises} exercises and have instructions only. No other information. Exercises should be wrapped in bold and not numbered, instructions should be marked with bullet points.`;
 
         console.log(`Invoking Groq AI with content: ${content}`);
 

@@ -10,13 +10,17 @@ const getNumberOfExercises = async () => {
         return "Three"; 
     }
 
-    switch(workoutLength[0]){
+    switch (workoutLength[0]) {
         case "30-45 Minutes":
             return "Three";
         case "45-60 Minutes":
             return "Five";
-        case "60-90 Minutes" || "90+ Minutes":
+        case "60-90 Minutes":
+        case "90+ Minutes":
             return "Six";
+        default:
+            console.log('Unexpected workout length:', workoutLength[0]);
+            return "Three";
     }
 };
 
