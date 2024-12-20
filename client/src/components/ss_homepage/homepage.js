@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import '../../App.css';
 import './homepage.css';
-import WorkoutImage from '../images/chest.png';
-import WorkoutImage2 from '../images/legs.avif';
-import WorkoutImage3 from '../images/biceps.webp';
-import WorkoutImage4 from '../images/abs.jpg';
+import WorkoutImage from '../images/abs.jpg';
 import { fetchWorkoutPlansFromBackend } from '../ss_workoutplan/workoutPlanService';
 import NavBar from "../navbar/nav_bar";
-import getNumberOfWorkouts from "../ss_workoutplan/filters";
 
 async function getWorkoutNames(userId) {
     const workoutList = [];
@@ -72,25 +68,19 @@ const Homepage = () => {
 
     return (
         <>
-        {/*Navigation bar*/}
         <NavBar /> 
 
         <div className='all'>    
             {/*All the stuff to do with workouts (Left side of the screen)*/}
             <div className='Workout_Section'>
-                <h1 className='test'>Today's Workout</h1>
+                <h1 className='test'>Today's Workouts</h1>
                 <div className='Workout'>
-                    <img className='body_highlight' src={images[currentImageIndex]} alt="Workout Image" />
+                    <img className='body_highlight' src={WorkoutImage} alt="abs" />
                     <h1 className='Workout_Title'>
                         {workoutNames[currentImageIndex] || "Rest Day"}
                     </h1>
                     <button className="left-arrow" onClick={goToPrevious}>❮</button>
                     <button className="right-arrow" onClick={goToNext}>❯</button>
-                </div>
-
-                {/*Workout Complete*/}
-                <div>
-                    <button className='Bottom_Button'>Workout Complete</button>
                 </div>
             </div>
 

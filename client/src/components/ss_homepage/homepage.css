@@ -39,12 +39,12 @@
 }
 
 .Workout_Section h1{
-    color: #ffffff;
+    color: #007bff;
 }
 
 .body_highlight {
     width: 100%;
-    height: 100%;
+    height: 107%;
     object-fit: cover;
     border-radius: 25px;
     position: absolute;
@@ -57,7 +57,7 @@
     top: 50%;
     transform: translateY(-50%);
     background: rgba(0, 0, 0, 0.5);
-    color: white;
+    color: #007bff;
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
@@ -79,7 +79,7 @@
 .Workout_Title{
     position: absolute;
     bottom: 0;
-    color: white;
+    color: #007bff;
 }
 
 .Bottom_Button {

@@ -13,15 +13,12 @@ const groq = new Groq({
  */
 const groqCloudAi = async () => {
     try {
+        // Get exercises based on the user's experience level
         const exercises = await getExercisesByExperienceLevel();
-        const selectedExercise = exercises[Math.floor(Math.random() * exercises.length)];
-        
         const numExercises = await getNumberOfExercises();
-        if (numExercises === undefined){
-            numExercises = "Three";
-        }
+        const selectedExercise = exercises[Math.floor(Math.random() * exercises.length)];
 
-        const content = `Include the following exercise: ${selectedExercise.name} (${selectedExercise.muscle}, ${selectedExercise.type}). ` + numExercises + ` exercises and instructions only. No other information. Exercises should be wrapped in bold and not numbered, instructions should be marked with bullet points.`;
+        const content = `Include the following exercise:(${selectedExercise.muscle}, ${selectedExercise.type}). Genrate ${numExercises} exercises and have instructions only. No other information. Exercises should be wrapped in bold and not numbered, instructions should be marked with bullet points.`;
 
         console.log(`Invoking Groq AI with content: ${content}`);
 

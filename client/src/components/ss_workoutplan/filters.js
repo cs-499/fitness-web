@@ -1,6 +1,6 @@
 import { getSpecificAnswer } from './getSurveyAnswers.js';
 
-const filters = async () => {
+const getNumberOfExercises = async () => {
     const userId = localStorage.getItem('userId');
     const lengthQuestion = "How long do you want your workouts to be?";
     const workoutLength = await getSpecificAnswer(userId, lengthQuestion);
@@ -10,14 +10,18 @@ const filters = async () => {
         return "Three"; 
     }
 
-    switch(workoutLength[0]){
+    switch (workoutLength[0]) {
         case "30-45 Minutes":
-            return "Three";
+            return "Two";
         case "45-60 Minutes":
-            return "Five";
-        case "60-90 Minutes" || "90+ Minutes":
-            return "Six";
+            return "Three";
+        case "60-90 Minutes":
+        case "90+ Minutes":
+            return "Four";
+        default:
+            console.log('Unexpected workout length:', workoutLength[0]);
+            return "Three";
     }
 };
 
-export default filters;
+export default getNumberOfExercises;
