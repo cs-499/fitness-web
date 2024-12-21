@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import './journal.css';
 import NavBar from "../navbar/nav_bar";
 
 const Recipes = () => {
     document.title = 'ShapeShifter';
 
+    const navigate = useNavigate(); // Hook for navigation
     const [meals, setMeals] = useState([]);
     const [notes, setNotes] = useState([]);
     const [newNote, setNewNote] = useState('');
@@ -63,7 +65,15 @@ const Recipes = () => {
                             </h2>
                             {mealsForDate.map((meal) => (
                                 <div key={meal.id} className="meal-item">
-                                    <div>
+                                    {/* Add onClick to navigate to the recipe page */}
+                                    <div
+                                        style={{
+                                            cursor: 'pointer',
+                                            textDecoration: 'underline',
+                                            color: 'blue',
+                                        }}
+                                        onClick={() => navigate(`/recipe/${meal.id}`)} // Navigate to /recipe/:id
+                                    >
                                         <h2>{meal.title}</h2>
                                         <p>Calories: {meal.calories}</p>
                                     </div>
