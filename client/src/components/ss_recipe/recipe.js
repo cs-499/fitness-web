@@ -65,8 +65,8 @@ const Recipe = () => {
             <div className="recipe-container">
                 <h1>{recipe?.title || 'Recipe Title'}</h1> {/* Display the recipe title or a placeholder */}
                 <img src={recipe?.image} alt={recipe?.title || 'Recipe Image'} /> {/* Display the recipe image */}
-                <button 
-                    onClick={saveMeal} 
+                <button
+                    onClick={saveMeal}
                     style={{
                         backgroundColor: '#1e293b', // Button background color
                         color: 'white', // Button text color
