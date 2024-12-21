@@ -27,9 +27,20 @@ npm install
 node index.js
 ```
 
-### Docker
+## Docker (Option 2)
 #### Initiate entire stack (client, server API, mongodb) and spin them as containers
 #### Uses nginx as a proxy
+
+### Install Docker Desktop to your machine
+```
+https://docs.docker.com/get-started/introduction/get-docker-desktop/
+after setup, ensure docker engine is running in docker desktop
+```
+### Run Command from terminal to make sure docker is running
+```
+docker ps
+```
+### Finally run below commands to bring the app up
 ```
 docker-compose up --build (first time)
 docker-compose up
