@@ -48,28 +48,25 @@ const Landing = () => {
 
   return (
       <div className='wrapper'>
-        {/* Logo and branding */}
         <div className='shapeShifter'>
-            <img className='logo' src={logo} alt="ShapeShifter Logo" /> {/* Logo image */}
-            <h2 className='logoText'>ShapeShifter</h2> {/* App title */}
+            <img className='logo' src={logo} alt="ShapeShifter Logo" />
+            <h2 className='logoText'>ShapeShifter</h2> 
         </div>
         
-        {/* Authentication container */}
         <div className='authcontainer'>
-            <h1 className='authText'>Sign In</h1> {/* Header text */}
-            <p className='authhelp'>‎ </p> {/* Placeholder for spacing, not to be fixed */}
-            <input id='username' type='text' placeholder='Username' className='authbox' required /> {/* Username input */}
-            <p className='authhelp'>‎ </p> {/* Placeholder for spacing, not to be fixed */}
-            <input id='password' type='password' placeholder='Password' className='authbox' required /> {/* Password input */}
-            <div className='button'> {/* Login button */}
+            <h1 className='authText'>Sign In</h1> 
+            <p className='authhelp'>‎ </p> 
+            <input id='username' type='text' placeholder='Username' className='authbox' required /> 
+            <p className='authhelp'>‎ </p>
+            <input id='password' type='password' placeholder='Password' className='authbox' required /> 
+            <div className='button'>
                 <button className='authbutton' onClick={logIn}>Login</button>
             </div>
-            <div className='button'> {/* Create account button */}
+            <div className='button'>
                 <button className='authbutton' onClick={createAcc}>Create Account</button>
             </div>
         </div>
 
-        {/* Background particle system */}
         <ParticleSys />
       </div>
   );

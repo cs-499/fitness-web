@@ -7,5 +7,5 @@ RUN npm install
 COPY ./src ./src
 RUN rm ./src/.env
 
-EXPOSE 5000
+EXPOSE 5900
 CMD ["node", "src/index.js"]

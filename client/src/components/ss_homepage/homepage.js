@@ -66,6 +66,10 @@ const Homepage = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % workoutNames.length);
     };
 
+    const navigateToWorkouts = () => {
+        window.location.href = '/workoutplan';
+    }
+
     return (
         <>
         <NavBar /> 
@@ -76,14 +80,16 @@ const Homepage = () => {
                 <h1 className='test'>Today's Workouts</h1>
                 <div className='Workout'>
                     <img className='body_highlight' src={WorkoutImage} alt="abs" />
-                    <h1 className='Workout_Title'>
-                        {workoutNames[currentImageIndex] || "Rest Day"}
-                    </h1>
+                    <h2 
+                    className='Workout_Title'>{workoutNames[currentImageIndex] || "Rest Day"}
+                    </h2>
                     <button className="left-arrow" onClick={goToPrevious}>❮</button>
                     <button className="right-arrow" onClick={goToNext}>❯</button>
                 </div>
+                <div>
+                    <button className="Centered_Button" onClick={navigateToWorkouts}>Go To My Workouts</button>
+                </div>
             </div>
-
 
 
             {/*All the stuff related to meals (Right side of the screen) */}
