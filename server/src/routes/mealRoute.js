@@ -10,8 +10,7 @@ import {
     resetWeek,
     updateCalorieGoal,
     getCalorieGoal,
-    getSpendingGoal,
-    updateSpendingGoal,
+    getSpending,
     updateBudget,
     resetSpending,
     updateGoalType,
@@ -22,7 +21,10 @@ import {
     getAppliances,
     updateAppliances,
     updatePalate,
-    getPalate
+    getPalate,
+    resetBudget,
+    resetSpendingComplete,
+    updateSpendingThisWeek
 } from '../controllers/userPalate.js';
 import verifyToken from '../middleware/auth.js';
 
@@ -48,10 +50,12 @@ router.put('/update-calorie-goal/:userId', verifyToken, updateCalorieGoal);
 router.get('/calorie-goal/:userId', verifyToken, getCalorieGoal);
 
 // routes for handling spending details
-router.get('/get-spending-goal/:userId', verifyToken, getSpendingGoal);
-router.put('/update-spending-goal/:userId', verifyToken, updateSpendingGoal);
+router.get('/get-spending/:userId', verifyToken, getSpending);
 router.put('/update-budget/:userId', verifyToken, updateBudget);
-router.post('/reset-spending/:userId', verifyToken, resetSpending);
+router.put('/reset-spending/:userId', verifyToken, resetSpending);
+router.post('/reset-budget/:userId', verifyToken, resetBudget);
+router.delete('/reset-spending-complete/:userId', verifyToken, resetSpendingComplete);
+router.post('/update-spending-this-week/:userId', verifyToken, updateSpendingThisWeek);
 
 // route for updating goal type
 router.put('/update-goal-type/:userId', verifyToken, updateGoalType);

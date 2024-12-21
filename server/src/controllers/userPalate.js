@@ -10,8 +10,7 @@ import Palate from '../models/createPalate.js';
     getCaloriesThisWeek,
     updateCalorieGoal,
     getCalorieGoal,
-    getSpendingGoal,
-    updateSpendingGoal,
+    getSpending,
     updateBudget,
     resetSpending,
     updateGoalType,
@@ -22,7 +21,10 @@ import Palate from '../models/createPalate.js';
     getAppliances,
     updateAppliances,
     updatePalate,
-    getPalate
+    getPalate,
+    resetBudget,
+    resetSpendingComplete,
+    updateSpendingThisWeek
  */
 
 // app.use('/meals', mealRoute); // note /meals before frontend requests/submissions
@@ -314,7 +316,7 @@ export const getCalorieGoal = async (req, res) => {
     }
 };
 
-export const getSpendingGoal = async (req, res) => {
+export const getSpending = async (req, res) => {
     const { userId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -324,7 +326,7 @@ export const getSpendingGoal = async (req, res) => {
     try {
         const userPalate = await Palate.findOne({ userId });
         if (userPalate && userPalate.spending_details.spending_goal) {
-            res.status(200).json({ spending_goal: userPalate.spending_details.spending_goal });
+            res.status(200).json({ all_spending: userPalate.spending_details});
         } else {
             res.status(404).json({ message: 'No spending goal found for this user' });
         }
@@ -334,36 +336,7 @@ export const getSpendingGoal = async (req, res) => {
     }
 };
 
-export const updateSpendingGoal = async (req, res) => {
-    const { userId } = req.params;
-    const { lowerBound, upperBound } = req.body;
-
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-        return res.status(400).json({ message: 'Invalid user ID' });
-    }
-    if (lowerBound === undefined || upperBound === undefined) {
-        return res.status(400).json({ message: 'Both lower and upper bounds are required' });
-    }
-
-    try {
-        const result = await Palate.findOneAndUpdate(
-            { userId },
-            { "spending_details.spending_goal.lower_bound": lowerBound, "spending_details.spending_goal.upper_bound": upperBound },
-            { new: true }
-        );
-
-        if (result) {
-            res.status(200).json({ message: 'Spending goal updated successfully', data: result.spending_details.spending_goal });
-        } else {
-            res.status(404).json({ message: 'User not found' });
-        }
-    } catch (error) {
-        console.error('Error updating spending goal:', error);
-        res.status(500).json({ message: 'Failed to update spending goal', error: error.message });
-    }
-};
-
-export const updateBudget = async () => {
+export const updateBudget = async (req, res) => {
     const { userId } = req.params;
     const { budget } = req.body;
 
@@ -375,56 +348,117 @@ export const updateBudget = async () => {
     }
 
     try {
-        const result = await Palate.findOneAndUpdate({ userId });
+        const result = await Palate.findOne({ userId });
 
-        if (result.spending_details.lowerBound != 0.0 && result.spending_details.upperBound != 0.0) {
-            result.spending_details.budget = mongoose.Types.Decimal128.fromString(budget.toString());
-            result.spending_details.lowerBound = 0.0;
-            result.spending_details.upperBound = 0.0;
+        if (!result) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (result.spending_details.spending_goal.lower_bound != 0.0 && result.spending_details.spending_goal.upper_bound != 0.0) {
+            result.spending_details.spending_goal.budget = mongoose.Types.Decimal128.fromString(budget.toString());
+            result.spending_details.spending_goal.lower_bound = 0.0;
+            result.spending_details.spending_goal.upper_bound = 0.0;
         } else {
-            result.spending_details.budget = mongoose.Types.Decimal128.fromString(budget.toString());
+            result.spending_details.spending_goal.budget = mongoose.Types.Decimal128.fromString(budget.toString());
         }
 
         await result.save();
+
         res.status(200).json({ message: 'Budget updated successfully', data: result.spending_details.spending_goal });
     } catch (error) {
         console.error('Error updating budget:', error);
         res.status(500).json({ message: 'Failed to update budget', error: error.message });
     }
-}
+};
 
-export const updateSpendingThisWeek = async (req, res) => {
+export const resetBudget = async (req, res) => {
     const { userId } = req.params;
-    const { spending, date } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: 'Invalid user ID' });
     }
 
-    // check if spending is vlaid
-    if (spending === undefined || typeof spending !== 'number' || spending < 0) {
-        return res.status(400).json({ message: 'A valid spending value is required' });
+    try {
+        const userPalate = await Palate.findOne({ userId });
+        if (!userPalate) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        userPalate.spending_details.spending_goal.lower_bound = mongoose.Types.Decimal128.fromString('0.0');
+        userPalate.spending_details.spending_goal.upper_bound = mongoose.Types.Decimal128.fromString('0.0');
+        userPalate.spending_details.spending_goal.budget = mongoose.Types.Decimal128.fromString('0.0');
+
+        await userPalate.save();
+        res.status(200).json({ message: 'Budget reset successfully' });
+    } catch (error) {
+        console.error('Error resetting budget:', error);
+        res.status(500).json({ message: 'Failed to reset budget', error: error.message });
+    }
+};
+
+export const updateSpendingThisWeek = async (req, res) => {
+    const { userId } = req.params;
+    const { day, spending, date } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    if (!day || !spending || !date) {
+        return res.status(400).json({ message: 'Missing required fields: day, spending, or date' });
     }
 
     try {
         const userPalate = await Palate.findOne({ userId });
-        if (userPalate) {
-            const newSpending = {
-                amount : mongoose.Types.Decimal128.fromString(spending.toString()),
-                date: date || new Date(),
-            };
-            userPalate.spending_details.spending_this_week.push(newSpending);
-            await userPalate.save();
-            res.status(200).json({ 
-                message: 'Spendingupdated successfully', 
-                data: userPalate.spending_details.spending_this_week
-            });
-        } else {
-            res.status(404).json({ message: 'User palate not found' });
+
+        if (!userPalate) {
+            return res.status(404).json({ message: 'User not found' });
         }
+        
+        const spendingAmount = mongoose.Types.Decimal128.fromString(spending.toString());
+        const parsedDate = new Date(date);
+
+        // update spending_this_week
+        const existingEntry = userPalate.spending_details.spending_this_week.find(entry => entry.day === day);
+
+        if (existingEntry) {
+            // update existing entry
+            existingEntry.amount = mongoose.Types.Decimal128.fromString(
+                (parseFloat(existingEntry.amount.toString()) + parseFloat(spendingAmount.toString())).toFixed(2)
+            );
+            existingEntry.dateUpdated = parsedDate;
+        } else {
+            // push a new entry
+            userPalate.spending_details.spending_this_week.push({ day, amount: spendingAmount, dateUpdated: parsedDate });
+
+            // ensure a maximum of 7 entries
+            if (userPalate.spending_details.spending_this_week.length > 7) {
+                userPalate.spending_details.spending_this_week.shift();
+            }
+        }
+
+        // update spending_this_year and spending_this_month
+        userPalate.spending_details.spending_this_year = mongoose.Types.Decimal128.fromString(
+            (parseFloat(userPalate.spending_details.spending_this_year.toString()) + parseFloat(spendingAmount.toString())).toFixed(2)
+        );
+
+        userPalate.spending_details.spending_this_month = mongoose.Types.Decimal128.fromString(
+            (parseFloat(userPalate.spending_details.spending_this_month.toString()) + parseFloat(spendingAmount.toString())).toFixed(2)
+        );
+
+        // calculate spending_total_this_week
+        userPalate.spending_details.spending_total_this_week = mongoose.Types.Decimal128.fromString(
+            userPalate.spending_details.spending_this_week.reduce((total, entry) => {
+                return total + parseFloat(entry.amount.toString());
+            }, 0).toFixed(2)
+        );
+
+        await userPalate.save();
+
+        res.status(200).json({ message: 'Spending updated successfully', spendingDetails: userPalate.spending_details });
     } catch (error) {
-        console.error('Error updating spending this week:', error);
-        res.status(500).json({ message: 'Failed to update spending this week', error: error.message });
+        console.error('Error updating spending:', error);
+        res.status(500).json({ message: 'Failed to update spending', error: error.message });
     }
 };
 
@@ -439,10 +473,8 @@ export const resetSpending = async (req, res) => {
     try {
         const userPalate = await Palate.findOne({ userId });
         if (userPalate) {
-            userPalate.spending_details.spending_this_month += userPalate.spending_details.spending_this_week;
-            userPalate.spending_details.spending_this_year += userPalate.spending_details.spending_this_week;
-            userPalate.spending_details.spending_this_total += userPalate.spending_details.spending_this_week;
-            userPalate.spending_details.spending_this_week = 0;
+            userPalate.spending_details.spending_total_this_week = mongoose.Types.Decimal128.fromString(0);
+            userPalate.spending_details.spending_this_week = [];
 
             await userPalate.save();
             res.status(200).json({ message: 'Spending reset successfully' });
@@ -454,6 +486,34 @@ export const resetSpending = async (req, res) => {
         res.status(500).json({ message: 'Failed to reset spending', error: error.message });
     }
 };
+
+export const resetSpendingComplete = async (req, res) => {
+    const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    try {
+        const userPalate = await Palate.findOne({ userId });
+        if (userPalate) {
+            userPalate.spending_details = {
+                spending_total_this_week: mongoose.Types.Decimal128.fromString("0.0"),
+                spending_this_year: mongoose.Types.Decimal128.fromString("0.0"),
+                spending_this_month: mongoose.Types.Decimal128.fromString("0.0"),
+                spending_this_week: [],
+                spending_goal: {
+                    lower_bound: mongoose.Types.Decimal128.fromString("0.0"),
+                    upper_bound: mongoose.Types.Decimal128.fromString("0.0"),
+                    budget: mongoose.Types.Decimal128.fromString("0.0"),
+                },
+            };
+        }
+        await userPalate.save();
+    } catch (error) {
+        console.error("Error resetting all spending: ", error);
+    }
+}
 
 export const updateGoalType = async (req, res) => {
     const { userId, newGoalType } = req.body;

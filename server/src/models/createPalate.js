@@ -21,12 +21,13 @@ const palateSchema = new mongoose.Schema({
         dateUpdated: { type: Date }
     }],
     spending_details: {
-        spending_this_total: { type: mongoose.Types.Decimal128, defult: 0.0 },
-        spending_this_year: { type: mongoose.Types.Decimal128, defult: 0.0 },
-        spending_this_month: { type: mongoose.Types.Decimal128, defult: 0.0 },
+        spending_total_this_week: { type: mongoose.Types.Decimal128, default: 0.0 },
+        spending_this_year: { type: mongoose.Types.Decimal128, default: 0.0 },
+        spending_this_month: { type: mongoose.Types.Decimal128, default: 0.0 },
         spending_this_week: [{ 
-            amount: { type: mongoose.Types.Decimal128, defult: 0.0 },
-            dateUpdated: {type: Date}
+            day: { type: String },
+            amount: { type: mongoose.Types.Decimal128, default: 0.0 },
+            dateUpdated: { type: Date },
         }],
         spending_goal: { 
             lower_bound: { type: mongoose.Types.Decimal128, default: 0.0, required: true },
