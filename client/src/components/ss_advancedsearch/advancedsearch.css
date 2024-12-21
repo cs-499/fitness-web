@@ -1,0 +1,52 @@
+.advance-searc-container {
+    display: flex;
+    justify-content: center;
+}
+
+.loadMore {
+    justify-self: center;
+}
+
+.taste-options {
+    width: 100%;
+    padding-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.tasteInput {
+    display: flex;
+    width: 20%;
+    margin: 2px;
+    height: 15%;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.moreOptionsBtn, .submitBtn {
+    width: 20%;
+    margin: 10px;
+}
+
+.submitBtn:hover {
+    transform: scale(1.05);
+    background-color: rgb(11, 205, 69);
+}
+
+.moreOptionsBtn:hover {
+    transform: scale(1.05);
+    background-color: rgb(10, 143, 205);
+}
+
+.search {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-options-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}

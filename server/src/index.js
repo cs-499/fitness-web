@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import { connectDB } from './connectDB.js';
 import { corsMiddleware } from './middleware/cors.js';
 import { sessionCookie, bodyParse } from './middleware/auth.js';
@@ -28,6 +29,13 @@ app.use(routes);
 app.use('/survey', surveyRoute);
 app.use('/api/workout-plan', workoutRoute);
 app.use('/meals', mealRoute);
+
+// proxy configuration to forward requests to Flask
+app.use('/api/flask', createProxyMiddleware({
+    target: 'http://127.0.0.1:5900',
+    pathRewrite: {'^/api/flask': ''},
+    changeOrigin: true,
+}));
 
 // script for starting Flask server for meal-gen API
 const flaskAppPath = path.join(__dirname, 'controllers', 'meal-gen.py');

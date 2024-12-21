@@ -4,4 +4,3 @@ python-dotenv
 flask-cors
 chardet
 flask-pymongo
-requests
