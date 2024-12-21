@@ -19,7 +19,7 @@ services:
     environment:
       MONGODB_ENDPOINT: mongodb://mongo:27017/api
     ports:
-      - '5000:5000'
+      - '5900:5900'
     depends_on:
       - mongo
 

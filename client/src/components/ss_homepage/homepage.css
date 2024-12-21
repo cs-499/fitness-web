@@ -24,8 +24,8 @@
 .Workout {
     width: 500px;
     height: 700px;
-    background: #164C7A;
-    color: #0e4a98; 
+    background: #ffffff;
+    color: #ffffff; 
     overflow: hidden;
     box-sizing: border-box;
     padding: 10px 30px;
@@ -39,7 +39,11 @@
 }
 
 .Workout_Section h1{
-    color: #007bff;
+    color: #ffffff;
+}
+
+.Workout_Section h2{
+    color: #aec2d8;
 }
 
 .body_highlight {
@@ -76,11 +80,17 @@
     right: 10px;
 }
 
-.Workout_Title{
+.Workout_Title {
     position: absolute;
     bottom: 0;
-    color: #007bff;
+    color: white;
+    background-color: black;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
 }
+
 
 .Bottom_Button {
     margin-top: 20px;
@@ -169,4 +179,29 @@
         height: 35px;
         font-size: 1.2rem;
     }
+}
+
+.Centered_Button {
+    background-color: rgb(13, 11, 58);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    display: inline-block;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.Centered_Button:hover {
+    background-color: #090909;
+}
+
+.Workout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
 }
